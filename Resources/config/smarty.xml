@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+		<parameter key="smarty.class">NoiseLabs\Bundle\SmartyBundle\Smarty</parameter>
+		<parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
+		<parameter key="smarty.options" type="collection">
+			<parameter key="template_dir">%kernel.root_dir%/Resources/views</parameter>
+			<parameter key="compile_dir">%kernel.cache_dir%/smarty/templates_c</parameter>
+			<parameter key="config_dir">%kernel.root_dir%/config/smarty</parameter>
+			<parameter key="cache_dir">%kernel.cache_dir%/smarty/cache</parameter>
+		</parameter>
+    </parameters>
+
+    <services>
+        <service id="smarty" class="%smarty.class%"></service>
+
+		<service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="false">
+			<argument type="service" id="smarty"/>
+			<argument type="service" id="templating.name_parser"/>
+			<argument type="service" id="templating.loader" />
+			<argument>%smarty.options%</argument>
+			<argument type="service" id="templating.globals" />
+		</service>
+    </services>
+</container>

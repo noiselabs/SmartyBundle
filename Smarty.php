@@ -29,8 +29,16 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+require_once (defined('SMARTY_DIR')) ?
+	SMARTY_DIR.'Smarty.class.php' :
+	'Smarty.class.php';
 
-class SmartyBundle extends Bundle
+/**
+ * Smarty.
+ *
+ * @since  0.1.0
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
+class Smarty extends \Smarty
 {
 }
