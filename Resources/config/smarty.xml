@@ -1,22 +1,19 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-		<parameter key="smarty.class">NoiseLabs\Bundle\SmartyBundle\Smarty</parameter>
+	<parameters>
+		<parameter key="smarty.class">Smarty</parameter>
 		<parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
-		<parameter key="smarty.options" type="collection">
-			<parameter key="template_dir">%kernel.root_dir%/Resources/views</parameter>
-			<parameter key="compile_dir">%kernel.cache_dir%/smarty/templates_c</parameter>
-			<parameter key="config_dir">%kernel.root_dir%/config/smarty</parameter>
-			<parameter key="cache_dir">%kernel.cache_dir%/smarty/cache</parameter>
-		</parameter>
-    </parameters>
+		<parameter key="smarty.class_file">Smarty.class.php</parameter>
+	</parameters>
 
-    <services>
-        <service id="smarty" class="%smarty.class%"></service>
+	<services>
+		<service id="smarty" class="%smarty.class%">
+			<file>%smarty.class_file%</file>
+		</service>
 
 		<service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="false">
 			<argument type="service" id="smarty"/>
