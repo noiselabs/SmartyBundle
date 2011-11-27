@@ -45,9 +45,11 @@ class SmartyEngine implements EngineInterface
 {
 	const TEMPLATE_SUFFIX = 'tpl';
 
-	protected $smarty;
-	protected $parser;
+	protected $globals;
 	protected $loader;
+	protected $parser;
+	protected $smarty;
+	
 
     /**
      * Constructor.
@@ -61,9 +63,18 @@ class SmartyEngine implements EngineInterface
 		$this->smarty = $smarty;
 		$this->parser = $parser;
 		$this->loader = $loader;
+		$this->globals = array();
+
+		$options = array_merge(array(
+			'use_sub_dirs'	=> true,
+		), $options);
 
 		foreach ($options as $property => $value) {
 			$this->smarty->$property = $value;
+		}
+
+		if (null !== $globals) {
+			$this->addGlobal('app', $globals);
 		}
 	}
 
@@ -84,6 +95,9 @@ class SmartyEngine implements EngineInterface
     public function render($name, array $parameters = array())
     {
 		$template = (string) $this->load($name);
+
+		// attach the global variables
+		$parameters = array_replace($this->getGlobals(), $parameters);
 
 		/**
 		 * Assign variables/objects to the templates.
@@ -204,5 +218,32 @@ class SmartyEngine implements EngineInterface
         }
 
         return $template;
+    }
+
+    /**
+     * Registers a Global.
+     *
+     * @param string $name  The global name
+     * @param mixed  $value The global value
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+	public function addGlobal($name, $value)
+	{
+		$this->globals[$name] = $value;
+	}
+	
+    /**
+     * Returns the assigned globals.
+     *
+     * @return array
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */     
+    public function getGlobals()
+    {
+        return $this->globals;
     }
 }

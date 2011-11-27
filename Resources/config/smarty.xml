@@ -24,6 +24,7 @@
 			<argument type="service" id="templating.loader" />
 			<argument>%smarty.options%</argument>
 			<argument type="service" id="templating.globals" />
+			<tag name="templating.engine" />
 		</service>
     </services>
 </container>
