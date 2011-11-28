@@ -12,6 +12,7 @@ Requirements
 ------------
 
 * PHP 5.3.2 and up.
+* Smarty 3
 * Symfony 2
 
 Documentation

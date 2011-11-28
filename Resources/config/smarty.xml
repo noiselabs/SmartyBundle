@@ -17,6 +17,7 @@
 
 		<service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="false">
 			<argument type="service" id="smarty"/>
+			<argument type="service" id="kernel" />
 			<argument type="service" id="templating.name_parser"/>
 			<argument type="service" id="templating.loader" />
 			<argument>%smarty.options%</argument>

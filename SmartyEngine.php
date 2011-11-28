@@ -31,9 +31,10 @@ namespace NoiseLabs\Bundle\SmartyBundle;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * SmartyEngine is an engine able to render Smarty templates.
@@ -57,7 +58,7 @@ class SmartyEngine implements EngineInterface
      * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
      * @param GlobalVariables|null        $globals     A GlobalVariables instance or null
      */
-	public function __construct(\Smarty $smarty, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null)
+	public function __construct(\Smarty $smarty, Kernel $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null)
 	{
 		$this->smarty = $smarty;
 		$this->parser = $parser;
@@ -67,6 +68,33 @@ class SmartyEngine implements EngineInterface
 		foreach ($options as $property => $value) {
 			$this->smarty->$property = $value;
 		}
+
+		/**
+		 * Register an handler for 'logical' filenames of the type:
+		 * <code>file:AcmeHelloBundle:Default:layout.html.tpl</code>
+		 */
+		$this->smarty->default_template_handler_func = array($this,  'smartyDefaultTemplateHandler');
+
+		/**
+		 * Define a set of template dirs to look for. This will allow the
+		 * usage of the following syntax:
+		 * <code>file:[WebkitBundle]/Default/layout.html.tpl</code>
+		 *
+		 * See {@link http://www.smarty.net/docs/en/resources.tpl} for details
+		 */
+		$templatesDir = array();
+
+		foreach ($kernel->getBundles() as $bundle) {
+			if (is_dir($path = $bundle->getPath().'/Resources/views/')) {
+				$templatesDir[$bundle->getName()] = $path;
+			}
+		}
+
+		$this->smarty->setTemplateDir(array_merge(
+			$this->smarty->template_dir,
+			$templatesDir
+		));
+
 
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);
@@ -228,7 +256,7 @@ class SmartyEngine implements EngineInterface
 	{
 		$this->globals[$name] = $value;
 	}
-	
+
     /**
      * Returns the assigned globals.
      *
@@ -236,9 +264,23 @@ class SmartyEngine implements EngineInterface
      *
      * @since  0.1.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */     
+     */
     public function getGlobals()
     {
         return $this->globals;
     }
+
+	/**
+	 * This method is called whenever Smarty fails to find a resource. We use
+	 * this to load a 'real' template from a 'logical' one.
+	 *
+	 * To learn more see {@link http://www.smarty.net/docs/en/variable.default.template.handler.func.tpl}
+	 *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+	public function smartyDefaultTemplateHandler($type, $name, &$content, &$modified, \Smarty $smarty)
+	{
+		return ($type == 'file') ? (string) $this->load($name) : false;
+	}
 }

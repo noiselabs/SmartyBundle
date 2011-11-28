@@ -84,4 +84,13 @@ class SmartyExtension extends Extension
 			'Smarty_Internal_Cacheresource_File',
 		));
     }
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+    public function getAlias()
+    {
+		return 'smarty';
+	}
 }
