@@ -75,6 +75,13 @@ class SmartyExtension extends Extension
 
 		$this->addClassesToCompile(array(
 			'Smarty',
+			'Smarty_Internal_Data',
+			'Smarty_Internal_Templatebase',
+			'Smarty_Internal_Template',
+			'Smarty_Resource',
+			'Smarty_Internal_Resource_File',
+			'Smarty_Cacheresource',
+			'Smarty_Internal_Cacheresource_File',
 		));
     }
 }

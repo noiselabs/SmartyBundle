@@ -18,13 +18,13 @@
  *
  * Copyright (C) 2011 Vítor Brandão
  *
- * @category 	NoiseLabs
- * @package 	SmartyBundle
- * @author 		Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright 	(C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
- * @license 	http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link 		http://www.noiselabs.org
- * @since 		0.1.0
+ * @category    NoiseLabs
+ * @package     SmartyBundle
+ * @author      Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
+ * @link        http://www.noiselabs.org
+ * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle;

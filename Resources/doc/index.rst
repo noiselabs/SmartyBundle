@@ -41,7 +41,7 @@ Requirements
 Installation
 ------------
 
-1: Download SmartyBundle
+1. Download SmartyBundle
 ++++++++++++++++++++++++
 
 This can be done in several ways, depending on your preference. The first method is the standard Symfony2 method.
@@ -66,7 +66,7 @@ If you prefer instead to use git submodules, then run the following::
 	$ git submodule add git://github.com/noiselabs/SmartyBundle.git vendor/bundles/NoiseLabs/Bundle/SmartyBundle
 	$ git submodule update --init
 
-2: Configure the Autoloader
+2. Configure the Autoloader
 +++++++++++++++++++++++++++
 
 Add the ``NoiseLabs`` namespace to your autoloader::
@@ -80,7 +80,7 @@ Add the ``NoiseLabs`` namespace to your autoloader::
 	));
 
 
-3: Enable the bundle
+3. Enable the bundle
 ++++++++++++++++++++
 
 Finally, enable the bundle in the kernel::
