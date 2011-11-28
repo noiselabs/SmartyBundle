@@ -10,8 +10,6 @@ Introduction
 
 This bundle was created to support `Smarty <http://www.smarty.net/>`_ in Symfony2, providing an alternative to the `Twig <http://twig.sensiolabs.org/>`_ template engine natively supported.
 
-.. note::
-
 	An effort was made to provide, where possible, the same user configuration and extensions available for the Twig bundle. This is to allow easy switching between the two bundles (at least I hope so!).
 
 What is Smarty?
@@ -135,7 +133,7 @@ Like Symfony2 PHP renderer or Twig, Smarty provides template inheritance.
 
 	Template inheritance is an approach to managing templates that resembles object-oriented programming techniques. Instead of the traditional use of ``{include ...}`` tags to manage parts of templates, you can inherit the contents of one template to another (like extending a class) and change blocks of content therein (like overriding methods of a class.) This keeps template management minimal and efficient, since each template only contains the differences from the template it extends.
 
-Example:
+**Example:**
 
 `layout.html.tpl`::
 
@@ -165,13 +163,13 @@ Output of mypage.html.tpl::
 	</body>
 	</html>
 
-**Important**: Note the usage of the ``file:`` resource in the ``{extends}`` block. Even if the Smarty class variable ``$default_resource_type`` is set to `'file'` it is required to declare it, because we need to trigger a function to handle 'logical' file names.
-
 Instead of using the ``file:AcmeHelloBundle:Default:layout.html.tpl`` syntax you may use ``file:[WebkitBundle]/Default/layout.html.tpl`` which should be, performance wise, slightly better/faster.
 
-.. note::
+Don't forget to use `file:` for 'logical' filenames
+	Note the usage of the ``file:`` resource in the ``{extends}`` block. Even if the Smarty class variable ``$default_resource_type`` is set to `'file'` it is required to declare it, because we need to trigger a function to handle 'logical' file names (only if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
 
-	The `.html.tpl` extension can be simply replace by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template. See `Symfony's Template Formats section <http://symfony.com/doc/2.0/book/templating.html#template-formats>`_ for more information.
+`.html.tpl` or just `.tpl`
+	The `.html.tpl` extension can simply be replaced by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template. See `Symfony's Template Formats section <http://symfony.com/doc/2.0/book/templating.html#template-formats>`_ for more information.
 
 Injecting variables into all templates (i.e. Global Variables)
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
