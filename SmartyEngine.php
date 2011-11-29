@@ -66,7 +66,7 @@ class SmartyEngine implements EngineInterface
 		$this->globals = array();
 
 		foreach ($options as $property => $value) {
-			$this->smarty->$property = $value;
+			$this->smarty->{$this->smartyPropertyToSetter($property)}($value);
 		}
 
 		/**
@@ -91,10 +91,9 @@ class SmartyEngine implements EngineInterface
 		}
 
 		$this->smarty->setTemplateDir(array_merge(
-			$this->smarty->template_dir,
+			$this->smarty->getTemplateDir(),
 			$templatesDir
 		));
-
 
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);
@@ -282,5 +281,23 @@ class SmartyEngine implements EngineInterface
 	public function smartyDefaultTemplateHandler($type, $name, &$content, &$modified, \Smarty $smarty)
 	{
 		return ($type == 'file') ? (string) $this->load($name) : false;
+	}
+
+	/**
+	 * Get the setter method for a Smarty class variable (property).
+	 *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+	protected function smartyPropertyToSetter($property)
+	{
+		$words = explode('_', strtolower($property));
+
+		$setter = 'set';
+		foreach ($words as $word) {
+			$setter .= ucfirst(trim($word));
+		}
+
+		return $setter;
 	}
 }

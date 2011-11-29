@@ -40,15 +40,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables as SymfonyGlobalVa
  */
 class GlobalVariables extends SymfonyGlobalVariables implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-	public function sayHello()
-	{
-
-
-		return 'Hello!';
-
-
-	}
-
 	/**
 	 * Set behavior is disabled.
 	 *
@@ -75,7 +66,7 @@ class GlobalVariables extends SymfonyGlobalVariables implements \ArrayAccess, \I
     }
 
 	/**
-	 * The unset behavior is disabled.
+	 * Unset behavior is disabled.
 	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
