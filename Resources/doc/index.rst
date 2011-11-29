@@ -173,13 +173,13 @@ To load a template that lives in the ``app/Resources/views`` directory of the pr
 
 Please see `Symfony2 - Template Naming and Locations <http://symfony.com/doc/2.0/book/templating.html#template-naming-locations>`_ to learn more about the naming scheme and template locations supported in Symfony2.
 
-**``{include}``** functions work the same way as the examples above.
+**{include} functions** work the same way as the examples above.
 
 	{include 'file:WebkitBundle:Default:layout.html.tpl'}
 	{include 'file:[WebkitBundle]/Default/layout.html.tpl'}
 	{include 'file:base.html.tpl'}
 
-**Important:** note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to `'file'`. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
+**Important:** Note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to `'file'`. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
 
 	The `.html.tpl` extension can simply be replaced by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template.
 
@@ -214,6 +214,7 @@ The example below uses YAML format. Adjust for XML of PHP if you are not using Y
 
 		options:
 
+			# See http://www.smarty.net/docs/en/api.variables.tpl
 			allow_php_templates:
 			allow_php_templates:
 			auto_literal:
@@ -260,6 +261,7 @@ The example below uses YAML format. Adjust for XML of PHP if you are not using Y
 			use_sub_dirs:                  true
 
 		globals:
+
 			# Examples:
 			foo:                 "@bar"
 			pi:                  3.14
@@ -376,7 +378,7 @@ php_handling
 	This tells Smarty how to handle PHP code embedded in the templates. There are four possible settings, the default being ``Smarty::PHP_PASSTHRU``. Note that this does NOT affect php code within ``{php}{/php}`` tags in the template. Settings: ``Smarty::PHP_PASSTHRU`` - Smarty echos tags as-is; ``Smarty::PHP_QUOTE`` - Smarty quotes the tags as html entities; ``Smarty::PHP_REMOVE`` - Smarty removes the tags from the templates; ``Smarty::PHP_ALLOW`` - Smarty will execute the tags as PHP code.
 
 plugins_dir
-	This is the directory or directories where Smarty will look for the plugins that it needs. Default is ``plugins/`` under the ``SMARTY_DIR``. If you supply a relative path, Smarty will first look under the ``SMARTY_DIR``, then relative to the current working directory, then relative to the PHP include_path. If ``$plugins_dir`` is an array of directories, Smarty will search for your plugin in each plugin directory in the order they are given. **While using the SmartyBundle you may add plugins by setting services tagged with ``smarty.extension``. See section Extensions for more information.**
+	This is the directory or directories where Smarty will look for the plugins that it needs. Default is ``plugins/`` under the ``SMARTY_DIR``. If you supply a relative path, Smarty will first look under the ``SMARTY_DIR``, then relative to the current working directory, then relative to the PHP include_path. If ``$plugins_dir`` is an array of directories, Smarty will search for your plugin in each plugin directory in the order they are given. **While using the SmartyBundle you may add plugins by setting services tagged with smarty.extension. See section Extensions for more information.**
 
 right_delimiter
 	This is the right delimiter used by the template language. Default is ``}``.
@@ -385,7 +387,7 @@ smarty_debug_id
 	The value of ``$smarty_debug_id`` defines the URL keyword to enable debugging at browser level. The default value is ``SMARTY_DEBUG``.
 
 template_dir
-	This is the name of the default template directory. If you do not supply a resource type when including files, they will be found here. By default this is '%kernel.root_dir%/Resources/views'. ``$template_dir`` can also be an array of directory paths: Smarty will traverse the directories and stop on the first matching template found. **Note that the SmartyEngine included in this bundle already add the template directory of each registered Bundle**.
+	This is the name of the default template directory. If you do not supply a resource type when including files, they will be found here. By default this is ``%kernel.root_dir%/Resources/views``. ``$template_dir`` can also be an array of directory paths: Smarty will traverse the directories and stop on the first matching template found. **Note that the SmartyEngine included in this bundle already add the template directory of each registered Bundle**.
 
 trusted_dir
 	``$trusted_dir`` is only for use when security is enabled. This is an array of all directories that are considered trusted. Trusted directories are where you keep php scripts that are executed directly from the templates with ``{include_php}``.

@@ -32,7 +32,7 @@ namespace NoiseLabs\Bundle\SmartyBundle;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
@@ -51,14 +51,17 @@ class SmartyEngine implements EngineInterface
 	protected $parser;
 	protected $smarty;
 
-    /**
-     * Constructor.
-     *
-     * @param \Smarty                     $smarty A \Smarty instance
-     * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
-     * @param GlobalVariables|null        $globals     A GlobalVariables instance or null
-     */
-	public function __construct(\Smarty $smarty, Kernel $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null)
+	/**
+	 * Constructor.
+	 *
+	 * @param \Smarty                     $smarty  A \Smarty instance
+	 * @param KernelInterface             $kernel  A KernelInterface instance
+	 * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
+	 * @param LoaderInterface             $loader  A LoaderInterface instance
+	 * @param array                       $options An array of \Smarty properties
+	 * @param GlobalVariables|null        $globals A GlobalVariables instance or null
+	 */
+	public function __construct(\Smarty $smarty, KernelInterface $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null)
 	{
 		$this->smarty = $smarty;
 		$this->parser = $parser;
@@ -98,6 +101,8 @@ class SmartyEngine implements EngineInterface
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);
 		}
+
+		$extension = new \NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension(1);
 	}
 
     /**

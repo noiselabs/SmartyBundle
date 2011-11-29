@@ -38,7 +38,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables as SymfonyGlobalVa
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class GlobalVariables extends SymfonyGlobalVariables implements \ArrayAccess, \IteratorAggregate, \Countable
+class GlobalVariables extends SymfonyGlobalVariables implements \ArrayAccess
 {
 	/**
 	 * Set behavior is disabled.
@@ -85,25 +85,5 @@ class GlobalVariables extends SymfonyGlobalVariables implements \ArrayAccess, \I
 	public function offsetGet($offset)
 	{
 		return $this->container->get($offset);
-	}
-
-	/**
-	 * Returns the iterator for this group.
-	 *
-	 * @return \ArrayIterator
-	 */
-	public function getIterator()
-	{
-		return new \ArrayIterator($this->container);
-	}
-
-	/**
-	 * Implements the \Countable interface
-	 *
-	 * @return integer The number of sections
-	 */
-	public function count()
-	{
-		return count($this->container);
 	}
 }
