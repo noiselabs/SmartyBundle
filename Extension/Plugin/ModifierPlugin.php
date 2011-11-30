@@ -27,26 +27,25 @@
  * @since       0.1.0
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
-
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 
 /**
- * Smarty bundle.
+ * Variable modifiers can be applied to variables, custom functions or strings.
+ * To apply a modifier, specify the value followed by a | (pipe) and the
+ * modifier name. A modifier may accept additional parameters that affect its
+ * behavior. These parameters follow the modifier name and are separated by a :
+ * (colon). Also, all php-functions can be used as modifiers implicitly (more
+ * below) and modifiers can be combined.
+ *
+ * See {@link http://www.smarty.net/docs/en/language.modifiers.tpl}.
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class SmartyBundle extends Bundle
+class ModifierPlugin extends Plugin
 {
-	const VERSION = '0.1.0';
-
-	public function build(ContainerBuilder $container)
+	public function getType()
 	{
-		parent::build($container);
-
-		$container->addCompilerPass(new RegisterExtensionsPass());
+		return 'modifier';
 	}
 }

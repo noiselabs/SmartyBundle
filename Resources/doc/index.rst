@@ -201,12 +201,168 @@ Now, the variable ga_tracking is available in all Smarty templates::
 Extensions
 ----------
 
-Extensions are PHP objects that provide features useful in a template context.
+Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.tpl>`_ available in Smarty. The implemented architecture was inspired in Twig Extensions.
+
+Each extension object share a common interest (translation, routing, etc.) and provide methods that will be registered as a Smarty plugin before rendering a template. To learn about the plugin ecosystem in Smarty take a look at the `Smarty documentation page <http://www.smarty.net/docs/en/plugins.tpl>`_ on that subject.
+
+The SmartyBundle comes with a few extensions to help you right away. These are described in the next section.
+
+Translation Extension
++++++++++++++++++++++
+
+To help with message translation of static blocks of text in template context, the SmartyBundle, provides a translation extension. This extension is implemented in the class `TranslationExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/TranslationExtension.php>`_.
+
+You may translate a message, in a template, using a block or modifier.
+
+Block::
+
+	{trans}Hello World!{/trans}
+
+	{trans locale="pt_PT"}Hello World!{/trans}
+
+	<!-- If you are curious, the latter returns "Olá mundo!" :) -->
+
+Modifier::
+
+	{"Hello World!"|trans}
+
+	{"Hello World!"|trans:array():"messages":"pt_PT"}
+
+Routing Extension
++++++++++++++++++
+
+*Available soon*.
+
+Enabling custom Extensions
+++++++++++++++++++++++++++
+
+To enable a Smarty extension, add it as a regular service in one of your configuration, and tag it with ``smarty.extension``. The creation of the extension itself is described in the next section.
+
+YAML example::
+
+	services:
+		smarty.extension.your_extension_name:
+			class: Fully\Qualified\Extension\Class\Name
+			arguments: [@service]
+			tags:
+				- { name: smarty.extension }
+
+Creating a Smarty[Bundle] Extension
++++++++++++++++++++++++++++++++++++
+
+An extension is a class that implements the `ExtensionInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/ExtensionInterface.php>`_. To make your life easier an abstract `Extension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Extension.php>`_ class is provided, so you can inherit from it instead of implementing the interface.
+
+That way, you just need to implement the getName() method as the ``Extension`` class provides empty implementations for all other methods.
+
+The ``getName()`` method must return a unique identifier for your extension::
+
+	<?php
+
+	namespace NoiseLabs\Bundle\SmartyBundle\Extension;
+
+	class TranslationExtension extends Extension
+	{
+		public function getName()
+		{
+			return 'translator';
+		}
+	}
+
+**Plugins**
+
+Plugins can be registered in an extension via the ``getPlugins()`` method.
+
+Each element in the array returned by ``getPlugins()`` must implement `PluginInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Plugin/PluginInterface.php>`_.
+
+For each Plugin object 3 parameters are required. The plugin name comes in the first parameter and should be unique for each plugin type. Second parameter is an object of type ``ExtensionInterface`` and third parameter is the name of the method in the extension object used to perform the plugin action.
+
+Please check available method parameters and plugin types in the `Smarty documentation <http://www.smarty.net/docs/en/plugins.tpl>`_.
+
+::
+
+	<?php
+
+	namespace NoiseLabs\Bundle\SmartyBundle\Extension;
+
+	use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
+
+	class BeautifyExtension extends Extension
+	{
+		public function getPlugins()
+		{
+			return array(
+				new BlockPlugin('trans', $this, 'blockTrans'),
+			);
+		}
+
+		public function blockTrans(array $params = array(), $message = null, $template, &$repeat)
+		{
+			$params = array_merge(array(
+				'arguments'	=> array(),
+				'domain'	=> 'messages',
+				'locale'	=> null,
+			), $params);
+
+			return $this->translator->trans($message, $params['arguments'], $params['domain'], $params['locale']);
+		}
+	}
+
+**Filters**
+
+Filters can be registered in an extension via the ``getFilters()`` method.
+
+Each element in the array returned by ``getFilters()`` must implement `FilterInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Filter/FilterInterface.php>`_.
+
+::
+
+	<?php
+
+	namespace NoiseLabs\Bundle\SmartyBundle\Extension;
+
+	use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\PreFilter;
+
+	class BeautifyExtension extends Extension
+	{
+		public function getFilters()
+		{
+			return array(
+				new PreFilter($this, 'htmlTagsTolower'),
+			);
+		}
+
+		// Convert html tags to be lowercase
+		public function htmlTagsTolower($source, \Smarty_Internal_Template $template)
+		{
+			return preg_replace('!<(\w+)[^>]+>!e', 'strtolower("$1")', $source);
+		}
+	}
+
+**Globals**
+
+Global variables can be registered in an extension via the ``getGlobals()`` method.
+
+There are no restrictions about the type of the array elements returned by ``getGlobals()``.
+
+::
+
+	<?php
+
+	namespace NoiseLabs\Bundle\SmartyBundle\Extension;
+
+	class GoogleExtension extends Extension
+	{
+		public function getGlobals()
+		{
+			return array(
+				'ga_tracking' => UA-xxxxx-x
+			);
+		}
+	}
 
 Configuration Reference
 -----------------------
 
-The example below uses YAML format. Adjust for XML of PHP if you are not using YAML for configuration files.
+The example below uses YAML format. You should adapt if using XML or PHP.
 
 ``app/config/config.yml``::
 

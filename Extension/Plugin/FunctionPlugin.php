@@ -27,26 +27,18 @@
  * @since       0.1.0
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
-
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 
 /**
- * Smarty bundle.
+ * See {@link http://www.smarty.net/docs/en/plugins.functions.tpl}.
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class SmartyBundle extends Bundle
+class FunctionPlugin extends Plugin
 {
-	const VERSION = '0.1.0';
-
-	public function build(ContainerBuilder $container)
+	public function getType()
 	{
-		parent::build($container);
-
-		$container->addCompilerPass(new RegisterExtensionsPass());
+		return 'function';
 	}
 }

@@ -29,6 +29,9 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle;
 
+use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +42,8 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 /**
  * SmartyEngine is an engine able to render Smarty templates.
  *
+ * This class is heavily inspired by \Twig_Environment. See {@link http://twig.sensiolabs.org/doc/api.html} for details about \Twig_Environment.
+ *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
@@ -46,9 +51,12 @@ class SmartyEngine implements EngineInterface
 {
 	const TEMPLATE_SUFFIX = 'tpl';
 
+	protected $extensions;
+	protected $filters;
 	protected $globals;
 	protected $loader;
 	protected $parser;
+	protected $plugins;
 	protected $smarty;
 
 	/**
@@ -66,7 +74,9 @@ class SmartyEngine implements EngineInterface
 		$this->smarty = $smarty;
 		$this->parser = $parser;
 		$this->loader = $loader;
-		$this->globals = array();
+
+		// There are no default extensions.
+		$this->extensions = array();
 
 		foreach ($options as $property => $value) {
 			$this->smarty->{$this->smartyPropertyToSetter($property)}($value);
@@ -101,27 +111,28 @@ class SmartyEngine implements EngineInterface
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);
 		}
-
-		$extension = new \NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension(1);
 	}
 
-    /**
-     * Renders a template.
-     *
-     * @param mixed $name       A template name
-     * @param array $parameters An array of parameters to pass to the template
-     *
-     * @return string The evaluated template as a string
-     *
-     * @throws \InvalidArgumentException if the template does not exist
-     * @throws \RuntimeException         if the template cannot be rendered
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function render($name, array $parameters = array())
-    {
+	/**
+	 * Renders a template.
+	 *
+	 * @param mixed $name       A template name
+	 * @param array $parameters An array of parameters to pass to the template
+	 *
+	 * @return string The evaluated template as a string
+	 *
+	 * @throws \InvalidArgumentException if the template does not exist
+	 * @throws \RuntimeException         if the template cannot be rendered
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function render($name, array $parameters = array())
+	{
 		$template = (string) $this->load($name);
+
+		$this->registerFilters();
+		$this->registerPlugins();
 
 		// attach the global variables
 		$parameters = array_replace($this->getGlobals(), $parameters);
@@ -162,117 +173,319 @@ class SmartyEngine implements EngineInterface
         return $this->smarty->fetch($template);
     }
 
-    /**
-     * Returns true if the template exists.
-     *
-     * @param string $name A template name
-     *
-     * @return Boolean true if the template exists, false otherwise
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function exists($name)
-    {
-        try {
-            $this->load($name);
-        } catch (\InvalidArgumentException $e) {
-            return false;
-        }
+	/**
+	 * Returns true if the template exists.
+	 *
+	 * @param string $name A template name
+	 *
+	 * @return Boolean true if the template exists, false otherwise
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function exists($name)
+	{
+		try {
+			$this->load($name);
+		} catch (\InvalidArgumentException $e) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns true if this class is able to render the given template.
-     *
-     * @param string $name A template name
-     *
-     * @return Boolean True if this class supports the given resource, false otherwise
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function supports($name)
-    {
-        $template = $this->parser->parse($name);
+	/**
+	 * Returns true if this class is able to render the given template.
+	 *
+	 * @param string $name A template name
+	 *
+	 * @return Boolean True if this class supports the given resource, false
+otherwise
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function supports($name)
+	{
+		$template = $this->parser->parse($name);
 
-        return static::TEMPLATE_SUFFIX === $template->get('engine');
-    }
+		return static::TEMPLATE_SUFFIX === $template->get('engine');
+	}
 
-    /**
-     * Renders a view and returns a Response.
-     *
-     * @param string   $view       The view name
-     * @param array    $parameters An array of parameters to pass to the view
-     * @param Response $response   A Response instance
-     *
-     * @return Response A Response instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function renderResponse($view, array $parameters = array(), Response $response = null)
-    {
-        if (null === $response) {
-            $response = new Response();
-        }
+	/**
+	 * Renders a view and returns a Response.
+	 *
+	 * @param string   $view       The view name
+	 * @param array    $parameters An array of parameters to pass to the view
+	 * @param Response $response   A Response instance
+	 *
+	 * @return Response A Response instance
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function renderResponse($view, array $parameters = array(), Response
+$response = null)
+	{
+		if (null === $response) {
+			$response = new Response();
+		}
 
-        $response->setContent($this->render($view, $parameters));
+		$response->setContent($this->render($view, $parameters));
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /**
-     * Loads the given template.
-     *
-     * @param string $name A template name
-     *
-     * @return Storage A Storage instance
-     *
-     * @throws \InvalidArgumentException if the template cannot be found
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function load($name)
-    {
-        $template = $this->parser->parse($name);
+	/**
+	 * Loads the given template.
+	 *
+	 * @param string $name A template name
+	 *
+	 * @return Storage A Storage instance
+	 *
+	 * @throws \InvalidArgumentException if the template cannot be found
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function load($name)
+	{
+		$template = $this->parser->parse($name);
 
-        $template = $this->loader->load($template);
-        if (false === $template) {
-            throw new \InvalidArgumentException(sprintf('The template "%s" does not exist.', $name));
-        }
+		$template = $this->loader->load($template);
+		if (false === $template) {
+			throw new \InvalidArgumentException(sprintf('The template "%s" does not exist.', $name));
+		}
 
-        return $template;
-    }
+		return $template;
+	}
 
-    /**
-     * Registers a Global.
-     *
-     * @param string $name  The global name
-     * @param mixed  $value The global value
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
+	/**
+	 * Returns true if the given extension is registered.
+	 *
+	 * @param string $name The extension name
+	 *
+	 * @return Boolean Whether the extension is registered or not
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function hasExtension($name)
+	{
+		return isset($this->extensions[$name]);
+	}
+
+	/**
+	 * Gets an extension by name.
+	 *
+	 * @param string $name The extension name
+	 *
+	 * @return ExtensionInterface An ExtensionInterface instance
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getExtension($name)
+	{
+		if (!isset($this->extensions[$name])) {
+			throw new \RuntimeException(sprintf('The "%s" extension is not enabled.', $name));
+		}
+
+		return $this->extensions[$name];
+	}
+
+	/**
+	 * Registers an extension.
+	 *
+	 * @param ExtensionInterface $extension A ExtensionInterface
+instance
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function addExtension(ExtensionInterface $extension)
+	{
+		$this->extensions[$extension->getName()] = $extension;
+	}
+
+	/**
+	 * Removes an extension by name.
+	 *
+	 * @param string $name The extension name
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function removeExtension($name)
+	{
+		unset($this->extensions[$name]);
+	}
+
+	/**
+	 * Registers an array of extensions.
+	 *
+	 * @param array $extensions An array of extensions
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function setExtensions(array $extensions)
+	{
+		foreach ($extensions as $extension) {
+			$this->addExtension($extension);
+		}
+	}
+
+	/**
+	 * Returns all registered extensions.
+	 *
+	 * @return array An array of extensions
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getExtensions()
+	{
+		return $this->extensions;
+	}
+
+	/**
+	 * Adds a filter to the collection.
+	 *
+	 * @param mixed  $filter A FilterInterface instance
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function addFilter(FilterInterface $filter)
+	{
+		if (null === $this->filters) {
+			$this->getFilters();
+		}
+
+		$this->filters[] = $filter;
+	}
+
+	/**
+	 * Gets the collection of filters.
+	 *
+	 * @return array An array of Filters
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getFilters()
+	{
+		if (null === $this->filters) {
+			$this->filters = array();
+			foreach ($this->getExtensions() as $extension) {
+				$this->filters = array_merge($this->filters, $extension->getFilters());
+			}
+		}
+
+		return $this->filters;
+	}
+
+	/**
+	 * Dynamically register filters to Smarty.
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function registerFilters()
+	{
+		foreach ($this->getFilters() as $filter) {
+			$this->smarty->registerFilter($filter->getType(), $filter->getCallback());
+		}
+	}
+
+	/**
+	 * Adds a plugin to the collection.
+	 *
+	 * @param mixed  $plugin A PluginInterface instance
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function addPlugin(PluginInterface $plugin)
+	{
+		if (null === $this->plugins) {
+			$this->getPlugins();
+		}
+
+		$this->plugins[] = $plugin;
+	}
+
+	/**
+	 * Gets the collection of plugins.
+	 *
+	 * @return array An array of plugins
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getPlugins()
+	{
+		if (null === $this->plugins) {
+			$this->plugins = array();
+			foreach ($this->getExtensions() as $extension) {
+				$this->plugins = array_merge($this->plugins, $extension->getPlugins());
+			}
+		}
+
+		return $this->plugins;
+	}
+
+	/**
+	 * Dynamically register plugins to Smarty.
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function registerPlugins()
+	{
+		foreach ($this->getPlugins() as $plugin) {
+			$this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
+		}
+	}
+
+	/**
+	 * Registers a Global.
+	 *
+	 * @param string $name  The global name
+	 * @param mixed  $value The global value
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
 	public function addGlobal($name, $value)
 	{
+		if (null === $this->globals) {
+			$this->getGlobals();
+		}
+
 		$this->globals[$name] = $value;
 	}
 
-    /**
-     * Returns the assigned globals.
-     *
-     * @return array
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
-    public function getGlobals()
-    {
-        return $this->globals;
-    }
+	/**
+	 * Gets the registered Globals.
+	 *
+	 * @return array An array of Globals
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getGlobals()
+	{
+		if (null === $this->globals) {
+			$this->globals = array();
+			foreach ($this->getExtensions() as $extension) {
+				$this->globals = array_merge($this->globals, $extension->getGlobals());
+			}
+		}
+
+		return $this->globals;
+	}
 
 	/**
 	 * This method is called whenever Smarty fails to find a resource. We use

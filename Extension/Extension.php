@@ -27,26 +27,52 @@
  * @since       0.1.0
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
-
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 /**
- * Smarty bundle.
+ * Base Extension class.
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class SmartyBundle extends Bundle
+abstract class Extension implements ExtensionInterface
 {
-	const VERSION = '0.1.0';
-
-	public function build(ContainerBuilder $container)
+	/**
+	 * Returns a list of Plugins to add to the existing list.
+	 *
+	 * @return array An array of Plugins
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getPlugins()
 	{
-		parent::build($container);
+		return array();
+	}
 
-		$container->addCompilerPass(new RegisterExtensionsPass());
+	/**
+	 * Returns a list of Filters to add to the existing list.
+	 *
+	 * @return array An array of Filters
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getFilters()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns a list of globals to add to the existing list.
+	 *
+	 * @return array An array of globals
+	 *
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getGlobals()
+	{
+		return array();
 	}
 }

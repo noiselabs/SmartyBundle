@@ -8,6 +8,8 @@
 		<parameter key="smarty.class">Smarty</parameter>
 		<parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
 		<parameter key="smarty.class_file">Smarty.class.php</parameter>
+		<parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
+		<parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
 	</parameters>
 
 	<services>
@@ -23,6 +25,11 @@
 			<argument>%smarty.options%</argument>
 			<argument type="service" id="templating.globals" />
 			<tag name="templating.engine" />
+		</service>
+
+		<service id="smarty.extension.trans" class="%smarty.extension.trans.class%" public="false">
+			<tag name="smarty.extension" />
+			<argument type="service" id="translator" />
 		</service>
     </services>
 </container>
