@@ -31,17 +31,17 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Provides integration of the Translation component with Smarty[Bundle].
+ * Provides integration of the Routing component with Smarty[Bundle].
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class TranslationExtension extends Extension
+class RoutingExtension extends Extension
 {
-	protected $translator;
+	protected $generator;
 
 	/**
 	 * Constructor.
@@ -49,18 +49,9 @@ class TranslationExtension extends Extension
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function __construct(TranslatorInterface $translator)
+	public function __construct(UrlGeneratorInterface $generator)
 	{
-		$this->translator = $translator;
-	}
-
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getTranslator()
-	{
-		return $this->translator;
+		$this->generator = $generator;
 	}
 
 	/**
@@ -72,9 +63,33 @@ class TranslationExtension extends Extension
 	public function getPlugins()
 	{
 		return array(
-			new BlockPlugin('trans', $this, 'blockTrans'),
-			new ModifierPlugin('trans', $this, 'modTrans')
+			new BlockPlugin('path', $this, 'getPath'),
+			new BlockPlugin('url', $this, 'getUrl')
 		);
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getPath(array $parameters = array(), $name = null, $template, &$repeat)
+	{
+		// only output on the closing tag
+		if (!$repeat) {
+			return $this->generator->generate($name, $parameters, false);
+		}
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function getUrl(array $parameters = array(), $name = null, $template, &$repeat)
+	{
+		// only output on the closing tag
+		if (!$repeat) {
+			return $this->generator->generate($name, $parameters, true);
+		}
 	}
 
 	/**
@@ -83,16 +98,13 @@ class TranslationExtension extends Extension
 	 */
 	public function blockTrans(array $params = array(), $message = null, $template, &$repeat)
 	{
-		// only output on the closing tag
-		if (!$repeat) {
-			$params = array_merge(array(
-				'arguments'	=> array(),
-				'domain'	=> 'messages',
-				'locale'	=> null,
-			), $params);
+		$params = array_merge(array(
+			'arguments'	=> array(),
+			'domain'	=> 'messages',
+			'locale'	=> null,
+		), $params);
 
-			return $this->translator->trans($message, $params['arguments'], $params['domain'], $params['locale']);
-		}
+		return $this->translator->trans($message, $params['arguments'], $params['domain'], $params['locale']);
 	}
 
 	/**
@@ -119,6 +131,6 @@ class TranslationExtension extends Extension
 	 */
 	public function getName()
 	{
-		return 'translator';
+		return 'routing';
 	}
 }

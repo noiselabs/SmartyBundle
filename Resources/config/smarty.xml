@@ -31,5 +31,10 @@
 			<tag name="smarty.extension" />
 			<argument type="service" id="translator" />
 		</service>
+
+        <service id="smarty.extension.routing" class="%smarty.extension.routing.class%" public="false">
+            <tag name="smarty.extension" />
+            <argument type="service" id="router" />
+        </service>
     </services>
 </container>

@@ -173,13 +173,13 @@ To load a template that lives in the ``app/Resources/views`` directory of the pr
 
 Please see `Symfony2 - Template Naming and Locations <http://symfony.com/doc/2.0/book/templating.html#template-naming-locations>`_ to learn more about the naming scheme and template locations supported in Symfony2.
 
-**{include} functions** work the same way as the examples above.
+**{include} functions** work the same way as the examples above.::
 
 	{include 'file:WebkitBundle:Default:layout.html.tpl'}
 	{include 'file:[WebkitBundle]/Default/layout.html.tpl'}
 	{include 'file:base.html.tpl'}
 
-**Important:** Note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to `'file'`. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
+**Important:** Note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to ``'file'``. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
 
 	The `.html.tpl` extension can simply be replaced by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template.
 
@@ -201,7 +201,7 @@ Now, the variable ga_tracking is available in all Smarty templates::
 Extensions
 ----------
 
-Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.tpl>`_ available in Smarty. The implemented architecture was inspired in Twig Extensions.
+Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.tpl>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
 
 Each extension object share a common interest (translation, routing, etc.) and provide methods that will be registered as a Smarty plugin before rendering a template. To learn about the plugin ecosystem in Smarty take a look at the `Smarty documentation page <http://www.smarty.net/docs/en/plugins.tpl>`_ on that subject.
 
@@ -220,7 +220,7 @@ Block::
 
 	{trans locale="pt_PT"}Hello World!{/trans}
 
-	<!-- If you are curious, the latter returns "Olá mundo!" :) -->
+	<!-- If you are curious, the latter returns "Olá mundo!" -->
 
 Modifier::
 
@@ -231,7 +231,19 @@ Modifier::
 Routing Extension
 +++++++++++++++++
 
-*Available soon*.
+To generate URLs from a Smarty template you may use two block functions (``path`` and ``url``) provided by the `RoutingExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/RoutingExtension.php>`_.::
+
+	<a href="{path slug='my-blog-post'}blog_show{/path}">
+		Read this blog post.
+	</a>
+
+Absolute URLs can also be generated.::
+
+	<a href="{url slug='my-blog-post'}blog_show{/url}">
+		Read this blog post.
+	</a>
+
+Please see the `Symfony Routing <http://symfony.com/doc/2.0/book/routing.html>`_ documentation page for full information about routing features and options in Symfony2.
 
 Enabling custom Extensions
 ++++++++++++++++++++++++++
@@ -250,9 +262,7 @@ YAML example::
 Creating a Smarty[Bundle] Extension
 +++++++++++++++++++++++++++++++++++
 
-An extension is a class that implements the `ExtensionInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/ExtensionInterface.php>`_. To make your life easier an abstract `Extension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Extension.php>`_ class is provided, so you can inherit from it instead of implementing the interface.
-
-That way, you just need to implement the getName() method as the ``Extension`` class provides empty implementations for all other methods.
+An extension is a class that implements the `ExtensionInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/ExtensionInterface.php>`_. To make your life easier an abstract `Extension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Extension.php>`_ class is provided, so you can inherit from it instead of implementing the interface. That way, you just need to implement the getName() method as the ``Extension`` class provides empty implementations for all other methods.
 
 The ``getName()`` method must return a unique identifier for your extension::
 
@@ -270,13 +280,11 @@ The ``getName()`` method must return a unique identifier for your extension::
 
 **Plugins**
 
-Plugins can be registered in an extension via the ``getPlugins()`` method.
+Plugins can be registered in an extension via the ``getPlugins()`` method. Each element in the array returned by ``getPlugins()`` must implement `PluginInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Plugin/PluginInterface.php>`_.
 
-Each element in the array returned by ``getPlugins()`` must implement `PluginInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Plugin/PluginInterface.php>`_.
+For each Plugin object three parameters are required. The plugin name comes in the first parameter and should be unique for each plugin type. Second parameter is an object of type ``ExtensionInterface`` and third parameter is the name of the method in the extension object used to perform the plugin action.
 
-For each Plugin object 3 parameters are required. The plugin name comes in the first parameter and should be unique for each plugin type. Second parameter is an object of type ``ExtensionInterface`` and third parameter is the name of the method in the extension object used to perform the plugin action.
-
-Please check available method parameters and plugin types in the `Smarty documentation <http://www.smarty.net/docs/en/plugins.tpl>`_.
+Please check available method parameters and plugin types in the `Extending Smarty With Plugins <http://www.smarty.net/docs/en/plugins.tpl>`_ webpage.
 
 ::
 
@@ -362,7 +370,7 @@ There are no restrictions about the type of the array elements returned by ``get
 Configuration Reference
 -----------------------
 
-The example below uses YAML format. You should adapt if using XML or PHP.
+The example below uses YAML format. Please adapt the example if using XML or PHP.
 
 ``app/config/config.yml``::
 
@@ -439,7 +447,7 @@ cache_id
 	Persistent cache_id identifier. As an alternative to passing the same ``$cache_id`` to each and every function call, you can set this ``$cache_id`` and it will be used implicitly thereafter. With a ``$cache_id`` you can have multiple cache files for a single call to ``display()`` or ``fetch()`` depending for example from different content of the same template.
 
 cache_lifetime
-	This is the length of time in seconds that a template cache is valid. Once this time has expired, the cache will be regenerated. See the  `Smarty documentation page <http://www.smarty.net/docs/en/variable.cache.lifetime.tpl>`_ for more details.
+	This is the length of time in seconds that a template cache is valid. Once this time has expired, the cache will be regenerated. See the page `Smarty Class Variables - $cache_lifetime <http://www.smarty.net/docs/en/variable.cache.lifetime.tpl>`_ for more details.
 
 cache_locking
 	Cache locking avoids concurrent cache generation. This means resource intensive pages can be generated only once, even if they've been requested multiple times in the same moment. Cache locking is disabled by default.
