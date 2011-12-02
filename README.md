@@ -34,10 +34,11 @@ This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https:/
 About
 -----
 
-SmartyBundle is a [NoiseLabs.org](https://github.com/noiselabs) initiative.
-See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors).
+Vítor Brandão - <noisebleed@noiselabs.org> - <http://twitter.com/noiselabs> - <http://blog.noiselabs.org>
+
+See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
 
 Submitting bugs and feature requests
 ------------------------------------
 
-Bugs and feature requests are tracked on [GitHub](https://github.com/noiselabs/SmartyBundle/issues)
+Bugs and feature requests are tracked on [GitHub](https://github.com/noiselabs/SmartyBundle/issues).

@@ -37,6 +37,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Templating\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
@@ -68,12 +69,14 @@ class SmartyEngine implements EngineInterface
 	 * @param LoaderInterface             $loader  A LoaderInterface instance
 	 * @param array                       $options An array of \Smarty properties
 	 * @param GlobalVariables|null        $globals A GlobalVariables instance or null
+	 * @param LoggerInterface|null        $logger A LoggerInterface instance or null
 	 */
-	public function __construct(\Smarty $smarty, KernelInterface $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null)
+	public function __construct(\Smarty $smarty, KernelInterface $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null, LoggerInterface $logger = null)
 	{
 		$this->smarty = $smarty;
 		$this->parser = $parser;
 		$this->loader = $loader;
+		$this->logger = $logger;
 
 		// There are no default extensions.
 		$this->extensions = array();
@@ -395,7 +398,14 @@ instance
 	public function registerFilters()
 	{
 		foreach ($this->getFilters() as $filter) {
-			$this->smarty->registerFilter($filter->getType(), $filter->getCallback());
+			try {
+				$this->smarty->registerFilter($filter->getType(), $filter->getCallback());
+			}
+			catch (\SmartyException $e) {
+				if (null !== $this->logger) {
+					$this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
+				}
+			}
 		}
 	}
 
@@ -445,7 +455,14 @@ instance
 	public function registerPlugins()
 	{
 		foreach ($this->getPlugins() as $plugin) {
-			$this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
+			try {
+				$this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
+			}
+			catch (\SmartyException $e) {
+				if (null !== $this->logger) {
+					$this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
+				}
+			}
 		}
 	}
 

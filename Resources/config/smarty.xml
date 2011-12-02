@@ -25,8 +25,10 @@
 			<argument type="service" id="templating.name_parser"/>
 			<argument type="service" id="templating.loader" />
 			<argument>%smarty.options%</argument>
-			<argument type="service" id="templating.globals" />
+			<argument type="service" id="templating.globals" on-invalid="null" />
+			<argument type="service" id="logger" on-invalid="null" />
 			<tag name="templating.engine" />
+			<tag name="monolog.logger" channel="smartybundle" />
 		</service>
 
 		<service id="smarty.extension.trans" class="%smarty.extension.trans.class%" public="false">
@@ -35,6 +37,11 @@
 		</service>
 
 		<service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
+			<tag name="smarty.extension" />
+			<argument type="service" id="service_container" />
+		</service>
+
+		<service id="smarty.extension.actions" class="%smarty.extension.actions.class%" public="false">
 			<tag name="smarty.extension" />
 			<argument type="service" id="service_container" />
 		</service>

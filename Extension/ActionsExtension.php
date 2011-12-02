@@ -30,17 +30,15 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
-use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides helper functions to link to assets (images, Javascript,
- * stylesheets, etc.).
+ * SmartyBundle extension for Symfony actions helper.
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class AssetsExtension extends Extension
+class ActionsExtension extends Extension
 {
 	protected $container;
 
@@ -64,50 +62,32 @@ class AssetsExtension extends Extension
 	public function getPlugins()
 	{
 		return array(
-			new BlockPlugin('asset', $this, 'getAssetUrl'),
-			new FunctionPlugin('assets_version', $this, 'getAssetsVersion')
+			new BlockPlugin('render', $this, 'renderAction')
 		);
 	}
 
 	/**
-	 * Returns the public path of an asset
+	 * Returns the Response content for a given controller or URI.
 	 *
-	 * Absolute paths (i.e. http://...) are returned unmodified.
+	 * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
 	 *
-	 * @param string $path        A public path
-	 *
-	 * @return string A public path which takes into account the base path and URL path
+	 * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver::render()
+	 * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
 	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function getAssetUrl(array $parameters = array(), $path = null, $template, &$repeat)
+	public function renderAction(array $parameters = array(), $controller = null, $template, &$repeat)
 	{
 		// only output on the closing tag
 		if (!$repeat) {
 			$parameters = array_merge(array(
-				'package'	=> null,
+				'attributes'	=> array(),
+				'options'		=> array(),
 			), $parameters);
 
-			return $this->container->get('templating.helper.assets')->getUrl($path, $parameters['package']);
+			return $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']);
 		}
-	}
-
-	/**
-	 * Returns the version of the assets in a package
-	 *
-	 * @return int
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
-	{
-		$parameters = array_merge(array(
-				'package'	=> null,
-		), $parameters);
-
-		return $this->container->get('templating.helper.assets')->getVersion($parameters['package']);
 	}
 
 	/**
@@ -120,6 +100,6 @@ class AssetsExtension extends Extension
 	 */
 	public function getName()
 	{
-		return 'assets';
+		return 'actions';
 	}
 }

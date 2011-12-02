@@ -263,7 +263,11 @@ Usage in template context::
 Actions Extension
 +++++++++++++++++
 
-*Available soon*.
+This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
+
+Following the example presented in the link above, the Smarty equivalent is::
+
+	{render max='3'}AcmeArticleBundle:Article:recentArticles{/render}
 
 Enabling custom Extensions
 ++++++++++++++++++++++++++
