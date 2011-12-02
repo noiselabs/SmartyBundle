@@ -1,0 +1,23 @@
+{
+	"name": "noiselabs/noiselabs-smarty-bundle",
+	"type": "symfony-bundle",
+	"description": "This Symfony2 bundle provides integration for the Smarty3 template engine.",
+	"keywords": ["smarty", "symfony", "noiselabs", "templating"],
+	"homepage": "https://github.com/noiselabs/SmartyBundle",
+	"version": "0.1.0",
+	"license": "LGPLv3",
+	"authors": [
+		{
+			"name": "Vítor Brandão",
+			"email": "noisebleed@noiselabs.org",
+			"homepage": http://blog.noiselabs.org
+		}
+	],
+	"require": {
+		"php": ">=5.3.2"
+	},
+	"autoload": {
+		"psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
+	},
+	"target-dir": "NoiseLabs/Bundle/SmartyBundle"
+}

@@ -243,7 +243,7 @@ Absolute URLs can also be generated.::
 		Read this blog post.
 	</a>
 
-Please see the `Symfony Routing <http://symfony.com/doc/2.0/book/routing.html>`_ documentation page for full information about routing features and options in Symfony2.
+Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
 
 Enabling custom Extensions
 ++++++++++++++++++++++++++
