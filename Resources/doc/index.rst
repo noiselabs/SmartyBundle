@@ -245,6 +245,26 @@ Absolute URLs can also be generated.::
 
 Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
 
+Assets Extension
+++++++++++++++++
+
+Templates commonly refer to images, Javascript, stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
+
+	<img src="{asset}images/logo.png{/asset}" />
+
+	<link href="{asset}css/blog.css{/asset}" rel="stylesheet" type="text/css" />
+
+This bundle also provides the ``assets_version`` function to return the version of the assets in a package. To set the version see the `assets_version configuration option in Symfony's Framework Bundle <http://symfony.com/doc/2.0/reference/configuration/framework.html#ref-framework-assets-version>`_.
+
+Usage in template context::
+
+	{assets_version}
+
+Actions Extension
++++++++++++++++++
+
+*Available soon*.
+
 Enabling custom Extensions
 ++++++++++++++++++++++++++
 
