@@ -220,7 +220,7 @@ Block::
 
 	{trans locale="pt_PT"}Hello World!{/trans}
 
-	<!-- If you are curious, the latter returns "Olá mundo!" -->
+	<!-- In case you're curious, the latter returns "Olá mundo!" -->
 
 Modifier::
 
@@ -231,7 +231,9 @@ Modifier::
 Routing Extension
 +++++++++++++++++
 
-To generate URLs from a Smarty template you may use two block functions (``path`` and ``url``) provided by the `RoutingExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/RoutingExtension.php>`_.::
+To generate URLs from a Smarty template you may use two block functions (``path`` and ``url``) provided by the `RoutingExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/RoutingExtension.php>`_.
+
+::
 
 	<a href="{path slug='my-blog-post'}blog_show{/path}">
 		Read this blog post.
@@ -248,7 +250,7 @@ Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html
 Assets Extension
 ++++++++++++++++
 
-Templates commonly refer to images, Javascript, stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
+Templates commonly refer to images, Javascript and stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
 
 	<img src="{asset}images/logo.png{/asset}" />
 
@@ -318,7 +320,7 @@ Please check available method parameters and plugin types in the `Extending Smar
 
 	use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 
-	class BeautifyExtension extends Extension
+	class TranslationExtension extends Extension
 	{
 		public function getPlugins()
 		{
@@ -386,7 +388,7 @@ There are no restrictions about the type of the array elements returned by ``get
 		public function getGlobals()
 		{
 			return array(
-				'ga_tracking' => UA-xxxxx-x
+				'ga_tracking' => 'UA-xxxxx-x'
 			);
 		}
 	}
