@@ -50,5 +50,7 @@
 			<tag name="smarty.extension" />
 			<argument type="service" id="router" />
 		</service>
+
+		<service id="smarty_engine" alias="templating.engine.smarty" />
     </services>
 </container>

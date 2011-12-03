@@ -65,11 +65,11 @@ class SmartyEngine implements EngineInterface
 	 *
 	 * @param \Smarty                     $smarty  A \Smarty instance
 	 * @param KernelInterface             $kernel  A KernelInterface instance
-	 * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
+	 * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
 	 * @param LoaderInterface             $loader  A LoaderInterface instance
 	 * @param array                       $options An array of \Smarty properties
 	 * @param GlobalVariables|null        $globals A GlobalVariables instance or null
-	 * @param LoggerInterface|null        $logger A LoggerInterface instance or null
+	 * @param LoggerInterface|null        $logger  A LoggerInterface instance or null
 	 */
 	public function __construct(\Smarty $smarty, KernelInterface $kernel, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null, LoggerInterface $logger = null)
 	{
@@ -132,7 +132,7 @@ class SmartyEngine implements EngineInterface
 	 */
 	public function render($name, array $parameters = array())
 	{
-		$template = (string) $this->load($name);
+		$template = $this->load($name);
 
 		$this->registerFilters();
 		$this->registerPlugins();
@@ -210,6 +210,10 @@ otherwise
 	 */
 	public function supports($name)
 	{
+		if ($name instanceof \Smarty_Internal_Template) {
+			return true;
+		}
+
 		$template = $this->parser->parse($name);
 
 		return static::TEMPLATE_SUFFIX === $template->get('engine');
@@ -244,7 +248,7 @@ $response = null)
 	 *
 	 * @param string $name A template name
 	 *
-	 * @return Storage A Storage instance
+	 * @return mixed The resource handle of the template file or template object
 	 *
 	 * @throws \InvalidArgumentException if the template cannot be found
 	 *
@@ -253,6 +257,10 @@ $response = null)
 	 */
 	public function load($name)
 	{
+		if ($name instanceof \Smarty_Internal_Template) {
+			return $name;
+		}
+
 		$template = $this->parser->parse($name);
 
 		$template = $this->loader->load($template);
@@ -260,7 +268,7 @@ $response = null)
 			throw new \InvalidArgumentException(sprintf('The template "%s" does not exist.', $name));
 		}
 
-		return $template;
+		return (string) $template;
 	}
 
 	/**
