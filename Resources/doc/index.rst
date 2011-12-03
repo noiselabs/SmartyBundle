@@ -43,6 +43,11 @@ Requirements
 * Smarty 3
 * Symfony 2
 
+License
+-------
+
+This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE) for details.
+
 Installation
 ------------
 
@@ -220,7 +225,7 @@ Block::
 
 	{trans locale="pt_PT"}Hello World!{/trans}
 
-	<!-- In case you're curious, the latter returns "Olá mundo!" -->
+	<!-- In case you're curious, the latter returns "Olá mundo!" :) -->
 
 Modifier::
 
@@ -579,3 +584,15 @@ use_include_path
 
 use_sub_dirs
 	Smarty will create subdirectories under the compiled templates and cache directories if $use_sub_dirs is set to ``TRUE``, default is ``FALSE``. In an environment where there are potentially tens of thousands of files created, this may help the filesystem speed. On the other hand, some environments do not allow PHP processes to create directories, so this must be disabled which is the default. Sub directories are more efficient, so use them if you can. Theoretically you get much better perfomance on a filesystem with 10 directories each having 100 files, than with 1 directory having 1000 files. This was certainly the case with Solaris 7 (UFS)... with newer filesystems such as ext3 and especially reiserfs, the difference is almost nothing.
+
+Authors
+-------
+
+Vítor Brandão - <noisebleed@noiselabs.org> - <http://twitter.com/noiselabs> - <http://blog.noiselabs.org>
+
+See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
+
+Submitting bugs and feature requests
+------------------------------------
+
+Bugs and feature requests are tracked on [GitHub](https://github.com/noiselabs/SmartyBundle/issues).

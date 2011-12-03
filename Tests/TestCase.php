@@ -33,6 +33,7 @@ use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\Util\Filesystem;
 use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\Storage\StringStorage;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -54,35 +55,43 @@ class TestCase extends \PHPUnit_Framework_TestCase
 		if (!class_exists('Smarty')) {
 			$this->markTestSkipped('Smarty is not available.');
 		}
-		
+
+		$this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
+		$this->deleteTmpDir();
+        
 		$this->smarty = $this->getSmarty();
 		$this->kernel = $this->getKernel();
 		$this->loader = new ProjectTemplateLoader();
+		$this->engine = $this->getSmartyEngine();
 	}
 
 	/**
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	protected function tearDown()
+	public function tearDown()
 	{
-		if (!is_dir($compile_dir = $this->smarty->getCompileDir())) {
-			return;
-		}
-		
-		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($compile_dir), \RecursiveIteratorIterator::CHILD_FIRST);
-
-		foreach ($iterator as $path) {
-			if ($path->isDir()) {
-				@rmdir($path);
-			} else {
-				@unlink($path);
-			}
-		}
-
-        @rmdir($compile_dir);
+		$this->deleteTmpDir();
 	}
 
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	protected function deleteTmpDir()
+	{
+		if (!file_exists($dir = $this->tmpDir)) {
+			return;
+		}
+
+		$fs = new Filesystem();
+		$fs->remove($dir);
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
 	public function getSmarty()
 	{
 		return new \Smarty();
@@ -91,8 +100,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
 	public function getSmartyOptions()
 	{
 		return array(
-			'compile_dir'	=> sys_get_temp_dir().'/noiselabs-smarty-bundle-test/templates_c',
-			'template_dir' 	=> __DIR__.'/Fixtures/views'
+			'caching'		=> false,
+			'compile_dir'	=> $this->tmpDir.'/templates_c',
+			'template_dir' 	=> __DIR__.'/Fixtures/Resources/views'
 		);
 	}
 
@@ -125,11 +135,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 	public function getKernel()
 	{
 		return new KernelForTest('test', true);
-	}
-	
-	public function getLoader()
-	{
-		return ;
 	}
 }
 

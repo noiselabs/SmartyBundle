@@ -299,7 +299,7 @@ $response = null)
 	public function getExtension($name)
 	{
 		if (!isset($this->extensions[$name])) {
-			throw new \RuntimeException(sprintf('The "%s" extension is not enabled.', $name));
+			throw new \InvalidArgumentException(sprintf('The "%s" extension is not enabled.', $name));
 		}
 
 		return $this->extensions[$name];

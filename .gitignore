@@ -1,4 +1,4 @@
 *~
 *.kate-swp
 phpunit.xml
-Resources/doc/phpunit
+Resources/doc/phpunit*

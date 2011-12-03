@@ -29,6 +29,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
+use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
@@ -107,6 +108,68 @@ class SmartyEngineTest extends TestCase
 		$this->assertEquals($engine->render('global.tpl'), 'global variable');
 
 		$this->assertEquals($engine->render('global.tpl', array('global' => 'overwritten')), 'overwritten');
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function testGetUnsetExtension()
+	{
+		$this->setExpectedException('InvalidArgumentException');
+
+		$name = 'non-existent-extension';
+		
+		$engine = $this->getSmartyEngine();	
+		$engine->getExtension($name);
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function testGetSetRemoveExtension()
+	{
+		$extension = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
+		$extension->expects($this->any())
+			->method('getName')
+			->will($this->returnValue('mock'));
+			
+		$engine = $this->getSmartyEngine();
+		$engine->addExtension($extension);
+		
+		$this->assertEquals($engine->getExtension('mock'), $extension);
+
+		$this->setExpectedException('InvalidArgumentException');
+		$engine->removeExtension('mock');
+		$engine->getExtension('mock');
+	}
+
+	/**
+	 * @since  0.1.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	public function testGetSetExtensionsArray()
+	{
+		$extensions = array();
+
+		foreach (array('mock0', 'mock1', 'mock2', 'mock3') as $name) {
+			$extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
+			$extensions[$name]->expects($this->any())
+				->method('getName')
+				->will($this->returnValue($name));
+		}
+
+		$engine = $this->getSmartyEngine();
+		
+		$engine->addExtension($extensions['mock1']);
+		$this->assertEquals($engine->getExtension('mock1'), $extensions['mock1']);
+
+		unset($extensions['mock1']);
+		$engine->setExtensions($extensions);
+
+		$engine->removeExtension('mock1');
+		$this->assertEquals($engine->getExtensions(), $extensions);
 	}
 
 	/**

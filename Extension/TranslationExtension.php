@@ -78,20 +78,22 @@ class TranslationExtension extends Extension
 	}
 
 	/**
+	 * @param string Message to translate
+	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function blockTrans(array $params = array(), $message = null, $template, &$repeat)
+	public function blockTrans(array $parameters = array(), $message = null, $template, &$repeat)
 	{
 		// only output on the closing tag
 		if (!$repeat) {
-			$params = array_merge(array(
+			$parameters = array_merge(array(
 				'arguments'	=> array(),
 				'domain'	=> 'messages',
 				'locale'	=> null,
-			), $params);
+			), $parameters);
 
-			return $this->translator->trans($message, $params['arguments'], $params['domain'], $params['locale']);
+			return $this->translator->trans($message, $parameters['arguments'], $parameters['domain'], $parameters['locale']);
 		}
 	}
 
