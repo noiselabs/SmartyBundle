@@ -46,7 +46,7 @@ Requirements
 License
 -------
 
-This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE) for details.
+This bundle is licensed under the LGPLv3 License. See the `LICENSE file <https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE>`_ for details.
 
 Installation
 ------------
