@@ -1,0 +1,47 @@
+smarty:
+    options:
+        allow_php_templates:
+        allow_php_templates:
+        auto_literal:
+        autoload_filters:
+        cache_dir:             /tmp/noiselabs-smarty-bundle-test/app/cache/smarty/cache
+        cache_id:
+        cache_lifetime:
+        cache_locking:
+        cache_modified_check:
+        caching:
+        caching_type:
+        compile_check:
+        compile_dir:           /tmp/noiselabs-smarty-bundle-test/app/cache/smarty/templates_c
+        compile_id:
+        compile_locking:
+        compiler_class:
+        config_booleanize:
+        config_dir:            /tmp/noiselabs-smarty-bundle-test/app/config/smarty
+        config_overwrite:
+        config_read_hidden:
+        debug_tpl:
+        debugging:
+        debugging_ctrl:
+        default_config_type:
+        default_modifiers:
+        default_resource_type:         string
+        default_config_handler_func:
+        default_template_handler_func:
+        direct_access_security:
+        error_reporting:
+        escape_html:
+        force_cache:
+        force_compile:
+        locking_timeout:
+        merge_compiled_includes:
+        php_handling:
+        plugins_dir:
+        smarty_debug_id:
+        template_dir:          /tmp/noiselabs-smarty-bundle-test/app/Resources/views
+        trusted_dir:
+        use_include_path:              true
+        use_sub_dirs:          false
+    globals:
+        foo:         "@bar"
+        pi:          3.14

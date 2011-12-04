@@ -3,7 +3,9 @@ SmartyBundle
 
 This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
 
-.. contents:: Contents
+.. sectnum::
+
+.. contents:: **Contents**
 
 Introduction
 ------------
@@ -51,7 +53,7 @@ This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https:/
 Installation
 ------------
 
-1. Download SmartyBundle
+Download SmartyBundle
 ++++++++++++++++++++++++
 
 This can be done in several ways, depending on your preference. The first method is the standard Symfony2 method.
@@ -76,7 +78,7 @@ If you prefer instead to use git submodules, then run the following::
 	$ git submodule add git://github.com/noiselabs/SmartyBundle.git vendor/bundles/NoiseLabs/Bundle/SmartyBundle
 	$ git submodule update --init
 
-2. Configure the Autoloader
+Configure the Autoloader
 +++++++++++++++++++++++++++
 
 Add the ``NoiseLabs`` namespace to your autoloader::
@@ -90,7 +92,7 @@ Add the ``NoiseLabs`` namespace to your autoloader::
 	));
 
 
-3. Enable the bundle
+Enable the bundle
 ++++++++++++++++++++
 
 Enable the bundle in the kernel::
@@ -106,7 +108,7 @@ Enable the bundle in the kernel::
 		);
 	}
 
-4. Enable the Smarty template engine in the config
+Enable the Smarty template engine in the config
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ::
@@ -588,9 +590,9 @@ use_sub_dirs
 Authors
 -------
 
-Vítor Brandão - <noisebleed@noiselabs.org> - <http://twitter.com/noiselabs> - <http://blog.noiselabs.org>
+Vítor Brandão - noisebleed@noiselabs.org ~ `twitter.com/noiselabs <http://twitter.com/noiselabs>`_ ~ `blog.noiselabs.org <http://blog.noiselabs.org>`_
 
-See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
+See also the list of `contributors <https://github.com/noiselabs/SmartyBundle/contributors>`_ who participated in this project.
 
 Submitting bugs and feature requests
 ------------------------------------

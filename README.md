@@ -34,7 +34,7 @@ This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https:/
 Authors
 -------
 
-Vítor Brandão - <noisebleed@noiselabs.org> - [twitter.com/noiselabs](http://twitter.com/noiselabs) - [blog.noiselabs.org](http://blog.noiselabs.org)
+Vítor Brandão - <noisebleed@noiselabs.org> ~ [twitter.com/noiselabs](http://twitter.com/noiselabs) ~ [blog.noiselabs.org](http://blog.noiselabs.org)
 
 See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
 
