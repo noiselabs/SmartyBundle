@@ -3,8 +3,6 @@ SmartyBundle
 
 This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
 
-.. sectnum::
-
 .. contents:: **Contents**
 
 Introduction
@@ -597,4 +595,4 @@ See also the list of `contributors <https://github.com/noiselabs/SmartyBundle/co
 Submitting bugs and feature requests
 ------------------------------------
 
-Bugs and feature requests are tracked on [GitHub](https://github.com/noiselabs/SmartyBundle/issues).
+Bugs and feature requests are tracked on `GitHub <https://github.com/noiselabs/SmartyBundle/issues>`_.
