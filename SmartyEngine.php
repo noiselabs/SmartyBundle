@@ -78,6 +78,8 @@ class SmartyEngine implements EngineInterface
 		$this->loader = $loader;
 		$this->logger = $logger;
 
+		$this->globals = array();
+
 		// There are no default extensions.
 		$this->extensions = array();
 
@@ -202,8 +204,7 @@ class SmartyEngine implements EngineInterface
 	 *
 	 * @param string $name A template name
 	 *
-	 * @return Boolean True if this class supports the given resource, false
-otherwise
+	 * @return Boolean True if this class supports the given resource, false otherwise
 	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -308,8 +309,7 @@ $response = null)
 	/**
 	 * Registers an extension.
 	 *
-	 * @param ExtensionInterface $extension A ExtensionInterface
-instance
+	 * @param ExtensionInterface $extension An ExtensionInterface instance
 	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -485,10 +485,6 @@ instance
 	 */
 	public function addGlobal($name, $value)
 	{
-		if (null === $this->globals) {
-			$this->getGlobals();
-		}
-
 		$this->globals[$name] = $value;
 	}
 
@@ -500,10 +496,9 @@ instance
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function getGlobals()
+	public function getGlobals($load_extensions = true)
 	{
-		if (null === $this->globals) {
-			$this->globals = array();
+		if (true === $load_extensions) {
 			foreach ($this->getExtensions() as $extension) {
 				$this->globals = array_merge($this->globals, $extension->getGlobals());
 			}
