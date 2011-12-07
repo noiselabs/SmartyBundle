@@ -63,8 +63,10 @@ class RoutingExtension extends Extension
 	public function getPlugins()
 	{
 		return array(
-			new BlockPlugin('path', $this, 'getPath'),
-			new BlockPlugin('url', $this, 'getUrl')
+			new BlockPlugin('path', $this, 'getPath_block'),
+			new ModifierPlugin('path', $this, 'getPath_modifier'),
+			new BlockPlugin('url', $this, 'getUrl_block'),
+			new ModifierPlugin('url', $this, 'getUrl_modifier')
 		);
 	}
 
@@ -72,7 +74,7 @@ class RoutingExtension extends Extension
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function getPath(array $parameters = array(), $name = null, $template, &$repeat)
+	public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
 	{
 		// only output on the closing tag
 		if (!$repeat) {
@@ -81,16 +83,34 @@ class RoutingExtension extends Extension
 	}
 
 	/**
+	 * @since  0.1.1
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+    public function getPath_modifier($name, array $parameters = array())
+    {
+        return $this->generator->generate($name, $parameters, false);
+    }
+
+	/**
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function getUrl(array $parameters = array(), $name = null, $template, &$repeat)
+	public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
 	{
 		// only output on the closing tag
 		if (!$repeat) {
 			return $this->generator->generate($name, $parameters, true);
 		}
 	}
+
+	/**
+	 * @since  0.1.1
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+    public function getUrl_modifier($name, array $parameters = array())
+    {
+        return $this->generator->generate($name, $parameters, true);
+    }
 
 	/**
 	 * @since  0.1.0

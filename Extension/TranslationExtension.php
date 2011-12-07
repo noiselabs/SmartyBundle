@@ -72,8 +72,8 @@ class TranslationExtension extends Extension
 	public function getPlugins()
 	{
 		return array(
-			new BlockPlugin('trans', $this, 'blockTrans'),
-			new ModifierPlugin('trans', $this, 'modTrans')
+			new BlockPlugin('trans', $this, 'trans_block'),
+			new ModifierPlugin('trans', $this, 'trans_modifier')
 		);
 	}
 
@@ -83,7 +83,7 @@ class TranslationExtension extends Extension
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function blockTrans(array $parameters = array(), $message = null, $template, &$repeat)
+	public function trans_block(array $parameters = array(), $message = null, $template, &$repeat)
 	{
 		// only output on the closing tag
 		if (!$repeat) {
@@ -106,7 +106,7 @@ class TranslationExtension extends Extension
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-    public function modTrans($message, array $arguments = array(), $domain = 'messages', $locale = null)
+    public function trans_modifier($message, array $arguments = array(), $domain = 'messages', $locale = null)
     {
         return $this->translator->trans($message, $arguments, $domain, $locale);
     }
