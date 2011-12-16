@@ -74,6 +74,12 @@ class SmartyExtension extends Extension
 
 		$container->setParameter('smarty.options', $config['options']);
 
+		/**
+		 * @note Caching of Smarty classes was causing issues because of the
+		 * include_once directives used in Smarty.class.php so this
+		 * feature is disabled.
+		 *
+		 * <code>
 		$this->addClassesToCompile(array(
 			'Smarty',
 			'Smarty_Internal_Data',
@@ -84,6 +90,8 @@ class SmartyExtension extends Extension
 			'Smarty_Cacheresource',
 			'Smarty_Internal_Cacheresource_File',
 		));
+		* </code>
+		*/
     }
 
 	/**
