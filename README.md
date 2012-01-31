@@ -3,11 +3,6 @@ SmartyBundle
 
 This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
-WARNING
--------
-
-**This projects is still in its early stages of development and the API is not stable yet. Use it at your own risk until this note is removed.**
-
 Requirements
 ------------
 
