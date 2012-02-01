@@ -41,7 +41,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class AssetsExtension extends Extension
+class AssetsExtension extends AbstractExtension
 {
 	protected $container;
 

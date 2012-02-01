@@ -35,7 +35,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-abstract class Extension implements ExtensionInterface
+abstract class AbstractExtension implements ExtensionInterface
 {
 	/**
 	 * Returns a list of Plugins to add to the existing list.

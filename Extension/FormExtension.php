@@ -41,7 +41,7 @@ use Symfony\Component\Form\Util\FormUtil;
  * @since  0.2.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class FormExtension extends Extension
+class FormExtension extends AbstractExtension
 {
 	/**
 	 * @since  0.2.0

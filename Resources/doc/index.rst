@@ -293,7 +293,12 @@ YAML example::
 Creating a Smarty[Bundle] Extension
 +++++++++++++++++++++++++++++++++++
 
-An extension is a class that implements the `ExtensionInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/ExtensionInterface.php>`_. To make your life easier an abstract `Extension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/Extension.php>`_ class is provided, so you can inherit from it instead of implementing the interface. That way, you just need to implement the getName() method as the ``Extension`` class provides empty implementations for all other methods.
+.. note::
+
+	In version 0.1.0 class AbstractExtension was simply named Extension. Please
+	update your code when migrating to 0.2.0.
+
+An extension is a class that implements the `ExtensionInterface <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/ExtensionInterface.php>`_. To make your life easier an abstract `AbstractExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/AbstractExtension.php>`_ class is provided, so you can inherit from it instead of implementing the interface. That way, you just need to implement the getName() method as the ``Extension`` class provides empty implementations for all other methods.
 
 The ``getName()`` method must return a unique identifier for your extension::
 
@@ -301,7 +306,7 @@ The ``getName()`` method must return a unique identifier for your extension::
 
 	namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
-	class TranslationExtension extends Extension
+	class TranslationExtension extends AbstractExtension
 	{
 		public function getName()
 		{
