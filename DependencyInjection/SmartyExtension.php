@@ -64,6 +64,8 @@ class SmartyExtension extends Extension
 		$container->setParameter('smarty.form.resources',
 		$config['form']['resources']);
 
+		$container->getDefinition('templating.engine.smarty')->addMethodCall('addTemplateDir', array(realpath(__DIR__.'/../Resources/views/Form')));
+
 		if (!empty($config['globals'])) {
 			$def = $container->getDefinition('templating.engine.smarty');
 			foreach ($config['globals'] as $key => $global) {

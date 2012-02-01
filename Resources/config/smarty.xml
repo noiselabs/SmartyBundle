@@ -54,6 +54,7 @@
 
 		<service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
 			<tag name="smarty.extension" />
+			<argument>%smarty.form.resources%</argument>
 		</service>
 
 		<service id="smarty_engine" alias="templating.engine.smarty" />

@@ -231,30 +231,30 @@ class FormExtension extends AbstractExtension
 		return $this->render($view, 'label', $variables);
 	}
 
-    /**
-     * Renders a template.
-     *
-     * 1. This function first looks for a block named "_<view id>_<section>",
-     * 2. if such a block is not found the function will look for a block named
-     *    "<type name>_<section>",
-     * 3. the type name is recursively replaced by the parent type name until a
-     *    corresponding block is found
-     *
-     * @param FormView  $view       The form view
-     * @param string    $section    The section to render (i.e. 'row', 'widget', 'label', ...)
-     * @param array     $variables  Additional variables
-     *
-     * @return string The html markup
-     *
-     * @throws FormException if no template block exists to render the given section of the view
-     */
-    protected function render(FormView $view, $section, array $variables = array())
-    {
-        $mainTemplate = in_array($section, array('widget', 'row'));
-        if ($mainTemplate && $view->isRendered()) {
-
-                return '';
-        }
+	/**
+	 * Renders a template.
+	 *
+	 * 1. This function first looks for a block named "_<view id>_<section>",
+	 * 2. if such a block is not found the function will look for a block named
+	 *    "<type name>_<section>",
+	 * 3. the type name is recursively replaced by the parent type name until a
+	 *    corresponding block is found
+	 *
+	 * @param FormView  $view       The form view
+	 * @param string    $section    The section to render (i.e. 'row', 'widget',
+	 * 'label', ...)
+	 * @param array     $variables  Additional variables
+	 *
+	 * @return string The html markup
+	 *
+	 * @throws FormException if no template block exists to render the given section of the view
+	 */
+	protected function render(FormView $view, $section, array $variables = array())
+	{
+		$mainTemplate = in_array($section, array('widget', 'row'));
+		if ($mainTemplate && $view->isRendered()) {
+				return '';
+		}
 
         if (null === $this->template) {
             $this->template = reset($this->resources);

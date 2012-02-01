@@ -77,12 +77,19 @@ class SmartyEngine implements EngineInterface
 		$this->parser = $parser;
 		$this->loader = $loader;
 		$this->logger = $logger;
-
 		$this->globals = array();
 
 		// There are no default extensions.
 		$this->extensions = array();
 
+		/**
+		 * @warning If you added template dirs to the Smarty instance prior to
+		 * the loading of this engine these WILL BE LOST because the setter
+		 * method setTemplateDir() is used below. Please use the following
+		 * method instead:
+		 *   $container->get('templating.engine.smarty')->addTemplateDir(
+		 *   '/path/to/template_dir');
+		 */
 		foreach ($options as $property => $value) {
 			$this->smarty->{$this->smartyPropertyToSetter($property)}($value);
 		}
@@ -100,19 +107,29 @@ class SmartyEngine implements EngineInterface
 		 *
 		 * See {@link http://www.smarty.net/docs/en/resources.tpl} for details
 		 */
-		$templatesDir = array();
+		$bundlesTemplateDir = array();
 
 		foreach ($kernel->getBundles() as $bundle) {
 			if (is_dir($path = $bundle->getPath().'/Resources/views/')) {
-				$templatesDir[$bundle->getName()] = $path;
+				$bundlesTemplateDir[$bundle->getName()] = $path;
 			}
 		}
-
-		$this->smarty->addTemplateDir($templatesDir);
+		$this->smarty->addTemplateDir($bundlesTemplateDir);
 
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);
 		}
+	}
+
+	/**
+	 * Pass methods not available in this engine to the Smarty instance.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <vbrandao@nexttoyou.pt>
+	 */
+	public function __call($name, $args)
+	{
+		return call_user_func_array(array($this->smarty, $name), $args);
 	}
 
 	/**
