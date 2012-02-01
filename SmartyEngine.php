@@ -108,10 +108,7 @@ class SmartyEngine implements EngineInterface
 			}
 		}
 
-		$this->smarty->setTemplateDir(array_merge(
-			$this->smarty->getTemplateDir(),
-			$templatesDir
-		));
+		$this->smarty->addTemplateDir($templatesDir);
 
 		if (null !== $globals) {
 			$this->addGlobal('app', $globals);

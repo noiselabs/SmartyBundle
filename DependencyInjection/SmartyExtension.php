@@ -61,6 +61,9 @@ class SmartyExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
+		$container->setParameter('smarty.form.resources',
+		$config['form']['resources']);
+
 		if (!empty($config['globals'])) {
 			$def = $container->getDefinition('templating.engine.smarty');
 			foreach ($config['globals'] as $key => $global) {
@@ -71,6 +74,12 @@ class SmartyExtension extends Extension
 				}
 			}
 		}
+
+		unset(
+			$config['form'],
+			$config['globals'],
+			$config['extensions']
+        );
 
 		$container->setParameter('smarty.options', $config['options']);
 
