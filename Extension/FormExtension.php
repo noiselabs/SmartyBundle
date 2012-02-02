@@ -45,6 +45,11 @@ use Symfony\Component\Templating\EngineInterface;
  *  - Symfony\Bridge\TwigExtension\FormExtension
  *  - Symfony\Bundle\FrameworkBundle\Helper\FormHelper
  *
+ * Symfony documentation:
+ *  - {@link http://symfony.com/doc/current/book/forms.html#rendering-a-form-in-a-template}
+ *  - {@link http://symfony.com/doc/current/book/forms.html#form-theming}
+ *  - {@link http://symfony.com/doc/current/cookbook/form/form_customization.html}
+ *
  * @since  0.2.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
@@ -362,10 +367,14 @@ class FormExtension extends AbstractExtension
 				if (!$template instanceof \Smarty_Internal_Template) {
 					$template = $this->loadTemplate($template);
 				}
+
 				$templateBlocks = array();
 				do {
-					$templateBlocks = array_merge($template->getBlocks(), $templateBlocks);
-				} while (false !== $template = $template->getParent(array()));
+					$templateBlocks = array_merge(
+						$this->getTemplateBlocks($template),
+						$templateBlocks
+					);
+				} while (null !== $template = $template->getParent(array()));
 				$blocks = array_merge($blocks, $templateBlocks);
 			}
 
@@ -398,9 +407,9 @@ class FormExtension extends AbstractExtension
 	protected function loadTemplate($name, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
 	{
 		$smarty = $this->engine->getSmarty();
-		$template = $this->engine->load($name);
+		$filename = $this->engine->load($name);
 
-		return $smarty->createTemplate($template, $cache_id, $compile_id,
+		return $smarty->createTemplate($filename, $cache_id, $compile_id,
 		$parent, $do_clone);
 	}
 
@@ -411,6 +420,8 @@ class FormExtension extends AbstractExtension
 	protected function getTemplateBlocks(\Smarty_Internal_Template $template)
 	{
 		$smarty = $this->engine->getSmarty();
-		return $smarty->getTags($template);
+		$tags = $smarty->getTags($template);
+
+		return $tags;
 	}
 }
