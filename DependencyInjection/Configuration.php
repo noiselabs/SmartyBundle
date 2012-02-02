@@ -95,11 +95,11 @@ class Configuration implements ConfigurationInterface
 					->children()
 						->arrayNode('resources')
 							->addDefaultsIfNotSet()
-							->defaultValue(array('form_div_layout.html.tpl'))
+							->defaultValue(array('SmartyBundle:Form:form_div_layout.html.tpl'))
 							->validate()
-								->ifTrue(function($v) { return !in_array('form_div_layout.html.tpl', $v); })
+								->ifTrue(function($v) { return !in_array('SmartyBundle:Form:form_div_layout.html.tpl', $v); })
 								->then(function($v){
-									return array_merge(array('form_div_layout.html.tpl'), $v);
+									return array_merge(array('SmartyBundle:Form:form_div_layout.html.tpl'), $v);
 								})
 							->end()
 							->prototype('scalar')->end()

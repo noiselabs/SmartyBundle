@@ -133,6 +133,17 @@ class SmartyEngine implements EngineInterface
 	}
 
 	/**
+	 * Returns the Smarty instance.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <vbrandao@nexttoyou.pt>
+	 */
+	public function getSmarty()
+	{
+		return $this->smarty;
+	}
+
+	/**
 	 * Renders a template.
 	 *
 	 * @param mixed $name       A template name

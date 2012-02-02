@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Exception\FormException;
 use Symfony\Component\Form\Util\FormUtil;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
  * SmartyBundle extension to render Symfony forms.
@@ -49,16 +50,25 @@ use Symfony\Component\Form\Util\FormUtil;
  */
 class FormExtension extends AbstractExtension
 {
+	protected $engine;
+	protected $resources;
+	protected $blocks;
+	protected $themes;
+	protected $varStack;
+	protected $template;
+
 	/**
 	 * Constructor.
 	 *
+	 * @param EngineInterface $engine    The templating engine
 	 * @param array           $resources An array of theme name
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function __construct(array $resources = array())
+	public function __construct(EngineInterface $engine, array $resources = array())
 	{
+		$this->engine = $engine;
 		$this->themes = new \SplObjectStorage();
 		$this->varStack = array();
 		$this->blocks = new \SplObjectStorage();
@@ -91,12 +101,12 @@ class FormExtension extends AbstractExtension
         return array(
 			new ModifierPlugin('form_enctype', $this, 'renderEnctype'),
 			new ModifierPlugin('form_widget', $this, 'renderWidget'),
-			new FunctionPlugin('form_errors', $this, 'renderErrors'),
-			new FunctionPlugin('form_label', $this, 'renderLabel'),
-			new FunctionPlugin('form_row', $this, 'renderRow'),
-			new FunctionPlugin('form_rest', $this, 'renderRest'),
-			new FunctionPlugin('_form_is_choice_group', $this, 'isChoiceGroup'),
-			new FunctionPlugin('_form_is_choice_selected', $this, 'isChoiceSelected'),
+			new ModifierPlugin('form_errors', $this, 'renderErrors'),
+			new ModifierPlugin('form_label', $this, 'renderLabel'),
+			new ModifierPlugin('form_row', $this, 'renderRow'),
+			new ModifierPlugin('form_rest', $this, 'renderRest'),
+			new ModifierPlugin('_form_is_choice_group', $this, 'isChoiceGroup'),
+			new ModifierPlugin('_form_is_choice_selected', $this, 'isChoiceSelected'),
         );
     }
 
@@ -253,60 +263,60 @@ class FormExtension extends AbstractExtension
 	{
 		$mainTemplate = in_array($section, array('widget', 'row'));
 		if ($mainTemplate && $view->isRendered()) {
-				return '';
+			return '';
 		}
 
-        if (null === $this->template) {
-            $this->template = reset($this->resources);
-            if (!$this->template instanceof \Twig_Template) {
-                $this->template = $this->environment->loadTemplate($this->template);
-            }
-        }
+		if (null === $this->template) {
+			$this->template = reset($this->resources);
+			if (!$this->template instanceof \Smarty_Internal_Template) {
+				$this->template = $this->engine->getSmarty();
+			}
+		}
 
-        $custom = '_'.$view->get('id');
-        $rendering = $custom.$section;
-        $blocks = $this->getBlocks($view);
+		$custom = '_'.$view->get('id');
+		$rendering = $custom.$section;
+		$blocks = $this->getBlocks($view);
 
-        if (isset($this->varStack[$rendering])) {
-            $typeIndex = $this->varStack[$rendering]['typeIndex'] - 1;
-            $types = $this->varStack[$rendering]['types'];
-            $this->varStack[$rendering]['variables'] = array_replace_recursive($this->varStack[$rendering]['variables'], $variables);
-        } else {
-            $types = $view->get('types');
-            $types[] = $custom;
-            $typeIndex = count($types) - 1;
-            $this->varStack[$rendering] = array (
-                'variables' => array_replace_recursive($view->all(), $variables),
-                'types'     => $types,
-            );
-        }
+		if (isset($this->varStack[$rendering])) {
+			$typeIndex = $this->varStack[$rendering]['typeIndex'] - 1;
+			$types = $this->varStack[$rendering]['types'];
+			$this->varStack[$rendering]['variables'] = array_replace_recursive($this->varStack[$rendering]['variables'], $variables);
+		} else {
+			$types = $view->get('types');
+			$types[] = $custom;
+			$typeIndex = count($types) - 1;
+			$this->varStack[$rendering] = array (
+				'variables'	=> array_replace_recursive($view->all(), $variables),
+				'types'		=> $types,
+			);
+		}
 
-        do {
-            $types[$typeIndex] .= '_'.$section;
+		do {
+			$types[$typeIndex] .= '_'.$section;
 
-            if (isset($blocks[$types[$typeIndex]])) {
+			if (isset($blocks[$types[$typeIndex]])) {
 
-                $this->varStack[$rendering]['typeIndex'] = $typeIndex;
+				$this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
-                // we do not call renderBlock here to avoid too many nested level calls (XDebug limits the level to 100 by default)
-                ob_start();
-                $this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $blocks);
-                $html = ob_get_clean();
+				// we do not call renderBlock here to avoid too many nested level calls (XDebug limits the level to 100 by default)
+				ob_start();
+				$this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $blocks);
+				$html = ob_get_clean();
 
-                if ($mainTemplate) {
-                    $view->setRendered();
-                }
+				if ($mainTemplate) {
+					$view->setRendered();
+				}
 
-                unset($this->varStack[$rendering]);
+				unset($this->varStack[$rendering]);
 
-                return $html;
-            }
-        } while (--$typeIndex >= 0);
+				return $html;
+			}
+		} while (--$typeIndex >= 0);
 
-        throw new FormException(sprintf(
-            'Unable to render the form as none of the following blocks exist: "%s".',
-            implode('", "', array_reverse($types))
-        ));
+		throw new FormException(sprintf(
+			'Unable to render the form as none of the following blocks exist: "%s".',
+			implode('", "', array_reverse($types))
+		));
     }
 
 
@@ -321,5 +331,86 @@ class FormExtension extends AbstractExtension
 	public function getName()
 	{
 		return 'form';
+	}
+
+	/**
+	 * Returns the blocks used to render the view.
+	 *
+	 * Templates are looked for in the resources in the following order:
+	 *   * resources from the themes (and its parents)
+	 *   * resources from the themes of parent views (up to the root view)
+	 *   * default resources
+	 *
+	 * @param FormView $view The view
+	 *
+	 * @return array An array of Smarty_Internal_Template instances
+	 */
+	protected function getBlocks(FormView $view)
+	{
+		if (!$this->blocks->contains($view)) {
+
+			$rootView = !$view->hasParent();
+			$templates = $rootView ? $this->resources : array();
+
+			if (isset($this->themes[$view])) {
+				$templates = array_merge($templates, $this->themes[$view]);
+			}
+
+			$blocks = array();
+
+			foreach ($templates as $template) {
+				if (!$template instanceof \Smarty_Internal_Template) {
+					$template = $this->loadTemplate($template);
+				}
+				$templateBlocks = array();
+				do {
+					$templateBlocks = array_merge($template->getBlocks(), $templateBlocks);
+				} while (false !== $template = $template->getParent(array()));
+				$blocks = array_merge($blocks, $templateBlocks);
+			}
+
+			if (!$rootView) {
+				$blocks = array_merge($this->getBlocks($view->getParent()), $blocks);
+			}
+
+			$this->blocks->attach($view, $blocks);
+		} else {
+			$blocks = $this->blocks[$view];
+		}
+
+		return $blocks;
+	}
+
+	/**
+	 * Creates a Smarty_Internal_Template from a logical template name.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 *
+	 * @param string  $name A template name
+	 * @param mixed   $cache_id cache id to be used with this template
+	 * @param mixed   $compile_id compile id to be used with this template
+	 * @param object  $parent next higher level of Smarty variables
+	 * @param boolean $do_clone flag is Smarty object shall be cloned
+	 *
+	 * @return \Smarty_Internal_Template A Smarty_Internal_Template instance.
+	 */
+	protected function loadTemplate($name, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
+	{
+		$smarty = $this->engine->getSmarty();
+		$template = $this->engine->load($name);
+
+		return $smarty->createTemplate($template, $cache_id, $compile_id,
+		$parent, $do_clone);
+	}
+
+	/**
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	protected function getTemplateBlocks(\Smarty_Internal_Template $template)
+	{
+		$smarty = $this->engine->getSmarty();
+		return $smarty->getTags($template);
 	}
 }
