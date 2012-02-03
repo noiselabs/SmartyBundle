@@ -103,16 +103,16 @@
     {/if}
 {/block***}
 
-{***block number_widget}
-    {# type="number" doesn't work with floats #}
-    {set type = type|default('text')}
+{block "number_widget"}
+    {* type="number" doesn't work with floats *}
+    {if !isset($type) || empty($type)}{$type='text'}{/if}
     {block 'field_widget'}{/block}
-{/block***}
+{/block}
 
-{***block integer_widget}
-    {set type = type|default('number')}
+{block "integer_widget"}
+	{if !isset($type) || empty($type)}{$type='number'}{/if}
     {block 'field_widget'}{/block}
-{/block***}
+{/block}
 
 {***block money_widget}
     {{ money_pattern|replace({ '{{ widget }}': block('field_widget') })|raw }}
@@ -161,12 +161,13 @@
     <label{for attrname,attrvalue in attr} {{attrname}}="{{attrvalue}}"{/foreach}>{{ label|trans }}</label>
 {/block***}
 
-{***block "field_label"}
-    {set attr = attr|merge({'for': id})}
+{block "field_label"}
+	{$attr_for.for=$id}
+	{$attr=array_merge($attr, $attr_for)}
     {block 'generic_label'}{/block}
-{/block***}
+{/block}
 
-{block form_label}
+{block "form_label"}
     {block 'generic_label'}{/block}
 {/block}
 
@@ -176,13 +177,13 @@
 	{block 'field_rows'}{/block}
 {/block}
 
-{***block "field_row"}
-    <div>
-        {{ form_label(form, label|default(null)) }}
-        {{ form_errors(form) }}
-        {{ form_widget(form) }}
-    </div>
-{/block***}
+{block "field_row"}
+	<div>
+		{$form|form_label}
+		{$form|form_errors}
+		{$form|form_widget}
+	</div>
+{/block}
 
 {block "hidden_row"}
 	{$form|form_widget}

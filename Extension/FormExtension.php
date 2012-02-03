@@ -422,6 +422,8 @@ class FormExtension extends AbstractExtension
 		$smarty = $this->engine->getSmarty();
 		$tags = $smarty->getTags($template);
 
-		return $tags;
+		return array_filter($tags, function($tag) {
+			return $tag[0] == 'block';
+		});
 	}
 }
