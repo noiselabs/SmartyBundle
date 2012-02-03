@@ -1,9 +1,9 @@
 {* Widgets *}
 
-{block form_widget}
+{block "form_widget"}
 	<div {block 'widget_container_attributes'}{/block}>
 		{block 'field_rows'}{/block}
-		{$form|form_rest}
+		{form_rest form=$form}
     </div>
 {/block}
 
@@ -36,8 +36,8 @@
 	{if $expanded}
 		<div {block 'widget_container_attributes'}{/block}>
 		{foreach $form as $child}
-			{$child|form_widget}
-			{$child|form_label}
+			{form_widget form=$child}
+			{form_label form=$child}
 		{/foreach}
 		</div>
 	{else}
@@ -71,10 +71,10 @@
 		{block 'field_widget'}{/block}
 	{else}
 		<div {block 'widget_container_attributes'}{/block}>
-			{$form.date|form_errors}
-			{$form.time|form_errors}
-			{$form.date|form_widget}
-			{$form.time|form_widget}
+			{form_errors form=$form.date}
+			{form_errors form=$form.time}
+			{form_widget form=$form.date}
+			{form_widget form=$form.time}
 		</div>
 	{/if}
 {/block}
@@ -177,23 +177,23 @@
 	{block 'field_rows'}{/block}
 {/block}
 
-{block "field_row"}
+{function field_row}
 	<div>
-		{$form|form_label}
-		{$form|form_errors}
-		{$form|form_widget}
+		{form_label form=$form}
+		{form_errors form=$form}
+		{form_widget form=$form}
 	</div>
-{/block}
+{/function}
 
-{block "hidden_row"}
-	{$form|form_widget}
-{/block}
+{function hidden_row}
+	{form_widget form=$form}
+{/function}
 
 {* Misc *}
 
-{block "field_enctype"}
+{function field_enctype}
 	{if $multipart}enctype="multipart/form-data"{/if}
-{/block}
+{/function}
 
 {***block "field_errors"}
     {if count($errors) > 0}
@@ -205,22 +205,22 @@
     {/if}
 {/block***}
 
-{block "field_rest"}
+{function field_rest}
 	{foreach $form as $child}
 		{if !$child.rendered}
-			{$child|form_row}
+			{form_row form=$child}
 		{/if}
 	{/foreach}
-{/block}
+{/function}
 
 {* Support *}
 
-{block "field_rows"}
-	{$form|form_errors}
+{function field_rows}
+	{form_errors form=$form}
 	{foreach $form as $child}
-		{$child|form_row}
+		{form_row form=$child}
 	{/foreach}
-{/block}
+{/function}
 
 {***block "widget_attributes"}
     id="{{ id }}" name="{{ full_name }}"{if read_only} disabled="disabled"{/if}{if required} required="required"{/if}{if max_length} maxlength="{{ max_length }}"{/if}{if pattern} pattern="{{ pattern }}"{/if}

@@ -104,12 +104,12 @@ class FormExtension extends AbstractExtension
 	public function getPlugins()
 	{
         return array(
-			new ModifierPlugin('form_enctype', $this, 'renderEnctype'),
-			new ModifierPlugin('form_widget', $this, 'renderWidget'),
-			new ModifierPlugin('form_errors', $this, 'renderErrors'),
-			new ModifierPlugin('form_label', $this, 'renderLabel'),
-			new ModifierPlugin('form_row', $this, 'renderRow'),
-			new ModifierPlugin('form_rest', $this, 'renderRest'),
+			new FunctionPlugin('form_enctype', $this, 'renderEnctype'),
+			new FunctionPlugin('form_widget', $this, 'renderWidget'),
+			new FunctionPlugin('form_errors', $this, 'renderErrors'),
+			new FunctionPlugin('form_label', $this, 'renderLabel'),
+			new FunctionPlugin('form_row', $this, 'renderRow'),
+			new FunctionPlugin('form_rest', $this, 'renderRest'),
 			new ModifierPlugin('_form_is_choice_group', $this, 'isChoiceGroup'),
 			new ModifierPlugin('_form_is_choice_selected', $this, 'isChoiceSelected'),
         );
@@ -138,18 +138,20 @@ class FormExtension extends AbstractExtension
 	 *
 	 * Example usage in Smarty templates:
 	 *
-	 *     <form action="..." method="post" {$form|form_enctype}>
+	 *     <form action="..." method="post" {form_enctype form=$form}>
 	 *
-	 * @param FormView $view  The view for which to render the encoding type
+	 * @param array  $params   Attributes passed from the template.
+	 * @param object $template The \Smarty_Internal_Template instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderEnctype(FormView $view)
+	public function renderEnctype($params, \Smarty_Internal_Template $template)
 	{
-		return $this->render($view, 'enctype');
+		$view = $this->extractFunctionParameters($params);
+		return $this->render(reset($view), $template, 'enctype');
 	}
 
 	/**
@@ -163,25 +165,27 @@ class FormExtension extends AbstractExtension
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderRow(FormView $view, array $variables = array())
+	public function renderRest($params, \Smarty_Internal_Template $template)
 	{
-		return $this->render($view, 'row', $variables);
+		list($view, $variables) = $this->extractFunctionParameters($params);
+		return $this->render($view, $template, 'row', $variables);
 	}
 
 	/**
 	 * Renders views which have not already been rendered.
 	 *
-	 * @param FormView $view      The parent view
-	 * @param array    $variables An array of variables
+	 * @param array  $params   Attributes passed from the template.
+	 * @param object $template The \Smarty_Internal_Template instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderRest(FormView $view, array $variables = array())
+	public function renderRow($params, \Smarty_Internal_Template $template)
 	{
-		return $this->render($view, 'rest', $variables);
+		list($view, $variables) = $this->extractFunctionParameters($params);
+		return $this->render($view, $template, 'rest', $variables);
 	}
 
 	/**
@@ -197,59 +201,58 @@ class FormExtension extends AbstractExtension
 	 *
 	 *     {$form|form_widget:array('separator' => '+++++')}
 	 *
-	 * @param FormView        $view      The view to render
-	 * @param array           $variables Additional variables passed to the template
+	 * @param array  $params   Attributes passed from the template.
+	 * @param object $template The \Smarty_Internal_Template instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderWidget(FormView $view, array $variables = array())
+	public function renderWidget($params, \Smarty_Internal_Template $template)
 	{
-		return $this->render($view, 'widget', $variables);
+		list($view, $variables) = $this->extractFunctionParameters($params);
+		return $this->render($view, $template, 'widget', $variables);
 	}
 
     /**
 	 * Renders the errors of the given view.
 	 *
-	 * @param FormView $view The view to render the errors for
+	 * @param array  $params   Attributes passed from the template.
+	 * @param object $template The \Smarty_Internal_Template instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderErrors(FormView $view)
+	public function renderErrors($params, \Smarty_Internal_Template $template)
 	{
-		return $this->render($view, 'errors');
+		$view = reset($this->extractFunctionParameters($params));
+		return $this->render($view, $template, 'errors');
 	}
 
     /**
 	 * Renders the label of the given view.
 	 *
-	 * @param FormView $view  The view to render the label for
-	 * @param string   $label Label name
-	 * @param array    $variables Additional variables passed to the template
+	 * @param array  $params   Attributes passed from the template.
+	 * @param object $template The \Smarty_Internal_Template instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderLabel(FormView $view, $label = null, array $variables = array())
+	public function renderLabel($params, \Smarty_Internal_Template $template)
 	{
-		if ($label !== null) {
-			$variables += array('label' => $label);
-		}
-
+		list($view, $variables) = $this->extractFunctionParameters($params);
 		return $this->render($view, 'label', $variables);
 	}
 
 	/**
 	 * Renders a template.
 	 *
-	 * 1. This function first looks for a block named "_<view id>_<section>",
+	 * 1. This function first looks for a function named "_<view id>_<section>",
 	 * 2. if such a block is not found the function will look for a block named
 	 *    "<type name>_<section>",
 	 * 3. the type name is recursively replaced by the parent type name until a
@@ -264,23 +267,15 @@ class FormExtension extends AbstractExtension
 	 *
 	 * @throws FormException if no template block exists to render the given section of the view
 	 */
-	protected function render(FormView $view, $section, array $variables = array())
+	protected function render(FormView $view, \Smarty_Internal_Template $template, $section, array $variables = array())
 	{
 		$mainTemplate = in_array($section, array('widget', 'row'));
 		if ($mainTemplate && $view->isRendered()) {
 			return '';
 		}
 
-		if (null === $this->template) {
-			$this->template = reset($this->resources);
-			if (!$this->template instanceof \Smarty_Internal_Template) {
-				$this->template = $this->engine->getSmarty();
-			}
-		}
-
 		$custom = '_'.$view->get('id');
 		$rendering = $custom.$section;
-		$blocks = $this->getBlocks($view);
 
 		if (isset($this->varStack[$rendering])) {
 			$typeIndex = $this->varStack[$rendering]['typeIndex'] - 1;
@@ -303,7 +298,6 @@ class FormExtension extends AbstractExtension
 
 				$this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
-				// we do not call renderBlock here to avoid too many nested level calls (XDebug limits the level to 100 by default)
 				ob_start();
 				$this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $blocks);
 				$html = ob_get_clean();
@@ -318,6 +312,7 @@ class FormExtension extends AbstractExtension
 			}
 		} while (--$typeIndex >= 0);
 
+		return;
 		throw new FormException(sprintf(
 			'Unable to render the form as none of the following blocks exist: "%s".',
 			implode('", "', array_reverse($types))
@@ -339,7 +334,27 @@ class FormExtension extends AbstractExtension
 	}
 
 	/**
-	 * Returns the blocks used to render the view.
+	 * Returns, if available, the $form parameter from the parameters array
+	 * passed to the Smarty plugin function. When missing a FormException is
+	 * thrown.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	protected function extractFunctionParameters(array $parameters)
+	{
+		if (!isset($parameters['form'])) {
+			throw new FormException("Form parameter missing in Smarty function");
+		}
+
+		$view = $parameters['form'];
+		unset($parameters['form']);
+
+		return array($view, $parameters);
+	}
+
+	/**
+	 * Returns the functions used to render the view.
 	 *
 	 * Templates are looked for in the resources in the following order:
 	 *   * resources from the themes (and its parents)
@@ -417,7 +432,7 @@ class FormExtension extends AbstractExtension
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	protected function getTemplateBlocks(\Smarty_Internal_Template $template)
+	protected function getTemplateFunctions(\Smarty_Internal_Template $template)
 	{
 		$smarty = $this->engine->getSmarty();
 		$tags = $smarty->getTags($template);
@@ -426,4 +441,13 @@ class FormExtension extends AbstractExtension
 			return $tag[0] == 'block';
 		});
 	}
+
+	/*
+		if (null === $this->template) {
+			$this->template = reset($this->resources);
+			if (!$this->template instanceof \Smarty_Internal_Template) {
+				$this->template = $this->engine->getSmarty();
+			}
+		}
+	*/
 }
