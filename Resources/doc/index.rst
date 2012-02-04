@@ -102,7 +102,7 @@ Enable the bundle in the kernel::
 	{
 		$bundles = array(
 			// ...
-			new NoiseLabs\Bundle\SmartyBundle(),
+			new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
 		);
 	}
 
