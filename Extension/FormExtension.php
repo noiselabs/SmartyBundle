@@ -31,6 +31,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use Smarty_Internal_Template as SmartyTemplate;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Exception\FormException;
@@ -57,16 +58,16 @@ class FormExtension extends AbstractExtension
 {
 	protected $engine;
 	protected $resources;
-	protected $blocks;
+	protected $functions;
 	protected $themes;
 	protected $varStack;
-	protected $template;
+	protected $templates;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param EngineInterface $engine    The templating engine
-	 * @param array           $resources An array of theme name
+	 * @param array           $resources An array of theme names
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -74,17 +75,17 @@ class FormExtension extends AbstractExtension
 	public function __construct(EngineInterface $engine, array $resources = array())
 	{
 		$this->engine = $engine;
-		$this->themes = new \SplObjectStorage();
-		$this->varStack = array();
-		$this->blocks = new \SplObjectStorage();
 		$this->resources = $resources;
+		$this->varStack = array();
+		$this->themes = new \SplObjectStorage();
+		$this->templates = new \SplObjectStorage();
 	}
 
 	/**
 	 * Sets a theme for a given view.
 	 *
-	 * @param FormView $view      A FormView instance
-	 * @param array    $resources An array of resources
+	 * @param FormView $view       A FormView instance
+	* @param array    $resources   An array of resources
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -92,7 +93,7 @@ class FormExtension extends AbstractExtension
 	public function setTheme(FormView $view, array $resources)
 	{
 		$this->themes->attach($view, $resources);
-		$this->blocks = new \SplObjectStorage();
+		$this->templates = new \SplObjectStorage();
 	}
 
 	/**
@@ -141,14 +142,14 @@ class FormExtension extends AbstractExtension
 	 *     <form action="..." method="post" {form_enctype form=$form}>
 	 *
 	 * @param array  $params   Attributes passed from the template.
-	 * @param object $template The \Smarty_Internal_Template instance.
+	 * @param object $template The SmartyTemplate instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderEnctype($params, \Smarty_Internal_Template $template)
+	public function renderEnctype($params, SmartyTemplate $template)
 	{
 		$view = $this->extractFunctionParameters($params);
 		return $this->render(reset($view), $template, 'enctype');
@@ -165,7 +166,7 @@ class FormExtension extends AbstractExtension
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderRest($params, \Smarty_Internal_Template $template)
+	public function renderRest($params, SmartyTemplate $template)
 	{
 		list($view, $variables) = $this->extractFunctionParameters($params);
 		return $this->render($view, $template, 'row', $variables);
@@ -175,14 +176,14 @@ class FormExtension extends AbstractExtension
 	 * Renders views which have not already been rendered.
 	 *
 	 * @param array  $params   Attributes passed from the template.
-	 * @param object $template The \Smarty_Internal_Template instance.
+	 * @param object $template The SmartyTemplate instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderRow($params, \Smarty_Internal_Template $template)
+	public function renderRow($params, SmartyTemplate $template)
 	{
 		list($view, $variables) = $this->extractFunctionParameters($params);
 		return $this->render($view, $template, 'rest', $variables);
@@ -202,14 +203,14 @@ class FormExtension extends AbstractExtension
 	 *     {$form|form_widget:array('separator' => '+++++')}
 	 *
 	 * @param array  $params   Attributes passed from the template.
-	 * @param object $template The \Smarty_Internal_Template instance.
+	 * @param object $template The SmartyTemplate instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderWidget($params, \Smarty_Internal_Template $template)
+	public function renderWidget($params, SmartyTemplate $template)
 	{
 		list($view, $variables) = $this->extractFunctionParameters($params);
 		return $this->render($view, $template, 'widget', $variables);
@@ -219,31 +220,31 @@ class FormExtension extends AbstractExtension
 	 * Renders the errors of the given view.
 	 *
 	 * @param array  $params   Attributes passed from the template.
-	 * @param object $template The \Smarty_Internal_Template instance.
+	 * @param object $template The SmartyTemplate instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderErrors($params, \Smarty_Internal_Template $template)
+	public function renderErrors($params, \SmartyTemplate $template)
 	{
-		$view = reset($this->extractFunctionParameters($params));
-		return $this->render($view, $template, 'errors');
+		$view = $this->extractFunctionParameters($params);
+		return $this->render(reset($view), $template, 'errors');
 	}
 
     /**
 	 * Renders the label of the given view.
 	 *
 	 * @param array  $params   Attributes passed from the template.
-	 * @param object $template The \Smarty_Internal_Template instance.
+	 * @param object $template The SmartyTemplate instance.
 	 *
 	 * @return string The html markup
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderLabel($params, \Smarty_Internal_Template $template)
+	public function renderLabel($params, SmartyTemplate $template)
 	{
 		list($view, $variables) = $this->extractFunctionParameters($params);
 		return $this->render($view, 'label', $variables);
@@ -267,12 +268,14 @@ class FormExtension extends AbstractExtension
 	 *
 	 * @throws FormException if no template block exists to render the given section of the view
 	 */
-	protected function render(FormView $view, \Smarty_Internal_Template $template, $section, array $variables = array())
+	protected function render(FormView $view, SmartyTemplate $template, $section, array $variables = array())
 	{
 		$mainTemplate = in_array($section, array('widget', 'row'));
 		if ($mainTemplate && $view->isRendered()) {
 			return '';
 		}
+
+		$this->loadTemplates($view, $template);
 
 		$custom = '_'.$view->get('id');
 		$rendering = $custom.$section;
@@ -280,7 +283,8 @@ class FormExtension extends AbstractExtension
 		if (isset($this->varStack[$rendering])) {
 			$typeIndex = $this->varStack[$rendering]['typeIndex'] - 1;
 			$types = $this->varStack[$rendering]['types'];
-			$this->varStack[$rendering]['variables'] = array_replace_recursive($this->varStack[$rendering]['variables'], $variables);
+			$this->varStack[$rendering]['variables'] = array_replace_recursive(
+				$this->varStack[$rendering]['variables'], $variables);
 		} else {
 			$types = $view->get('types');
 			$types[] = $custom;
@@ -292,21 +296,21 @@ class FormExtension extends AbstractExtension
 		}
 
 		do {
-			$types[$typeIndex] .= '_'.$section;
+			$function = $types[$typeIndex] .= '_'.$section;
+			$template = $this->lookupTemplateFunction($view, $function);
 
-			if (isset($blocks[$types[$typeIndex]])) {
+			if ($template) {
 
 				$this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
-				ob_start();
-				$this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $blocks);
-				$html = ob_get_clean();
+				//$this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $functions);
+				$html = '';
+
+				unset($this->varStack[$rendering]);
 
 				if ($mainTemplate) {
 					$view->setRendered();
 				}
-
-				unset($this->varStack[$rendering]);
 
 				return $html;
 			}
@@ -314,7 +318,7 @@ class FormExtension extends AbstractExtension
 
 		return;
 		throw new FormException(sprintf(
-			'Unable to render the form as none of the following blocks exist: "%s".',
+			'Unable to render the form as none of the following functions exist: "%s".',
 			implode('", "', array_reverse($types))
 		));
     }
@@ -344,7 +348,7 @@ class FormExtension extends AbstractExtension
 	protected function extractFunctionParameters(array $parameters)
 	{
 		if (!isset($parameters['form'])) {
-			throw new FormException("Form parameter missing in Smarty function");
+			throw new FormException("'form' parameter missing in Smarty template function.");
 		}
 
 		$view = $parameters['form'];
@@ -354,59 +358,59 @@ class FormExtension extends AbstractExtension
 	}
 
 	/**
-	 * Returns the functions used to render the view.
+	 * Returns the Smarty functions used to render the view.
 	 *
-	 * Templates are looked for in the resources in the following order:
-	 *   * resources from the themes (and its parents)
-	 *   * resources from the themes of parent views (up to the root view)
-	 *   * default resources
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 *
 	 * @param FormView $view The view
+	 * @param string   $block The name of the function
 	 *
-	 * @return array An array of Smarty_Internal_Template instances
+	 * @return array An array
 	 */
-	protected function getBlocks(FormView $view)
+	protected function lookupTemplateFunction(FormView $view, $function)
 	{
-		if (!$this->blocks->contains($view)) {
-
-			$rootView = !$view->hasParent();
-			$templates = $rootView ? $this->resources : array();
-
-			if (isset($this->themes[$view])) {
-				$templates = array_merge($templates, $this->themes[$view]);
+		foreach ($this->templates as $template) {
+			if (in_array($function, array_keys($template->template_functions))) {
+				return $template;
 			}
-
-			$blocks = array();
-
-			foreach ($templates as $template) {
-				if (!$template instanceof \Smarty_Internal_Template) {
-					$template = $this->loadTemplate($template);
-				}
-
-				$templateBlocks = array();
-				do {
-					$templateBlocks = array_merge(
-						$this->getTemplateBlocks($template),
-						$templateBlocks
-					);
-				} while (null !== $template = $template->getParent(array()));
-				$blocks = array_merge($blocks, $templateBlocks);
-			}
-
-			if (!$rootView) {
-				$blocks = array_merge($this->getBlocks($view->getParent()), $blocks);
-			}
-
-			$this->blocks->attach($view, $blocks);
-		} else {
-			$blocks = $this->blocks[$view];
 		}
 
-		return $blocks;
+		return false;
 	}
 
 	/**
-	 * Creates a Smarty_Internal_Template from a logical template name.
+	 * Creates SmartyTemplate instances for every resource (template filename)
+	 * set.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 *
+	 * @return \SplObjectStorage Collection of SmartyTemplate instances
+	 */
+	protected function loadTemplates(FormView $view, SmartyTemplate $template = null)
+	{
+		$resources = $this->resources;
+
+		if (isset($this->themes[$view])) {
+			$resources = array_merge($resources, $this->themes[$view]);
+		}
+
+		foreach ($resources as $resource) {
+			if ($this->engine->exists($resource)) {
+				$this->templates->attach($this->loadTemplate($resource));
+			}
+		}
+
+		if (isset($template)) {
+			$this->templates->attach($template);
+		}
+
+		return $this->templates;
+	}
+
+	/**
+	 * Creates a SmartyTemplate from a logical template name.
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -417,37 +421,17 @@ class FormExtension extends AbstractExtension
 	 * @param object  $parent next higher level of Smarty variables
 	 * @param boolean $do_clone flag is Smarty object shall be cloned
 	 *
-	 * @return \Smarty_Internal_Template A Smarty_Internal_Template instance.
+	 * @return SmartyTemplate A SmartyTemplate instance.
 	 */
 	protected function loadTemplate($name, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
 	{
 		$smarty = $this->engine->getSmarty();
 		$filename = $this->engine->load($name);
 
-		return $smarty->createTemplate($filename, $cache_id, $compile_id,
+		$template = $smarty->createTemplate($filename, $cache_id, $compile_id,
 		$parent, $do_clone);
+		$template->fetch();
+
+		return $template;
 	}
-
-	/**
-	 * @since  0.2.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	protected function getTemplateFunctions(\Smarty_Internal_Template $template)
-	{
-		$smarty = $this->engine->getSmarty();
-		$tags = $smarty->getTags($template);
-
-		return array_filter($tags, function($tag) {
-			return $tag[0] == 'block';
-		});
-	}
-
-	/*
-		if (null === $this->template) {
-			$this->template = reset($this->resources);
-			if (!$this->template instanceof \Smarty_Internal_Template) {
-				$this->template = $this->engine->getSmarty();
-			}
-		}
-	*/
 }

@@ -86,7 +86,7 @@ Add the ``NoiseLabs`` namespace to your autoloader::
 
 	$loader->registerNamespaces(array(
 		// ...
-		'NoiseLabs' => __DIR__.'/../vendor/bundles',
+		'NoiseLabs\\Bundle' => __DIR__.'/../vendor/bundles',
 	));
 
 
@@ -102,7 +102,7 @@ Enable the bundle in the kernel::
 	{
 		$bundles = array(
 			// ...
-			new NoiseLabs\Bundle\SmartyBundle(),
+			new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
 		);
 	}
 
