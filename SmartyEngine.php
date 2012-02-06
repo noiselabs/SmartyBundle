@@ -32,6 +32,7 @@ namespace NoiseLabs\Bundle\SmartyBundle;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
+use Smarty_Internal_Template as SmartyTemplate;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Response;
@@ -236,7 +237,7 @@ class SmartyEngine implements EngineInterface
 	 */
 	public function supports($name)
 	{
-		if ($name instanceof \Smarty_Internal_Template) {
+		if ($name instanceof SmartyTemplate) {
 			return true;
 		}
 
@@ -280,10 +281,13 @@ $response = null)
 	 *
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 *
+	 * @todo Check windows filepaths as defined in
+	 * {@link http://www.smarty.net/docs/en/resources.tpl#templates.windows.filepath}.
 	 */
 	public function load($name)
 	{
-		if ($name instanceof \Smarty_Internal_Template) {
+		if ($name instanceof SmartyTemplate) {
 			return $name;
 		}
 

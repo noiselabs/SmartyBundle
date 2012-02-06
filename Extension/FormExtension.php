@@ -297,14 +297,15 @@ class FormExtension extends AbstractExtension
 
 		do {
 			$function = $types[$typeIndex] .= '_'.$section;
-			$template = $this->lookupTemplateFunction($view, $function);
+			$template = $this->lookupTemplateFunction($function);
 
 			if ($template) {
 
 				$this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
-				//$this->template->displayBlock($types[$typeIndex], $this->varStack[$rendering]['variables'], $functions);
-				$html = '';
+				ob_start();
+				$this->displayTemplateFunction($template, $function, $this->varStack[$rendering]['variables']);
+				$html = ob_get_clean();
 
 				unset($this->varStack[$rendering]);
 
@@ -338,6 +339,31 @@ class FormExtension extends AbstractExtension
 	}
 
 	/**
+	 * Renders the Smarty template function.
+	 *
+	 * Thanks to Uwe Tews for providing information on Smarty inner workings
+	 * allowing the call to the template function from within the plugin:
+	 * {@link http://stackoverflow.com/questions/9152047/in-smarty3-call-a-template-function-defined-by-the-function-tag-from-within-a}.
+	 *
+	 * \Smarty_Internal_Function_Call_Handler is defined in file
+	 * smarty/libs/sysplugins/smarty_internal_function_call_handler.php.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	protected function displayTemplateFunction(SmartyTemplate $template, $function,
+	array $attributes = array())
+	{
+		if ($template->caching) {
+			\Smarty_Internal_Function_Call_Handler::call($function,
+			$template, $attributes, $template->properties['nocache_hash'], false);
+		} else {
+			$function = 'smarty_template_function_'.$function;
+			$function($template, $attributes);
+		}
+	 }
+
+	/**
 	 * Returns, if available, the $form parameter from the parameters array
 	 * passed to the Smarty plugin function. When missing a FormException is
 	 * thrown.
@@ -363,12 +389,12 @@ class FormExtension extends AbstractExtension
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 *
-	 * @param FormView $view The view
 	 * @param string   $block The name of the function
 	 *
-	 * @return array An array
+	 * @return SmartyTemplate\false Return the SmartyTemplate where the function
+	 * is found or false if it doesn't exist in any loaded template object.
 	 */
-	protected function lookupTemplateFunction(FormView $view, $function)
+	protected function lookupTemplateFunction($function)
 	{
 		foreach ($this->templates as $template) {
 			if (in_array($function, array_keys($template->template_functions))) {
