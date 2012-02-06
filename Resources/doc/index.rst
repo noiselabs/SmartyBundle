@@ -276,6 +276,11 @@ Following the example presented in the link above, the Smarty equivalent is::
 
 	{render max='3'}AcmeArticleBundle:Article:recentArticles{/render}
 
+Form Extension
+++++++++++++++
+
+*Coming soon*.
+
 Enabling custom Extensions
 ++++++++++++++++++++++++++
 

@@ -51,6 +51,9 @@ use Symfony\Component\Templating\EngineInterface;
  *  - {@link http://symfony.com/doc/current/book/forms.html#form-theming}
  *  - {@link http://symfony.com/doc/current/cookbook/form/form_customization.html}
  *
+ * Thanks for Smarty developers Uwe Tews and Rodney Rehm for 1) patience and 2)
+ * insight on Smarty internals.
+ *
  * @since  0.2.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
@@ -85,7 +88,7 @@ class FormExtension extends AbstractExtension
 	 * Sets a theme for a given view.
 	 *
 	 * @param FormView $view       A FormView instance
-	* @param array    $resources   An array of resources
+	 * @param array    $resources   An array of resources
 	 *
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -304,20 +307,23 @@ class FormExtension extends AbstractExtension
 				$this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
 				ob_start();
-				$this->displayTemplateFunction($template, $function, $this->varStack[$rendering]['variables']);
+				$functionExists = $this->displayTemplateFunction($template,
+					$function, $this->varStack[$rendering]['variables']);
 				$html = ob_get_clean();
 
-				unset($this->varStack[$rendering]);
+				if ($functionExists) {
 
-				if ($mainTemplate) {
-					$view->setRendered();
+					unset($this->varStack[$rendering]);
+
+					if ($mainTemplate) {
+						$view->setRendered();
+					}
+
+					return $html;
 				}
-
-				return $html;
 			}
 		} while (--$typeIndex >= 0);
 
-		return;
 		throw new FormException(sprintf(
 			'Unable to render the form as none of the following functions exist: "%s".',
 			implode('", "', array_reverse($types))
@@ -339,31 +345,6 @@ class FormExtension extends AbstractExtension
 	}
 
 	/**
-	 * Renders the Smarty template function.
-	 *
-	 * Thanks to Uwe Tews for providing information on Smarty inner workings
-	 * allowing the call to the template function from within the plugin:
-	 * {@link http://stackoverflow.com/questions/9152047/in-smarty3-call-a-template-function-defined-by-the-function-tag-from-within-a}.
-	 *
-	 * \Smarty_Internal_Function_Call_Handler is defined in file
-	 * smarty/libs/sysplugins/smarty_internal_function_call_handler.php.
-	 *
-	 * @since  0.2.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	protected function displayTemplateFunction(SmartyTemplate $template, $function,
-	array $attributes = array())
-	{
-		if ($template->caching) {
-			\Smarty_Internal_Function_Call_Handler::call($function,
-			$template, $attributes, $template->properties['nocache_hash'], false);
-		} else {
-			$function = 'smarty_template_function_'.$function;
-			$function($template, $attributes);
-		}
-	 }
-
-	/**
 	 * Returns, if available, the $form parameter from the parameters array
 	 * passed to the Smarty plugin function. When missing a FormException is
 	 * thrown.
@@ -381,28 +362,6 @@ class FormExtension extends AbstractExtension
 		unset($parameters['form']);
 
 		return array($view, $parameters);
-	}
-
-	/**
-	 * Returns the Smarty functions used to render the view.
-	 *
-	 * @since  0.2.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 *
-	 * @param string   $block The name of the function
-	 *
-	 * @return SmartyTemplate\false Return the SmartyTemplate where the function
-	 * is found or false if it doesn't exist in any loaded template object.
-	 */
-	protected function lookupTemplateFunction($function)
-	{
-		foreach ($this->templates as $template) {
-			if (in_array($function, array_keys($template->template_functions))) {
-				return $template;
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -459,5 +418,62 @@ class FormExtension extends AbstractExtension
 		$template->fetch();
 
 		return $template;
+	}
+
+	/**
+	 * Returns the Smarty functions used to render the view.
+	 *
+	 * @note This method may return a function that is not callable because it
+	 * looks for function templates defined in the template file which may not
+	 * be accessible due to be outside template blocks for instance (in a child
+	 * template).
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 *
+	 * @param string   $block The name of the function
+	 *
+	 * @return SmartyTemplate\false Return the SmartyTemplate where the function
+	 * is found or false if it doesn't exist in any loaded template object.
+	 */
+	protected function lookupTemplateFunction($function)
+	{
+		foreach ($this->templates as $template) {
+			if (in_array($function, array_keys($template->template_functions))) {
+				return $template;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Renders the Smarty template function.
+	 *
+	 * Thanks to Uwe Tews for providing information on Smarty inner workings
+	 * allowing the call to the template function from within the plugin:
+	 * {@link http://stackoverflow.com/questions/9152047/in-smarty3-call-a-template-function-defined-by-the-function-tag-from-within-a}.
+	 *
+	 * \Smarty_Internal_Function_Call_Handler is defined in file
+	 * smarty/libs/sysplugins/smarty_internal_function_call_handler.php.
+	 *
+	 * @since  0.2.0
+	 * @author Vítor Brandão <noisebleed@noiselabs.org>
+	 */
+	protected function displayTemplateFunction(SmartyTemplate $template, $function,
+	array $attributes = array())
+	{
+		if ($template->caching) {
+			\Smarty_Internal_Function_Call_Handler::call($function,
+			$template, $attributes, $template->properties['nocache_hash'], false);
+			return true;
+		} else {
+			if (is_callable($function = 'smarty_template_function_'.$function)) {
+				$function($template, $attributes);
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
