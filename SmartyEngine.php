@@ -258,8 +258,8 @@ class SmartyEngine implements EngineInterface
 	 * @since  0.1.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderResponse($view, array $parameters = array(), Response
-$response = null)
+	public function renderResponse($view, array $parameters = array(),
+	Response $response = null)
 	{
 		if (null === $response) {
 			$response = new Response();

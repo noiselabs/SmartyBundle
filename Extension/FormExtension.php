@@ -230,10 +230,10 @@ class FormExtension extends AbstractExtension
 	 * @since  0.2.0
 	 * @author Vítor Brandão <noisebleed@noiselabs.org>
 	 */
-	public function renderErrors($params, \SmartyTemplate $template)
+	public function renderErrors($params, SmartyTemplate $template)
 	{
-		$view = $this->extractFunctionParameters($params);
-		return $this->render(reset($view), $template, 'errors');
+		list($view) = $this->extractFunctionParameters($params);
+		return $this->render($view, $template, 'errors');
 	}
 
     /**
