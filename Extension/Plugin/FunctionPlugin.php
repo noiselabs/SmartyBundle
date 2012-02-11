@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class FunctionPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'function';
-	}
+    public function getType()
+    {
+        return 'function';
+    }
 }

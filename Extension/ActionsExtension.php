@@ -40,66 +40,66 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ActionsExtension extends AbstractExtension
 {
-	protected $container;
+    protected $container;
 
-	/**
-	 * Constructor.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function __construct(ContainerInterface $container)
-	{
-		$this->container = $container;
-	}
+    /**
+     * Constructor.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getPlugins()
-	{
-		return array(
-			new BlockPlugin('render', $this, 'renderAction')
-		);
-	}
+    /**
+     * {@inheritdoc}
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getPlugins()
+    {
+        return array(
+            new BlockPlugin('render', $this, 'renderAction')
+        );
+    }
 
-	/**
-	 * Returns the Response content for a given controller or URI.
-	 *
-	 * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
-	 *
-	 * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver::render()
-	 * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function renderAction(array $parameters = array(), $controller = null, $template, &$repeat)
-	{
-		// only output on the closing tag
-		if (!$repeat) {
-			$parameters = array_merge(array(
-				'attributes'	=> array(),
-				'options'		=> array(),
-			), $parameters);
+    /**
+     * Returns the Response content for a given controller or URI.
+     *
+     * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
+     *
+     * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver::render()
+     * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function renderAction(array $parameters = array(), $controller = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            $parameters = array_merge(array(
+                'attributes'    => array(),
+                'options'       => array(),
+            ), $parameters);
 
-			return $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']);
-		}
-	}
+            return $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']);
+        }
+    }
 
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getName()
-	{
-		return 'actions';
-	}
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getName()
+    {
+        return 'actions';
+    }
 }

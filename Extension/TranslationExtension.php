@@ -41,86 +41,86 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class TranslationExtension extends AbstractExtension
 {
-	protected $translator;
+    protected $translator;
 
-	/**
-	 * Constructor.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function __construct(TranslatorInterface $translator)
-	{
-		$this->translator = $translator;
-	}
+    /**
+     * Constructor.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getTranslator()
-	{
-		return $this->translator;
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getPlugins()
-	{
-		return array(
-			new BlockPlugin('trans', $this, 'trans_block'),
-			new ModifierPlugin('trans', $this, 'trans_modifier')
-		);
-	}
+    /**
+     * {@inheritdoc}
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getPlugins()
+    {
+        return array(
+            new BlockPlugin('trans', $this, 'trans_block'),
+            new ModifierPlugin('trans', $this, 'trans_modifier')
+        );
+    }
 
-	/**
-	 * @param string Message to translate
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function trans_block(array $parameters = array(), $message = null, $template, &$repeat)
-	{
-		// only output on the closing tag
-		if (!$repeat) {
-			$parameters = array_merge(array(
-				'arguments'	=> array(),
-				'domain'	=> 'messages',
-				'locale'	=> null,
-			), $parameters);
+    /**
+     * @param string Message to translate
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function trans_block(array $parameters = array(), $message = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            $parameters = array_merge(array(
+                'arguments' => array(),
+                'domain'    => 'messages',
+                'locale'    => null,
+            ), $parameters);
 
-			return $this->translator->trans($message, $parameters['arguments'], $parameters['domain'], $parameters['locale']);
-		}
-	}
+            return $this->translator->trans($message, $parameters['arguments'], $parameters['domain'], $parameters['locale']);
+        }
+    }
 
-	/**
-	 * Usage in template context:
-	 * <code>
-	 * {"text to be translated"|trans}
-	 * </code>
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
+    /**
+     * Usage in template context:
+     * <code>
+     * {"text to be translated"|trans}
+     * </code>
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
     public function trans_modifier($message, array $arguments = array(), $domain = 'messages', $locale = null)
     {
         return $this->translator->trans($message, $arguments, $domain, $locale);
     }
 
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getName()
-	{
-		return 'translator';
-	}
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getName()
+    {
+        return 'translator';
+    }
 }

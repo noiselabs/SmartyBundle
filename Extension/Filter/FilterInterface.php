@@ -31,5 +31,5 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
 
 interface FilterInterface
 {
-	public function getType();
+    public function getType();
 }

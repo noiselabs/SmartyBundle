@@ -41,12 +41,12 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SmartyBundle extends Bundle
 {
-	const VERSION = '0.2.0-DEV';
+    const VERSION = '0.2.0-DEV';
 
-	public function build(ContainerBuilder $container)
-	{
-		parent::build($container);
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
 
-		$container->addCompilerPass(new RegisterExtensionsPass());
-	}
+        $container->addCompilerPass(new RegisterExtensionsPass());
+    }
 }

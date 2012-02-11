@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class ResourcePlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'resource';
-	}
+    public function getType()
+    {
+        return 'resource';
+    }
 }

@@ -31,5 +31,5 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 
 interface PluginInterface
 {
-	public function getType();
+    public function getType();
 }

@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class PrefilterPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'prefilter';
-	}
+    public function getType()
+    {
+        return 'prefilter';
+    }
 }

@@ -42,29 +42,29 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 */
 abstract class Filter implements FilterInterface
 {
-	/**
-	 * Available filter types.
-	 * @var array
-	 */
-	protected static $types = array('pre', 'post', 'output', 'variable');
-	protected $extension;
-	protected $method;
+    /**
+     * Available filter types.
+     * @var array
+     */
+    protected static $types = array('pre', 'post', 'output', 'variable');
+    protected $extension;
+    protected $method;
 
-	public function __construct(ExtensionInterface $extension, $method)
-	{
-		$this->extension = $extension;
-		$this->method = $method;
-	}
+    public function __construct(ExtensionInterface $extension, $method)
+    {
+        $this->extension = $extension;
+        $this->method = $method;
+    }
 
-	public function getCallback()
-	{
-		return array($this->extension, $this->method);
-	}
+    public function getCallback()
+    {
+        return array($this->extension, $this->method);
+    }
 
-	public function validateType()
-	{
-		if (!in_array($this->getType(), static::$types)) {
-			throw new \RuntimeException("Filter type: '".$this->getType()."' is not allowed.");
-		}
-	}
+    public function validateType()
+    {
+        if (!in_array($this->getType(), static::$types)) {
+            throw new \RuntimeException("Filter type: '".$this->getType()."' is not allowed.");
+        }
+    }
 }

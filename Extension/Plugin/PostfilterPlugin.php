@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class PostfilerPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'postfilter';
-	}
+    public function getType()
+    {
+        return 'postfilter';
+    }
 }

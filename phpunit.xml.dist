@@ -2,30 +2,30 @@
 
 <!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
-	bootstrap="Tests/bootstrap.php"
-	colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true"
-	syntaxCheck="true"
+    bootstrap="Tests/bootstrap.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    syntaxCheck="true"
 >
-	<php>
-		<!-- <server name="SMARTYBUNDLE_TEST_VENDOR_DIR" value="/path/to/vendors" /> -->
-	</php>
+    <php>
+        <!-- <server name="SMARTYBUNDLE_TEST_VENDOR_DIR" value="/path/to/vendors" /> -->
+    </php>
 
-	<testsuites>
-		<testsuite name="NoiseLabs-SmartyBundle Test Suite">
-			<directory suffix="Test.php">./Tests</directory>
-		</testsuite>
-	</testsuites>
+    <testsuites>
+        <testsuite name="NoiseLabs-SmartyBundle Test Suite">
+            <directory suffix="Test.php">./Tests</directory>
+        </testsuite>
+    </testsuites>
 
-	<filter>
-		<whitelist>
-			<directory>./</directory>
-			<exclude>
-				<directory>./Resources</directory>
-				<directory>./Tests</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Resources</directory>
+                <directory>./Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>

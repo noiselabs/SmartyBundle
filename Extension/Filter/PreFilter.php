@@ -43,8 +43,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
  */
 class PreFilter extends Filter
 {
-	public function getType()
-	{
-		return 'pre';
-	}
+    public function getType()
+    {
+        return 'pre';
+    }
 }

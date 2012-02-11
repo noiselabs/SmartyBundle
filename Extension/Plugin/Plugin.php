@@ -42,73 +42,73 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
  */
 abstract class Plugin implements PluginInterface
 {
-	/**
-	 * Available plugin types.
-	 * @var array
-	 */
-	protected static $types = array('function', 'modifier', 'block',
-	'compiler', 'prefilter', 'postfilter', 'outputfilter', 'resource',
-	'insert');
-	protected $name;
-	protected $extension;
-	protected $method;
+    /**
+     * Available plugin types.
+     * @var array
+     */
+    protected static $types = array('function', 'modifier', 'block',
+    'compiler', 'prefilter', 'postfilter', 'outputfilter', 'resource',
+    'insert');
+    protected $name;
+    protected $extension;
+    protected $method;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string             $name      The plugin name
-	 * @param ExtensionInterface $extension A ExtensionInterface instance
-	 * @param string             $method    Method name
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function __construct($name, ExtensionInterface $extension, $method)
-	{
-		$this->name = $name;
-		$this->extension = $extension;
-		$this->method = $method;
-	}
+    /**
+     * Constructor.
+     *
+     * @param string             $name      The plugin name
+     * @param ExtensionInterface $extension A ExtensionInterface instance
+     * @param string             $method    Method name
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function __construct($name, ExtensionInterface $extension, $method)
+    {
+        $this->name = $name;
+        $this->extension = $extension;
+        $this->method = $method;
+    }
 
-	/**
-	 * Get the plugin name.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
+    /**
+     * Get the plugin name.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	/**
-	 * Set the plugin name.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
+    /**
+     * Set the plugin name.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getCallback()
-	{
-		return array($this->extension, $this->method);
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getCallback()
+    {
+        return array($this->extension, $this->method);
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function validateType()
-	{
-		if (!in_array($this->getType(), static::$types)) {
-			throw new \RuntimeException("Plugin type: '".$this->getType()."' is not allowed.");
-		}
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function validateType()
+    {
+        if (!in_array($this->getType(), static::$types)) {
+            throw new \RuntimeException("Plugin type: '".$this->getType()."' is not allowed.");
+        }
+    }
 }

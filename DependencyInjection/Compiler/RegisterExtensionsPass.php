@@ -41,19 +41,19 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
  */
 class RegisterExtensionsPass implements CompilerPassInterface
 {
-	public function process(ContainerBuilder $container)
-	{
-		if (false === $container->hasDefinition('templating.engine.smarty')) {
-			return;
-		}
+    public function process(ContainerBuilder $container)
+    {
+        if (false === $container->hasDefinition('templating.engine.smarty')) {
+            return;
+        }
 
-		$definition = $container->getDefinition('templating.engine.smarty');
+        $definition = $container->getDefinition('templating.engine.smarty');
 
-		$calls = $definition->getMethodCalls();
-		$definition->setMethodCalls(array());
-		foreach ($container->findTaggedServiceIds('smarty.extension') as $id => $attributes) {
-			$definition->addMethodCall('addExtension', array(new Reference($id)));
-		}
-		$definition->setMethodCalls(array_merge($definition->getMethodCalls(), $calls));
+        $calls = $definition->getMethodCalls();
+        $definition->setMethodCalls(array());
+        foreach ($container->findTaggedServiceIds('smarty.extension') as $id => $attributes) {
+            $definition->addMethodCall('addExtension', array(new Reference($id)));
+        }
+        $definition->setMethodCalls(array_merge($definition->getMethodCalls(), $calls));
     }
 }

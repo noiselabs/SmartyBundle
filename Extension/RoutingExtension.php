@@ -41,87 +41,87 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class RoutingExtension extends AbstractExtension
 {
-	protected $generator;
+    protected $generator;
 
-	/**
-	 * Constructor.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function __construct(UrlGeneratorInterface $generator)
-	{
-		$this->generator = $generator;
-	}
+    /**
+     * Constructor.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function __construct(UrlGeneratorInterface $generator)
+    {
+        $this->generator = $generator;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getPlugins()
-	{
-		return array(
-			new BlockPlugin('path', $this, 'getPath_block'),
-			new ModifierPlugin('path', $this, 'getPath_modifier'),
-			new BlockPlugin('url', $this, 'getUrl_block'),
-			new ModifierPlugin('url', $this, 'getUrl_modifier')
-		);
-	}
+    /**
+     * {@inheritdoc}
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getPlugins()
+    {
+        return array(
+            new BlockPlugin('path', $this, 'getPath_block'),
+            new ModifierPlugin('path', $this, 'getPath_modifier'),
+            new BlockPlugin('url', $this, 'getUrl_block'),
+            new ModifierPlugin('url', $this, 'getUrl_modifier')
+        );
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
-	{
-		// only output on the closing tag
-		if (!$repeat) {
-			return $this->generator->generate($name, $parameters, false);
-		}
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            return $this->generator->generate($name, $parameters, false);
+        }
+    }
 
-	/**
-	 * @since  0.1.1
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
+    /**
+     * @since  0.1.1
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
     public function getPath_modifier($name, array $parameters = array())
     {
         return $this->generator->generate($name, $parameters, false);
     }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
-	{
-		// only output on the closing tag
-		if (!$repeat) {
-			return $this->generator->generate($name, $parameters, true);
-		}
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            return $this->generator->generate($name, $parameters, true);
+        }
+    }
 
-	/**
-	 * @since  0.1.1
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
+    /**
+     * @since  0.1.1
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
     public function getUrl_modifier($name, array $parameters = array())
     {
         return $this->generator->generate($name, $parameters, true);
     }
 
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getName()
-	{
-		return 'routing';
-	}
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getName()
+    {
+        return 'routing';
+    }
 }

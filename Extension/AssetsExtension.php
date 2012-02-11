@@ -43,102 +43,102 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class AssetsExtension extends AbstractExtension
 {
-	protected $container;
+    protected $container;
 
-	/**
-	 * Constructor.
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function __construct(ContainerInterface $container)
-	{
-		$this->container = $container;
-	}
+    /**
+     * Constructor.
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getPlugins()
-	{
-		return array(
-			new BlockPlugin('asset', $this, 'getAssetUrl_block'),
-			new ModifierPlugin('asset', $this, 'getAssetUrl_modifier'),
-			new FunctionPlugin('assets_version', $this, 'getAssetsVersion')
-		);
-	}
+    /**
+     * {@inheritdoc}
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getPlugins()
+    {
+        return array(
+            new BlockPlugin('asset', $this, 'getAssetUrl_block'),
+            new ModifierPlugin('asset', $this, 'getAssetUrl_modifier'),
+            new FunctionPlugin('assets_version', $this, 'getAssetsVersion')
+        );
+    }
 
-	/**
-	 * Returns the public path of an asset
-	 *
-	 * Absolute paths (i.e. http://...) are returned unmodified.
-	 *
-	 * @param string $path        A public path
-	 *
-	 * @return string A public path which takes into account the base path and URL path
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
-	{
-		// only output on the closing tag
-		if (!$repeat) {
-			$parameters = array_merge(array(
-				'package'	=> null,
-			), $parameters);
+    /**
+     * Returns the public path of an asset
+     *
+     * Absolute paths (i.e. http://...) are returned unmodified.
+     *
+     * @param string $path        A public path
+     *
+     * @return string A public path which takes into account the base path and URL path
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            $parameters = array_merge(array(
+                'package'   => null,
+            ), $parameters);
 
-			return $this->container->get('templating.helper.assets')->getUrl($path, $parameters['package']);
-		}
-	}
+            return $this->container->get('templating.helper.assets')->getUrl($path, $parameters['package']);
+        }
+    }
 
-	/**
-	 * Returns the public path of an asset
-	 *
-	 * Absolute paths (i.e. http://...) are returned unmodified.
-	 *
-	 * @param string $path        A public path
-	 *
-	 * @return string A public path which takes into account the base path and URL path
-	 *
-	 * @since  0.1.1
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getAssetUrl_modifier($path, $package = null)
-	{
-		return $this->container->get('templating.helper.assets')->getUrl($path, $package);
-	}
+    /**
+     * Returns the public path of an asset
+     *
+     * Absolute paths (i.e. http://...) are returned unmodified.
+     *
+     * @param string $path        A public path
+     *
+     * @return string A public path which takes into account the base path and URL path
+     *
+     * @since  0.1.1
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getAssetUrl_modifier($path, $package = null)
+    {
+        return $this->container->get('templating.helper.assets')->getUrl($path, $package);
+    }
 
-	/**
-	 * Returns the version of the assets in a package
-	 *
-	 * @return int
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
-	{
-		$parameters = array_merge(array(
-				'package'	=> null,
-		), $parameters);
+    /**
+     * Returns the version of the assets in a package
+     *
+     * @return int
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
+    {
+        $parameters = array_merge(array(
+                'package'   => null,
+        ), $parameters);
 
-		return $this->container->get('templating.helper.assets')->getVersion($parameters['package']);
-	}
+        return $this->container->get('templating.helper.assets')->getVersion($parameters['package']);
+    }
 
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getName()
-	{
-		return 'assets';
-	}
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getName()
+    {
+        return 'assets';
+    }
 }

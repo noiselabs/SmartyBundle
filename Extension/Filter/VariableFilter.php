@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
  */
 class VariableFilter extends Filter
 {
-	public function getType()
-	{
-		return 'variable';
-	}
+    public function getType()
+    {
+        return 'variable';
+    }
 }

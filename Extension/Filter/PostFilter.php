@@ -44,8 +44,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
  */
 class PostFilter extends Filter
 {
-	public function getType()
-	{
-		return 'post';
-	}
+    public function getType()
+    {
+        return 'post';
+    }
 }

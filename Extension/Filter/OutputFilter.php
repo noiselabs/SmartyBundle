@@ -40,8 +40,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
  */
 class OutputFilter extends Filter
 {
-	public function getType()
-	{
-		return 'output';
-	}
+    public function getType()
+    {
+        return 'output';
+    }
 }

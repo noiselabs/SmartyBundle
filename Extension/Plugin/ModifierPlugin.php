@@ -44,8 +44,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class ModifierPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'modifier';
-	}
+    public function getType()
+    {
+        return 'modifier';
+    }
 }

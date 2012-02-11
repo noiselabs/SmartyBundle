@@ -80,8 +80,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class BlockPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'block';
-	}
+    public function getType()
+    {
+        return 'block';
+    }
 }

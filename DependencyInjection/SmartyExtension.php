@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -44,73 +44,67 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class SmartyExtension extends Extension
 {
-	/**
-	 * Responds to the smarty configuration parameter.
-	 *
-	 * @param array            $configs
-	 * @param ContainerBuilder $container
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
+    /**
+     * Responds to the smarty configuration parameter.
+     *
+     * @param array            $configs
+     * @param ContainerBuilder $container
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
-		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-		$loader->load('smarty.xml');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('smarty.xml');
 
-		$configuration = new Configuration();
-		$config = $this->processConfiguration($configuration, $configs);
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+        $engineDefinition = $container->getDefinition('templating.engine.smarty');
 
-		$container->setParameter('smarty.form.resources',
-		$config['form']['resources']);
+        $container->setParameter('smarty.form.resources',
+        $config['form']['resources']);
 
-		$container->getDefinition('templating.engine.smarty')->addMethodCall('addTemplateDir', array(realpath(__DIR__.'/../Resources/views/Form')));
+        $engineDefinition->addMethodCall('addTemplateDir', array(realpath(__DIR__.'/../Resources/views/Form')));
 
-		if (!empty($config['globals'])) {
-			$def = $container->getDefinition('templating.engine.smarty');
-			foreach ($config['globals'] as $key => $global) {
-				if (isset($global['type']) && 'service' === $global['type']) {
-					$def->addMethodCall('addGlobal', array($key, new Reference($global['id'])));
-				} else {
-					$def->addMethodCall('addGlobal', array($key, $global['value']));
-				}
-			}
-		}
+        if (!empty($config['globals'])) {
+            foreach ($config['globals'] as $key => $global) {
+                if (isset($global['type']) && 'service' === $global['type']) {
+                    $engineDefinition->addMethodCall('addGlobal', array($key, new Reference($global['id'])));
+                } else {
+                    $engineDefinition->addMethodCall('addGlobal', array($key, $global['value']));
+                }
+            }
+        }
 
-		unset(
-			$config['form'],
-			$config['globals'],
-			$config['extensions']
-        );
+        $container->setParameter('smarty.options', $config['options']);
 
-		$container->setParameter('smarty.options', $config['options']);
-
-		/**
-		 * @note Caching of Smarty classes was causing issues because of the
-		 * include_once directives used in Smarty.class.php so this
-		 * feature is disabled.
-		 *
-		 * <code>
-		$this->addClassesToCompile(array(
-			'Smarty',
-			'Smarty_Internal_Data',
-			'Smarty_Internal_Templatebase',
-			'Smarty_Internal_Template',
-			'Smarty_Resource',
-			'Smarty_Internal_Resource_File',
-			'Smarty_Cacheresource',
-			'Smarty_Internal_Cacheresource_File',
-		));
-		* </code>
-		*/
+        /**
+         * @note Caching of Smarty classes was causing issues because of the
+         * include_once directives used in Smarty.class.php so this
+         * feature is disabled.
+         *
+         * <code>
+        $this->addClassesToCompile(array(
+            'Smarty',
+            'Smarty_Internal_Data',
+            'Smarty_Internal_Templatebase',
+            'Smarty_Internal_Template',
+            'Smarty_Resource',
+            'Smarty_Internal_Resource_File',
+            'Smarty_Cacheresource',
+            'Smarty_Internal_Cacheresource_File',
+        ));
+        * </code>
+        */
     }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
     public function getAlias()
     {
-		return 'smarty';
-	}
+        return 'smarty';
+    }
 }

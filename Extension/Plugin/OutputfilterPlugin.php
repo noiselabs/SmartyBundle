@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class OutputfilerPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'outputfilter';
-	}
+    public function getType()
+    {
+        return 'outputfilter';
+    }
 }

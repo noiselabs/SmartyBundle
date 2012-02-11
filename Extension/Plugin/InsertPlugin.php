@@ -37,8 +37,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 class InsertPlugin extends Plugin
 {
-	public function getType()
-	{
-		return 'insert';
-	}
+    public function getType()
+    {
+        return 'insert';
+    }
 }

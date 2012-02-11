@@ -31,40 +31,40 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 interface ExtensionInterface
 {
-	/**
-	* Returns a list of Plugins to add to the existing list.
-	*
-	* @return array An array of Plugins
-	*
-	* @since  0.1.0
-	* @author Vítor Brandão <noisebleed@noiselabs.org>
-	*/
-	function getPlugins();
+    /**
+    * Returns a list of Plugins to add to the existing list.
+    *
+    * @return array An array of Plugins
+    *
+    * @since  0.1.0
+    * @author Vítor Brandão <noisebleed@noiselabs.org>
+    */
+    function getPlugins();
 
-	/**
-	 * Returns a list of Filters to add to the existing list.
-	 *
-	 * @return array An array of Filters
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	function getFilters();
+    /**
+     * Returns a list of Filters to add to the existing list.
+     *
+     * @return array An array of Filters
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    function getFilters();
 
-	/**
-	 * Returns a list of Globals to add to the existing list.
-	 *
-	 * @return array An array of Globals
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	function getGlobals();
+    /**
+     * Returns a list of Globals to add to the existing list.
+     *
+     * @return array An array of Globals
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    function getGlobals();
 
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 */
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     */
     function getName();
 }
