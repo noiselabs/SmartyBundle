@@ -44,7 +44,8 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 /**
  * SmartyEngine is an engine able to render Smarty templates.
  *
- * This class is heavily inspired by \Twig_Environment. See {@link http://twig.sensiolabs.org/doc/api.html} for details about \Twig_Environment.
+ * This class is heavily inspired by \Twig_Environment. 
+ * See {@link http://twig.sensiolabs.org/doc/api.html} for details about \Twig_Environment.
  *
  * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -371,6 +372,8 @@ class SmartyEngine implements EngineInterface
 	 */
 	public function setExtensions(array $extensions)
 	{
+		$this->extensions = array();
+
 		foreach ($extensions as $extension) {
 			$this->addExtension($extension);
 		}
