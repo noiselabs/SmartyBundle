@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -32,6 +32,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 use Symfony\Component\Templating\Loader\Loader;
@@ -60,7 +62,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->deleteTmpDir();
         
         $this->smarty = $this->getSmarty();
-        $this->kernel = $this->getKernel();
+        $this->container = $this->createContainer();
         $this->loader = new ProjectTemplateLoader();
         $this->engine = $this->getSmartyEngine();
     }
@@ -119,7 +121,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         
         return new ProjectTemplateEngine(
             $this->smarty,
-            $this->kernel,
+            $this->container,
             new TemplateNameParser(),
             $this->loader,
             $options,
@@ -135,6 +137,23 @@ class TestCase extends \PHPUnit_Framework_TestCase
     public function getKernel()
     {
         return new KernelForTest('test', true);
+    }
+
+    /**
+     * @since  0.2.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    protected function createContainer(array $data = array())
+    {
+        return new ContainerBuilder(new ParameterBag(array_merge(array(
+            'kernel.bundles'          => array('SmartyBundle' => 'NoiseLabs\\Bundle\\SmartyBundle\\SmartyBundle'),
+            'kernel.cache_dir'        => __DIR__,
+            'kernel.compiled_classes' => array(),
+            'kernel.debug'            => false,
+            'kernel.environment'      => 'test',
+            'kernel.name'             => 'kernel',
+            'kernel.root_dir'         => __DIR__,
+        ), $data)));
     }
 }
 

@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -178,7 +178,7 @@ class SmartyEngineTest extends TestCase
      */
     public function testGetLoader()
     {
-        $engine = new ProjectTemplateEngine($this->smarty, $this->kernel, 
+        $engine = new ProjectTemplateEngine($this->smarty, $this->container,
         new TemplateNameParser(), $this->loader, array());
 
         $this->assertSame($this->loader, $engine->getLoader());

@@ -51,7 +51,7 @@ use Symfony\Component\Templating\EngineInterface;
  *  - {@link http://symfony.com/doc/current/book/forms.html#form-theming}
  *  - {@link http://symfony.com/doc/current/cookbook/form/form_customization.html}
  *
- * Thanks for Smarty developers Uwe Tews and Rodney Rehm for 1) patience and 2)
+ * Thanks to Smarty developers Uwe Tews and Rodney Rehm for 1) patience and 2)
  * insight on Smarty internals.
  *
  * @since  0.2.0

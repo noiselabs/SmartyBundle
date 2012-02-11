@@ -65,8 +65,6 @@ class SmartyExtension extends Extension
         $container->setParameter('smarty.form.resources',
         $config['form']['resources']);
 
-        $engineDefinition->addMethodCall('addTemplateDir', array(realpath(__DIR__.'/../Resources/views/Form')));
-
         if (!empty($config['globals'])) {
             foreach ($config['globals'] as $key => $global) {
                 if (isset($global['type']) && 'service' === $global['type']) {

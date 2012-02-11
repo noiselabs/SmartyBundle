@@ -93,7 +93,8 @@ class TranslationExtension extends AbstractExtension
                 'locale'    => null,
             ), $parameters);
 
-            return $this->translator->trans($message, $parameters['arguments'], $parameters['domain'], $parameters['locale']);
+            return $this->translator->trans($message, $parameters['arguments'],
+            $parameters['domain'], $parameters['locale']);
         }
     }
 
