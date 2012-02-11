@@ -2,4 +2,6 @@
 *.kate-swp
 phpunit.xml
 Resources/doc/phpunit*
+vendor/smarty
+vendor/symfony
 run-me-before-release.sh
