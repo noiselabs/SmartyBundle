@@ -112,9 +112,11 @@ class SmartyEngine implements EngineInterface
         $bundlesTemplateDir = array();
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
+            $name = explode('\\', $bundle);
+            $name = end($name);
             $reflection = new \ReflectionClass($bundle);
             if (is_dir($dir = dirname($reflection->getFilename()).'/Resources/views')) {
-                $bundlesTemplateDir[$reflection->getName()] = $dir;
+                $bundlesTemplateDir[$name] = $dir;
             }
        }
 
