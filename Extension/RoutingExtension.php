@@ -113,35 +113,6 @@ class RoutingExtension extends AbstractExtension
     }
 
 	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function blockTrans(array $params = array(), $message = null, $template, &$repeat)
-	{
-		$params = array_merge(array(
-			'arguments'	=> array(),
-			'domain'	=> 'messages',
-			'locale'	=> null,
-		), $params);
-
-		return $this->translator->trans($message, $params['arguments'], $params['domain'], $params['locale']);
-	}
-
-	/**
-	 * Usage in template context:
-	 * <code>
-	 * {"text to be translated"|trans}
-	 * </code>
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-    public function modTrans($message, array $arguments = array(), $domain = 'messages', $locale = null)
-    {
-        return $this->translator->trans($message, $arguments, $domain, $locale);
-    }
-
-	/**
 	 * Returns the name of the extension.
 	 *
 	 * @return string The extension name
