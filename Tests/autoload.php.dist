@@ -34,28 +34,28 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'	=> array($vendorDir.'/symfony/src', $vendorDir.'/bundles'),
-    'Monolog'	=> $vendorDir.'/monolog/src',
+    'Symfony'   => array($vendorDir.'/symfony/src', $vendorDir.'/bundles'),
+    'Monolog'   => $vendorDir.'/monolog/src',
 ));
 $loader->registerPrefixes(array(
-	'Smarty_'			=> $vendorDir.'/smarty/libs',
+    'Smarty_'           => $vendorDir.'/smarty/libs',
 ));
 $loader->register();
 
 spl_autoload_register(function($class) {
-	if (0 === strpos($class, 'NoiseLabs\\Bundle\\SmartyBundle\\')) {
-		$path = __DIR__.'/../'.implode('/', array_slice(explode('\\', $class), 3)).'.php';
-		if (!stream_resolve_include_path($path)) {
-			return false;
-		}
-		require_once $path;
-		return true;
+    if (0 === strpos($class, 'NoiseLabs\\Bundle\\SmartyBundle\\')) {
+        $path = __DIR__.'/../'.implode('/', array_slice(explode('\\', $class), 3)).'.php';
+        if (!stream_resolve_include_path($path)) {
+            return false;
+        }
+        require_once $path;
+        return true;
     }
 });
 
 ini_set('include_path',
-	$vendorDir.'/smarty/libs'.
-	PATH_SEPARATOR.$vendorDir.
-	ini_get('include_path'));
+    $vendorDir.'/smarty/libs'.
+    PATH_SEPARATOR.$vendorDir.
+    ini_get('include_path'));
 
 require_once 'Smarty.class.php';

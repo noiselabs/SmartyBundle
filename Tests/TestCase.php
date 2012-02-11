@@ -46,96 +46,96 @@ use Symfony\Component\Templating\TemplateReference;
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	protected function setUp()
-	{
-		if (!class_exists('Smarty')) {
-			$this->markTestSkipped('Smarty is not available.');
-		}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    protected function setUp()
+    {
+        if (!class_exists('Smarty')) {
+            $this->markTestSkipped('Smarty is not available.');
+        }
 
-		$this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
-		$this->deleteTmpDir();
+        $this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
+        $this->deleteTmpDir();
         
-		$this->smarty = $this->getSmarty();
-		$this->kernel = $this->getKernel();
-		$this->loader = new ProjectTemplateLoader();
-		$this->engine = $this->getSmartyEngine();
-	}
+        $this->smarty = $this->getSmarty();
+        $this->kernel = $this->getKernel();
+        $this->loader = new ProjectTemplateLoader();
+        $this->engine = $this->getSmartyEngine();
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function tearDown()
-	{
-		$this->deleteTmpDir();
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function tearDown()
+    {
+        $this->deleteTmpDir();
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	protected function deleteTmpDir()
-	{
-		if (!file_exists($dir = $this->tmpDir)) {
-			return;
-		}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    protected function deleteTmpDir()
+    {
+        if (!file_exists($dir = $this->tmpDir)) {
+            return;
+        }
 
-		$fs = new Filesystem();
-		$fs->remove($dir);
-	}
+        $fs = new Filesystem();
+        $fs->remove($dir);
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getSmarty()
-	{
-		return new \Smarty();
-	}
-	
-	public function getSmartyOptions()
-	{
-		return array(
-			'caching'		=> false,
-			'compile_dir'	=> $this->tmpDir.'/templates_c',
-			'template_dir' 	=> __DIR__.'/Fixtures/Resources/views'
-		);
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getSmarty()
+    {
+        return new \Smarty();
+    }
+    
+    public function getSmartyOptions()
+    {
+        return array(
+            'caching'       => false,
+            'compile_dir'   => $this->tmpDir.'/templates_c',
+            'template_dir'  => __DIR__.'/Fixtures/Resources/views'
+        );
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
-	{
-		$options = array_merge(
-			$this->getSmartyOptions(),
-			$options
-		);
-		
-		return new ProjectTemplateEngine(
-			$this->smarty,
-			$this->kernel,
-			new TemplateNameParser(),
-			$this->loader,
-			$options,
-			$global,
-			$logger
-		);
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
+    {
+        $options = array_merge(
+            $this->getSmartyOptions(),
+            $options
+        );
+        
+        return new ProjectTemplateEngine(
+            $this->smarty,
+            $this->kernel,
+            new TemplateNameParser(),
+            $this->loader,
+            $options,
+            $global,
+            $logger
+        );
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getKernel()
-	{
-		return new KernelForTest('test', true);
-	}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getKernel()
+    {
+        return new KernelForTest('test', true);
+    }
 }
 
 /**
@@ -144,40 +144,40 @@ class TestCase extends \PHPUnit_Framework_TestCase
  */
 class KernelForTest extends Kernel
 {
-	public function getName()
-	{
-		return 'testkernel';
-	}
+    public function getName()
+    {
+        return 'testkernel';
+    }
 
-	public function registerBundles()
-	{
-	}
+    public function registerBundles()
+    {
+    }
 
-	public function init()
-	{
-	}
+    public function init()
+    {
+    }
 
-	public function getBundles()
-	{
-		return array();
-	}
+    public function getBundles()
+    {
+        return array();
+    }
 
-	public function registerContainerConfiguration(LoaderInterface $loader)
-	{
-	}
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+    }
 }
 
 class ProjectTemplateEngine extends SmartyEngine
 {
-	public function setTemplate($name, $content)
-	{
-		$this->loader->setTemplate($name, $content);
-	}
-	
-	public function getLoader()
-	{
-		return $this->loader;
-	}
+    public function setTemplate($name, $content)
+    {
+        $this->loader->setTemplate($name, $content);
+    }
+    
+    public function getLoader()
+    {
+        return $this->loader;
+    }
 }
 
 /**
@@ -186,26 +186,26 @@ class ProjectTemplateEngine extends SmartyEngine
  */
 class ProjectTemplateLoader extends Loader
 {
-	public $templates = array();
+    public $templates = array();
 
-	public function setTemplate($name, $content)
-	{
-		$template = new TemplateReference($name, 'tpl');
-		$this->templates[$template->getLogicalName()] = $content;
-	}
+    public function setTemplate($name, $content)
+    {
+        $template = new TemplateReference($name, 'tpl');
+        $this->templates[$template->getLogicalName()] = $content;
+    }
 
-	public function load(TemplateReferenceInterface $template)
-	{
-		if (isset($this->templates[$template->getLogicalName()])) {
-			$storage = new StringStorage($this->templates[$template->getLogicalName()]);
-			return 'string:'.$storage->getContent();
-		}
+    public function load(TemplateReferenceInterface $template)
+    {
+        if (isset($this->templates[$template->getLogicalName()])) {
+            $storage = new StringStorage($this->templates[$template->getLogicalName()]);
+            return 'string:'.$storage->getContent();
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function isFresh(TemplateReferenceInterface $template, $time)
-	{
-		return false;
-	}
+    public function isFresh(TemplateReferenceInterface $template, $time)
+    {
+        return false;
+    }
 }

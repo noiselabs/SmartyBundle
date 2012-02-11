@@ -50,157 +50,157 @@ use Symfony\Component\Templating\TemplateNameParser;
  */
 class SmartyEngineTest extends TestCase
 {
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testEvaluateAddsAppGlobal()
-	{
-		$container = $this->getContainer();
-		$app = new GlobalVariables($container);
-		$engine = $this->getSmartyEngine(array(), $app);
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testEvaluateAddsAppGlobal()
+    {
+        $container = $this->getContainer();
+        $app = new GlobalVariables($container);
+        $engine = $this->getSmartyEngine(array(), $app);
 
-		$request = $container->get('request');
-		$globals = $engine->getGlobals();
-		$this->assertSame($app, $globals['app']);
-	}
-
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testEvaluateWithoutAvailableRequest()
-	{
-		$container = $this->getContainer();
-		$app = new GlobalVariables($container);
-		$engine = $this->getSmartyEngine(array(), $app);
-
-		$container->set('request', null);
-
-		$globals = $engine->getGlobals();
-		$this->assertEmpty($globals['app']->getRequest());
-	}
-
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGlobalVariables()
-	{
-		$engine = $this->getSmartyEngine();
-		$engine->addGlobal('global_variable', 'lorem ipsum');
-
-		$this->assertEquals(array(
-			'global_variable' => 'lorem ipsum',
-		), $engine->getGlobals());
+        $request = $container->get('request');
+        $globals = $engine->getGlobals();
+        $this->assertSame($app, $globals['app']);
     }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGlobalsGetPassedToTemplate()
-	{
-		$engine = $this->getSmartyEngine();
-		$engine->setTemplate('global.tpl', '{$global}');
-		$engine->addGlobal('global', 'global variable');
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testEvaluateWithoutAvailableRequest()
+    {
+        $container = $this->getContainer();
+        $app = new GlobalVariables($container);
+        $engine = $this->getSmartyEngine(array(), $app);
 
-		$this->assertEquals($engine->render('global.tpl'), 'global variable');
+        $container->set('request', null);
 
-		$this->assertEquals($engine->render('global.tpl', array('global' => 'overwritten')), 'overwritten');
-	}
+        $globals = $engine->getGlobals();
+        $this->assertEmpty($globals['app']->getRequest());
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGetUnsetExtension()
-	{
-		$this->setExpectedException('InvalidArgumentException');
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGlobalVariables()
+    {
+        $engine = $this->getSmartyEngine();
+        $engine->addGlobal('global_variable', 'lorem ipsum');
 
-		$name = 'non-existent-extension';
-		
-		$engine = $this->getSmartyEngine();	
-		$engine->getExtension($name);
-	}
+        $this->assertEquals(array(
+            'global_variable' => 'lorem ipsum',
+        ), $engine->getGlobals());
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGetSetRemoveExtension()
-	{
-		$extension = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
-		$extension->expects($this->any())
-			->method('getName')
-			->will($this->returnValue('mock'));
-			
-		$engine = $this->getSmartyEngine();
-		$engine->addExtension($extension);
-		
-		$this->assertEquals($engine->getExtension('mock'), $extension);
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGlobalsGetPassedToTemplate()
+    {
+        $engine = $this->getSmartyEngine();
+        $engine->setTemplate('global.tpl', '{$global}');
+        $engine->addGlobal('global', 'global variable');
 
-		$this->setExpectedException('InvalidArgumentException');
-		$engine->removeExtension('mock');
-		$engine->getExtension('mock');
-	}
+        $this->assertEquals($engine->render('global.tpl'), 'global variable');
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGetSetExtensionsArray()
-	{
-		$extensions = array();
+        $this->assertEquals($engine->render('global.tpl', array('global' => 'overwritten')), 'overwritten');
+    }
 
-		foreach (array('mock0', 'mock1', 'mock2', 'mock3') as $name) {
-			$extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
-			$extensions[$name]->expects($this->any())
-				->method('getName')
-				->will($this->returnValue($name));
-		}
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGetUnsetExtension()
+    {
+        $this->setExpectedException('InvalidArgumentException');
 
-		$engine = $this->getSmartyEngine();
-		
-		$engine->addExtension($extensions['mock1']);
-		$this->assertEquals($engine->getExtension('mock1'), $extensions['mock1']);
+        $name = 'non-existent-extension';
+        
+        $engine = $this->getSmartyEngine(); 
+        $engine->getExtension($name);
+    }
 
-		unset($extensions['mock1']);
-		$engine->setExtensions($extensions);
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGetSetRemoveExtension()
+    {
+        $extension = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
+        $extension->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('mock'));
+            
+        $engine = $this->getSmartyEngine();
+        $engine->addExtension($extension);
+        
+        $this->assertEquals($engine->getExtension('mock'), $extension);
 
-		$engine->removeExtension('mock1');
-		$this->assertEquals($engine->getExtensions(), $extensions);
-	}
+        $this->setExpectedException('InvalidArgumentException');
+        $engine->removeExtension('mock');
+        $engine->getExtension('mock');
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testGetLoader()
-	{
-		$engine = new ProjectTemplateEngine($this->smarty, $this->kernel, 
-		new TemplateNameParser(), $this->loader, array());
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGetSetExtensionsArray()
+    {
+        $extensions = array();
 
-		$this->assertSame($this->loader, $engine->getLoader());
-	}
+        foreach (array('mock0', 'mock1', 'mock2', 'mock3') as $name) {
+            $extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
+            $extensions[$name]->expects($this->any())
+                ->method('getName')
+                ->will($this->returnValue($name));
+        }
 
-	/**
-	 * Creates a Container with a Session-containing Request service.
-	 *
-	 * @return Container
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	protected function getContainer()
-	{
-		$container = new Container();
-		$request = new Request();
-		$session = new Session(new ArraySessionStorage());
+        $engine = $this->getSmartyEngine();
+        
+        $engine->addExtension($extensions['mock1']);
+        $this->assertEquals($engine->getExtension('mock1'), $extensions['mock1']);
 
-		$request->setSession($session);
-		$container->set('request', $request);
+        unset($extensions['mock1']);
+        $engine->setExtensions($extensions);
 
-		return $container;
-	}
+        $engine->removeExtension('mock1');
+        $this->assertEquals($engine->getExtensions(), $extensions);
+    }
+
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testGetLoader()
+    {
+        $engine = new ProjectTemplateEngine($this->smarty, $this->kernel, 
+        new TemplateNameParser(), $this->loader, array());
+
+        $this->assertSame($this->loader, $engine->getLoader());
+    }
+
+    /**
+     * Creates a Container with a Session-containing Request service.
+     *
+     * @return Container
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    protected function getContainer()
+    {
+        $container = new Container();
+        $request = new Request();
+        $session = new Session(new ArraySessionStorage());
+
+        $request->setSession($session);
+        $container->set('request', $request);
+
+        return $container;
+    }
 }

@@ -40,39 +40,39 @@ use Symfony\Component\Translation\MessageSelector;
  */
 class TranslationExtensionTest extends TestCase
 {
-	/**
-	 * @dataProvider getTransTests
-	 *
-	 *
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function testTrans($name, $content, $expected, array $variables = array())
-	{        
-		$this->engine->setTemplate($name, $content);
-		$this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
-		
-		$this->assertEquals($expected, $this->engine->render($name, $variables));
-	}
+    /**
+     * @dataProvider getTransTests
+     *
+     *
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function testTrans($name, $content, $expected, array $variables = array())
+    {        
+        $this->engine->setTemplate($name, $content);
+        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
+        
+        $this->assertEquals($expected, $this->engine->render($name, $variables));
+    }
 
-	/**
-	 * @since  0.1.0
-	 * @author Vítor Brandão <noisebleed@noiselabs.org>
-	 */
-	public function getTransTests()
-	{
-		return array(
-			// trans block
-			array('b1.tpl', '{trans}Hello{/trans}', 'Hello'),
-			array('b2.tpl', '{trans}{$name}{/trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-			array('b3.tpl', '{trans}Hello {$name}{/trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-			array('b4.tpl', '{trans locale="pt"}Hello{/trans}', 'Hello'),
+    /**
+     * @since  0.1.0
+     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     */
+    public function getTransTests()
+    {
+        return array(
+            // trans block
+            array('b1.tpl', '{trans}Hello{/trans}', 'Hello'),
+            array('b2.tpl', '{trans}{$name}{/trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
+            array('b3.tpl', '{trans}Hello {$name}{/trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
+            array('b4.tpl', '{trans locale="pt"}Hello{/trans}', 'Hello'),
 
-			// trans filter
-			array('f1.tpl', '{"Hello"|trans}', 'Hello'),
-			array('f2.tpl', '{"$name"|trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-			array('f3.tpl', '{"Hello $name"|trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-			array('f4.tpl', '{"Hello"|trans:array():null:"pt"}', 'Hello'),
-		);
-	}
+            // trans filter
+            array('f1.tpl', '{"Hello"|trans}', 'Hello'),
+            array('f2.tpl', '{"$name"|trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
+            array('f3.tpl', '{"Hello $name"|trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
+            array('f4.tpl', '{"Hello"|trans:array():null:"pt"}', 'Hello'),
+        );
+    }
 }
