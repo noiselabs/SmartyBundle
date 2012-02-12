@@ -76,7 +76,9 @@ class SmartyEngine implements EngineInterface
      * @param GlobalVariables|null        $globals   A GlobalVariables instance or null
      * @param LoggerInterface|null        $logger    A LoggerInterface instance or null
      */
-    public function __construct(\Smarty $smarty, ContainerInterface $container, TemplateNameParserInterface $parser, LoaderInterface $loader, array $options, GlobalVariables $globals = null, LoggerInterface $logger = null)
+    public function __construct(\Smarty $smarty, ContainerInterface $container, 
+    TemplateNameParserInterface $parser, LoaderInterface $loader, array $options,
+    GlobalVariables $globals = null, LoggerInterface $logger = null)
     {
         $this->smarty = $smarty;
         $this->parser = $parser;

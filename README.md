@@ -3,7 +3,7 @@ SmartyBundle
 
 This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
-[![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png)](http://travis-ci.org/noiselabs/SmartyBundle)
+[![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png)](http://travis-ci.org/noiselabs/SmartyBundle) ![Smarty.net](http://www.smarty.net/images/icons/smarty-80x15.png)
 
 Requirements
 ------------
