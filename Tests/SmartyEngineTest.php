@@ -34,12 +34,9 @@ use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
-use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session;
-use Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -56,7 +53,7 @@ class SmartyEngineTest extends TestCase
      */
     public function testEvaluateAddsAppGlobal()
     {
-        $container = $this->getContainer();
+        $container = $this->createContainer();
         $app = new GlobalVariables($container);
         $engine = $this->getSmartyEngine(array(), $app);
 
@@ -71,7 +68,7 @@ class SmartyEngineTest extends TestCase
      */
     public function testEvaluateWithoutAvailableRequest()
     {
-        $container = $this->getContainer();
+        $container = $this->createContainer();
         $app = new GlobalVariables($container);
         $engine = $this->getSmartyEngine(array(), $app);
 
@@ -178,27 +175,22 @@ class SmartyEngineTest extends TestCase
      */
     public function testGetLoader()
     {
-        $engine = new ProjectTemplateEngine($this->smarty, $this->container,
+        $container = $this->createContainer();
+        $engine = new ProjectTemplateEngine($this->smarty, $container,
         new TemplateNameParser(), $this->loader, array());
 
         $this->assertSame($this->loader, $engine->getLoader());
     }
 
     /**
-     * Creates a Container with a Session-containing Request service.
-     *
-     * @return Container
-     *
-     * @since  0.1.0
+     * @since  0.2.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
-    protected function getContainer()
+    protected function createContainer(array $data = array())
     {
-        $container = new Container();
-        $request = new Request();
-        $session = new Session(new ArraySessionStorage());
+        $container = parent::createContainer($data);
 
-        $request->setSession($session);
+        $request = new Request();
         $container->set('request', $request);
 
         return $container;

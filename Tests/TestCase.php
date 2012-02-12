@@ -62,7 +62,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->deleteTmpDir();
         
         $this->smarty = $this->getSmarty();
-        $this->container = $this->createContainer();
         $this->loader = new ProjectTemplateLoader();
         $this->engine = $this->getSmartyEngine();
     }
@@ -114,6 +113,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
     {
+        $container = $this->createContainer();
         $options = array_merge(
             $this->getSmartyOptions(),
             $options
@@ -121,7 +121,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         
         return new ProjectTemplateEngine(
             $this->smarty,
-            $this->container,
+            $container,
             new TemplateNameParser(),
             $this->loader,
             $options,
