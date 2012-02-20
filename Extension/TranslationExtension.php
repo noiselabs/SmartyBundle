@@ -20,12 +20,10 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
- */
+  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
@@ -36,7 +34,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * Provides integration of the Translation component with Smarty[Bundle].
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class TranslationExtension extends AbstractExtension
@@ -45,9 +42,6 @@ class TranslationExtension extends AbstractExtension
 
     /**
      * Constructor.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -55,8 +49,7 @@ class TranslationExtension extends AbstractExtension
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Return the translator instance.
      */
     public function getTranslator()
     {
@@ -65,23 +58,21 @@ class TranslationExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
         return array(
             new BlockPlugin('trans', $this, 'trans_block'),
-            new ModifierPlugin('trans', $this, 'trans_modifier')
+            new ModifierPlugin('trans', $this, 'trans_modifier'),
+            new BlockPlugin('transchoice', $this, 'transchoice_block'),
+            new ModifierPlugin('transchoice', $this, 'transchoice_modifier')
         );
     }
 
     /**
-     * @param string Message to translate
+     * Block plugin for 'trans'.
      *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @param string Message to translate
      */
     public function trans_block(array $parameters = array(), $message = null, $template, &$repeat)
     {
@@ -99,13 +90,12 @@ class TranslationExtension extends AbstractExtension
     }
 
     /**
+     * Modifier plugin for 'trans'.
+     *
      * Usage in template context:
      * <code>
      * {"text to be translated"|trans}
      * </code>
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function trans_modifier($message, array $arguments = array(), $domain = 'messages', $locale = null)
     {
@@ -113,12 +103,38 @@ class TranslationExtension extends AbstractExtension
     }
 
     /**
+     * Block plugin for 'transchoice'.
+     *
+     * @param string $message Message to translate
+     */
+    public function transchoice_block(array $parameters = array(), $message = null, $template, &$repeat)
+    {
+        // only output on the closing tag
+        if (!$repeat) {
+            $parameters = array_merge(array(
+                'number'    => null,
+                'arguments' => array(),
+                'domain'    => 'messages',
+                'locale'    => null,
+            ), $parameters);
+
+            return $this->translator->transchoice($message, $parameters['number'],
+            $parameters['arguments'], $parameters['domain'], $parameters['locale']);
+        }
+    }
+
+    /**
+     * Modifier plugin for 'transchoice'.
+     */
+    public function transchoice_modifier($message, $number, array $arguments = array(), $domain = 'messages', $locale = null)
+    {
+        return $this->translator->transchoice($message, $number, $arguments, $domain, $locale);
+    }
+
+    /**
      * Returns the name of the extension.
      *
      * @return string The extension name
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getName()
     {
