@@ -16,15 +16,13 @@
 * License along with NoiseLabs-SmartyBundle; if not, see
 * <http://www.gnu.org/licenses/>.
 *
-* Copyright (C) 2011 Vítor Brandão
+* Copyright (C) 2011-2012 Vítor Brandão
 *
 * @category    NoiseLabs
 * @package     SmartyBundle
-* @author      Vítor Brandão <noisebleed@noiselabs.org>
-* @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+* @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
 * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
 * @link        http://www.noiselabs.org
-* @since       0.1.0
 */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
@@ -37,25 +35,36 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 *
 * See {@link http://www.smarty.net/docs/en/api.register.filter.tpl}.
 *
-* @since  0.1.0
 * @author Vítor Brandão <noisebleed@noiselabs.org>
 */
-abstract class Filter implements FilterInterface
+abstract class AbstractFilter implements FilterInterface
 {
     /**
      * Available filter types.
      * @var array
      */
     protected static $types = array('pre', 'post', 'output', 'variable');
+    protected $name;
     protected $extension;
     protected $method;
 
-    public function __construct(ExtensionInterface $extension, $method)
+    /**
+     * Constructor.
+     *
+     * @param string             $name      The filter name
+     * @param ExtensionInterface $extension A ExtensionInterface instance
+     * @param string             $method    Method name
+     */
+    public function __construct($name, ExtensionInterface $extension, $method)
     {
+        $this->name = $name;
         $this->extension = $extension;
         $this->method = $method;
     }
 
+    /**
+     * Return the filter callback.
+     */
     public function getCallback()
     {
         return array($this->extension, $this->method);

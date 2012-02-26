@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\DependencyInjection;
@@ -41,7 +39,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class Configuration implements ConfigurationInterface
@@ -61,9 +58,6 @@ class Configuration implements ConfigurationInterface
      *         template_dir:  %kernel.root_dir%/Resources/views
      *         use_sub_dirs:  true
      * </code>
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getConfigTreeBuilder()
     {
@@ -82,8 +76,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @since  0.2.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Form configuration.
      */
     protected function addFormSection(ArrayNodeDefinition $rootNode)
     {
@@ -94,15 +87,14 @@ class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('resource')
                     ->children()
                         ->arrayNode('resources')
-                            ->addDefaultsIfNotSet()
-                            ->defaultValue(array('SmartyBundle:Form:form_div_layout.html.tpl'))
+                            ->prototype('scalar')->defaultValue('form_div_layout.html.tpl')->end()
+                            ->setExample(array('MyBundle::form.html.tpl'))
                             ->validate()
-                                ->ifTrue(function($v) { return !in_array('SmartyBundle:Form:form_div_layout.html.tpl', $v); })
+                                ->ifTrue(function($v) { return !in_array('form_div_layout.html.tpl', $v); })
                                 ->then(function($v){
-                                    return array_merge(array('SmartyBundle:Form:form_div_layout.html.tpl'), $v);
+                                    return array_merge(array('form_div_layout.html.tpl'), $v);
                                 })
                             ->end()
-                            ->prototype('scalar')->end()
                         ->end()
                     ->end()
                 ->end()
@@ -110,10 +102,8 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Template globals.
      */
     protected function addGlobalsSection(ArrayNodeDefinition $rootNode)
     {
@@ -160,9 +150,6 @@ class Configuration implements ConfigurationInterface
      * Smarty options.
      *
      * The whole list can be seen here: {@link http://www.smarty.net/docs/en/api.variables.tpl}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     protected function addSmartyOptions(ArrayNodeDefinition $rootNode)
     {
