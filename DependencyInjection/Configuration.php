@@ -87,15 +87,14 @@ class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('resource')
                     ->children()
                         ->arrayNode('resources')
-                            //->addDefaultChildrenIfNoneSet()
-                            ->prototype('scalar')->defaultValue('form_div_layout.html.tpl')->end()
-                            ->setExample(array('MyBundle::form.html.tpl'))
+                            ->defaultValue(array('form_div_layout.html.tpl'))
                             ->validate()
                                 ->ifTrue(function($v) { return !in_array('form_div_layout.html.tpl', $v); })
                                 ->then(function($v){
                                     return array_merge(array('form_div_layout.html.tpl'), $v);
                                 })
                             ->end()
+                            ->prototype('scalar')->end()
                         ->end()
                     ->end()
                 ->end()
