@@ -1,0 +1,45 @@
+<?php
+/**
+ * This file is part of NoiseLabs-SmartyBundle
+ *
+ * NoiseLabs-SmartyBundle is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * NoiseLabs-SmartyBundle is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with NoiseLabs-SmartyBundle; if not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2011-2012 Vítor Brandão
+ *
+ * @category    NoiseLabs
+ * @package     SmartyBundle
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
+ * @link        http://www.noiselabs.org
+ */
+
+$vendorDir = __DIR__.'/vendor';
+require_once $vendorDir.'/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
+use Symfony\Component\ClassLoader\UniversalClassLoader;
+
+$loader = new UniversalClassLoader();
+$loader->registerNamespaces(array(
+    'Symfony\\Tests'   => $vendorDir.'/symfony/tests',
+    'Symfony'          => $vendorDir.'/symfony/src',
+));
+
+if (!function_exists('intl_get_error_code')) {
+    require_once $vendorDir.'/symfony/src/Symfony/Component/Locale/Resources/stubs/functions.php';
+
+    $loader->registerPrefixFallbacks(array($vendorDir.'/symfony/src/Symfony/Component/Locale/Resources/stubs'));
+}
+$loader->register();
+
