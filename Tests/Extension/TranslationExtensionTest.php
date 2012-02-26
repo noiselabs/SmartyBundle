@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
@@ -35,44 +33,75 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageSelector;
 
 /**
- * @since  0.1.0
+ * Test suite for the translation extension.
+ *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class TranslationExtensionTest extends TestCase
 {
+    public function testEscaping()
+    {
+        $template = 'trans_escaping.html.tpl';
+        $this->engine->setTemplate($template, '{trans vars=["%value%" => $value]}Percent: %value%% ({$msg}){/trans}');
+        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
+
+        $this->assertEquals('Percent: 12% (approx.)', $this->engine->render($template, array('value' => 12, 'msg' => 'approx.')));
+    }
+    
     /**
      * @dataProvider getTransTests
-     *
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
-    public function testTrans($name, $content, $expected, array $variables = array())
-    {        
-        $this->engine->setTemplate($name, $content);
+    public function testTrans($content, $expected, array $variables = array())
+    {
+        static $test = 0;
+        $template = 'translation_test_'.$test++.'.html.tpl';
+
+        $this->engine->setTemplate($template, $content);
         $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
         
-        $this->assertEquals($expected, $this->engine->render($name, $variables));
+        $this->assertEquals($expected, $this->engine->render($template, $variables));
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Returns translation tests (data provider).
      */
     public function getTransTests()
     {
         return array(
             // trans block
-            array('b1.tpl', '{trans}Hello{/trans}', 'Hello'),
-            array('b2.tpl', '{trans}{$name}{/trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-            array('b3.tpl', '{trans}Hello {$name}{/trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-            array('b4.tpl', '{trans locale="pt"}Hello{/trans}', 'Hello'),
+            array('{trans}Hello{/trans}', 'Hello'),
+            array('{trans}{$name}{/trans}', 'Symfony2', array('name' => 'Symfony2')),
 
-            // trans filter
-            array('f1.tpl', '{"Hello"|trans}', 'Hello'),
-            array('f2.tpl', '{"$name"|trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-            array('f3.tpl', '{"Hello $name"|trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-            array('f4.tpl', '{"Hello"|trans:array():null:"pt"}', 'Hello'),
+            array('{trans domain="elsewhere"}Hello{/trans}', 'Hello'),
+            
+            array('{trans}Hello {$name}{/trans}', 'Hello Symfony2', array('name' => 'Symfony2')),
+            array('{trans vars=["%name%" => "Symfony2"]}Hello %name%{/trans}', 'Hello Symfony2'),
+            array('{$vars=["%name%" => "Symfony2"]}{trans vars=$vars}Hello %name%{/trans}', 'Hello Symfony2'),
+
+            array('{trans locale="pt"}Hello{/trans}', 'Hello'),
+
+            // transchoice block
+            array('{transchoice count=$count domain="messages"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}', 
+                'There is no apples', array('count' => 0)),
+            array('{transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is 5 apples', array('count' => 5)),
+            array('{transchoice count=$count vars=["%name%" => $name]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
+                'There is 5 apples (Symfony2)', array('count' => 5, 'name' => 'Symfony2')),
+            array('{transchoice count=$count vars=["%name%" => "Symfony2"]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
+                'There is 5 apples (Symfony2)', array('count' => 5)),
+            array('{transchoice count=$count locale="fr"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is no apples', array('count' => 0)),
+            
+            // trans modifier
+            array('{"Hello"|trans}', 'Hello'),
+            array('{$name|trans}', 'Symfony2', array('name' => 'Symfony2')),
+            array('{$hello|trans:$vars}', 'Hello Symfony2', array('hello' => 'Hello %name%', 'vars' => array('%name%' => 'Symfony2'))),
+            array('{"Hello"|trans:array():"messages":"pt"}', 'Hello'),
+            
+            // transchoice modifier
+            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count}', 'There is 5 apples', array('count' => 5)),
+            array('{$text|transchoice:5:["%name%" => "Symfony2"]}', 'There is 5 apples (Symfony2)', array('text' => '[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%)')),
+            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count:[]:"messages":"pt"}', 'There is 5 apples', array('count' => 5)),
         );
     }
 }

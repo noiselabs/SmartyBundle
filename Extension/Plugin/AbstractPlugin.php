@@ -16,15 +16,13 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
@@ -37,10 +35,9 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
  *
  * See {@link http://www.smarty.net/docs/en/plugins.tpl}.
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-abstract class Plugin implements PluginInterface
+abstract class AbstractPlugin implements PluginInterface
 {
     /**
      * Available plugin types.
@@ -59,9 +56,6 @@ abstract class Plugin implements PluginInterface
      * @param string             $name      The plugin name
      * @param ExtensionInterface $extension A ExtensionInterface instance
      * @param string             $method    Method name
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function __construct($name, ExtensionInterface $extension, $method)
     {
@@ -72,9 +66,6 @@ abstract class Plugin implements PluginInterface
 
     /**
      * Get the plugin name.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getName()
     {
@@ -83,9 +74,6 @@ abstract class Plugin implements PluginInterface
 
     /**
      * Set the plugin name.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function setName($name)
     {
@@ -93,8 +81,7 @@ abstract class Plugin implements PluginInterface
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Return the plugin callback.
      */
     public function getCallback()
     {
@@ -102,8 +89,7 @@ abstract class Plugin implements PluginInterface
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Check if type is in the supported list.
      */
     public function validateType()
     {

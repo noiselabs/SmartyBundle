@@ -212,26 +212,44 @@ Each extension object share a common interest (translation, routing, etc.) and p
 
 The SmartyBundle comes with a few extensions to help you right away. These are described in the next section.
 
-Translation Extension
-+++++++++++++++++++++
 
-To help with message translation of static blocks of text in template context, the SmartyBundle, provides a translation extension. This extension is implemented in the class `TranslationExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/TranslationExtension.php>`_.
+Actions Extension
++++++++++++++++++
 
-You may translate a message, in a template, using a block or modifier.
+This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
 
-Block::
+Following the example presented in the link above, the Smarty equivalent is::
 
-    {trans}Hello World!{/trans}
+    {render max='3'}AcmeArticleBundle:Article:recentArticles{/render}
 
-    {trans locale="pt_PT"}Hello World!{/trans}
 
-    <!-- In case you're curious, the latter returns "Olá mundo!" :) -->
+Assetic Extension
++++++++++++++++++
 
-Modifier::
+*Coming soon*
 
-    {"Hello World!"|trans}
 
-    {"Hello World!"|trans:array():"messages":"pt_PT"}
+Assets Extension
+++++++++++++++++
+
+Templates commonly refer to images, Javascript and stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
+
+    <img src="{asset}images/logo.png{/asset}" />
+
+    <link href="{asset}css/blog.css{/asset}" rel="stylesheet" type="text/css" />
+
+This bundle also provides the ``assets_version`` function to return the version of the assets in a package. To set the version see the `assets_version configuration option in Symfony's Framework Bundle <http://symfony.com/doc/2.0/reference/configuration/framework.html#ref-framework-assets-version>`_.
+
+Usage in template context::
+
+    {assets_version}
+
+
+Form Extension
+++++++++++++++
+
+*Coming soon*.
+
 
 Routing Extension
 +++++++++++++++++
@@ -251,35 +269,52 @@ Absolute URLs can also be generated.::
     </a>
 
 Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
+    
+Translation Extension
++++++++++++++++++++++
 
-Assets Extension
-++++++++++++++++
+To help with message translation of static blocks of text in template context, the SmartyBundle, provides a translation extension. This extension is implemented in the class `TranslationExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/TranslationExtension.php>`_.
 
-Templates commonly refer to images, Javascript and stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
+You may translate a message, in a template, using a block or modifier. Both methods support the following arguments:
+    - **count**: In pluralization context, used to determine which translation to use and also to populate the %count% placeholder *(only available in transchoice)*;
+    - **vars**: `Message placeholders <http://symfony.com/doc/2.0/book/translation.html#message-placeholders>`_;
+    - **domain**: Message domain, an optional way to organize messages into groups;
+    - **locale**: The locale that the translations are for (e.g. en_GB, en, etc);
+    
+``trans`` block::
 
-    <img src="{asset}images/logo.png{/asset}" />
+    {trans}Hello World!{/trans}
+    
+    {trans vars=['%name%' => 'World']}Hello %name%{/trans}
 
-    <link href="{asset}css/blog.css{/asset}" rel="stylesheet" type="text/css" />
+    {trans domain="messages" locale="pt_PT"}Hello World!{/trans}
 
-This bundle also provides the ``assets_version`` function to return the version of the assets in a package. To set the version see the `assets_version configuration option in Symfony's Framework Bundle <http://symfony.com/doc/2.0/reference/configuration/framework.html#ref-framework-assets-version>`_.
+    <!-- In case you're curious, the latter returns "Olá Mundo!" :) -->
 
-Usage in template context::
+``trans`` modifier::
 
-    {assets_version}
+    {"Hello World!"|trans}
+    
+    {"Hello %name%"|trans:['%name%' => 'World']}
 
-Actions Extension
-+++++++++++++++++
+    {"Hello World!"|trans:[]:"messages":"pt_PT"}
 
-This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
 
-Following the example presented in the link above, the Smarty equivalent is::
+`Message pluralization <http://symfony.com/doc/2.0/book/translation.html#pluralization>`_ can be achieved using ``transchoice``:
 
-    {render max='3'}AcmeArticleBundle:Article:recentArticles{/render}
+    **Note:** Unlike the examples given in the `Symfony documentation <http://symfony.com/doc/2.0/book/translation.html#explicit-interval-pluralization>`_, which uses curly brackets for explicit interval pluralization we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``{0} There is no apples`` becomes ``[0] There is no apples``.
 
-Form Extension
-++++++++++++++
+``transchoice`` block::
+    
+    {transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}
 
-*Coming soon*.
+``transchoice`` modifier::
+    
+    {'[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples'|transchoice:$count}
+    <!-- Should write: "There is 5 apples" -->
+    
+    The transchoice block/modifier automatically gets the %count% variable from the current context and passes it to the translator. This mechanism only works when you use a placeholder following the %var% pattern.
+
 
 Enabling custom Extensions
 ++++++++++++++++++++++++++

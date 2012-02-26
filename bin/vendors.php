@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * This file is part of NoiseLabs-SmartyBundle
@@ -25,17 +26,35 @@
  * @link        http://www.noiselabs.org
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
+set_time_limit(0);
 
-/**
- * See {@link http://www.smarty.net/docs/en/plugins.functions.tpl}.
- *
- * @author Vítor Brandão <noisebleed@noiselabs.org>
- */
-class OutputfilerPlugin extends AbstractPlugin
-{
-    public function getType()
-    {
-        return 'outputfilter';
+if (isset($argv[1])) {
+    $_SERVER['SYMFONY_VERSION'] = $argv[1];
+}
+
+$vendorDir = __DIR__.'/../vendor';
+$deps = array(
+    array('symfony', 'git://github.com/symfony/symfony', isset($_SERVER['SYMFONY_VERSION']) ? $_SERVER['SYMFONY_VERSION'] : 'origin/master'),
+    array('smarty', 'git://github.com/ericingram/smarty', 'origin/master'),
+);
+
+foreach ($deps as $dep) {
+    list($name, $url, $rev) = $dep;
+
+    echo "> Installing/Updating $name\n";
+
+    $installDir = $vendorDir.'/'.$name;
+    if (!is_dir($installDir)) {
+        $return = null;
+        system(sprintf('git clone -q %s %s', escapeshellarg($url), escapeshellarg($installDir)), $return);
+        if ($return > 0) {
+            exit($return);
+        }
+    }
+
+    $return = null;
+    system(sprintf('cd %s && git fetch -q origin && git reset --hard %s', escapeshellarg($installDir), escapeshellarg($rev)), $return);
+    if ($return > 0) {
+        exit($return);
     }
 }
