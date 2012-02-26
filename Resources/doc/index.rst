@@ -316,6 +316,21 @@ You may translate a message, in a template, using a block or modifier. Both meth
     The transchoice block/modifier automatically gets the %count% variable from the current context and passes it to the translator. This mechanism only works when you use a placeholder following the %var% pattern.
 
 
+Security Extension
++++++++++++++++++++++
+
+This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/2.0/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/2.0/book/security.html>`_.
+
+  If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
+
+Usage::
+    
+    {if 'IS_AUTHENTICATED_FULLY'|is_granted:$object:$field}
+        access granted
+    {else}
+        access denied
+    {/if}
+
 Enabling custom Extensions
 ++++++++++++++++++++++++++
 

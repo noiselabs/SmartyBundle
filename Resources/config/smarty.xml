@@ -8,11 +8,12 @@
         <parameter key="smarty.class">Smarty</parameter>
         <parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
         <parameter key="smarty.class_file">Smarty.class.php</parameter>
-        <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
-        <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
         <parameter key="smarty.extension.actions.class">NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension</parameter>
-        <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
+        <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
         <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
+        <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
+        <parameter key="smarty.extension.security.class">NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension</parameter>
+        <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
     </parameters>
 
     <services>
@@ -32,32 +33,37 @@
             <tag name="monolog.logger" channel="smartybundle" />
         </service>
 
-        <service id="smarty.extension.trans" class="%smarty.extension.trans.class%" public="false">
-            <tag name="smarty.extension" />
-            <argument type="service" id="translator" />
-        </service>
-
-        <service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
-            <tag name="smarty.extension" />
-            <argument type="service" id="service_container" />
-        </service>
-
         <service id="smarty.extension.actions" class="%smarty.extension.actions.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
-        </service>
-
-        <service id="smarty.extension.routing" class="%smarty.extension.routing.class%" public="false">
+        </service>        
+        
+        <service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
             <tag name="smarty.extension" />
-            <argument type="service" id="router" />
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="templating.engine.smarty" />
             <argument>%smarty.form.resources%</argument>
+        </service>        
+        
+        <service id="smarty.extension.routing" class="%smarty.extension.routing.class%" public="false">
+            <tag name="smarty.extension" />
+            <argument type="service" id="router" />
         </service>
 
+        <service id="smarty.extension.trans" class="%smarty.extension.trans.class%" public="false">
+            <tag name="smarty.extension" />
+            <argument type="service" id="translator" />
+        </service>        
+
+        <service id="smarty.extension.security" class="%smarty.extension.security.class%" public="false">
+            <tag name="smarty.extension" />
+            <argument type="service" id="security.context" on-invalid="ignore" />
+        </service>        
+        
         <service id="smarty_engine" alias="templating.engine.smarty" />
     </services>
 </container>
