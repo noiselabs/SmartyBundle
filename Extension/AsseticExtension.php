@@ -48,10 +48,16 @@ if (isset($_SERVER['LESSPHP'])) {
  * on your assets.
  *
  * @author Pierre-Jean Parra <parra.pj@gmail.com>
+ *
+ * Pierre-Jean Parra articles about Assetic and Smarty:
  * @link   http://blog.pierrejeanparra.com/2011/12/assets-management-assetic-and-smarty/
  * @link   https://github.com/pjparra/assetic-smarty/blob/master/README.md
  *
+ * Assetic documentation:
  * @link   https://github.com/kriswallsmith/assetic/blob/master/README.md
+ *
+ * Assetic in Symfony2:
+ * @link   http://symfony.com/doc/2.0/cookbook/assetic/asset_management.html
  */
 class AsseticExtension extends AbstractExtension
 {
