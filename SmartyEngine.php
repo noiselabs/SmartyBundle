@@ -50,7 +50,6 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  * Thanks to Symfony developer Christophe Coevoet (@stof) for a carefully code
  * review of this bundle.
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class SmartyEngine implements EngineInterface

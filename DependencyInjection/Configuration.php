@@ -78,7 +78,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Form configuration.
      */
-    private function addFormSection(ArrayNodeDefinition $rootNode)
+    protected function addFormSection(ArrayNodeDefinition $rootNode)
     {
         $rootNode
             ->children()
@@ -87,14 +87,14 @@ class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('resource')
                     ->children()
                         ->arrayNode('resources')
-                            ->defaultValue(array('SmartyBundle:Form:form_div_layout.html.tpl'))
+                            ->prototype('scalar')->defaultValue('form_div_layout.html.tpl')->end()
+                            ->setExample(array('MyBundle::form.html.tpl'))
                             ->validate()
-                                ->ifTrue(function($v) { return !in_array('SmartyBundle:Form:form_div_layout.html.tpl', $v); })
+                                ->ifTrue(function($v) { return !in_array('form_div_layout.html.tpl', $v); })
                                 ->then(function($v){
-                                    return array_merge(array('SmartyBundle:Form:form_div_layout.html.tpl'), $v);
+                                    return array_merge(array('form_div_layout.html.tpl'), $v);
                                 })
                             ->end()
-                            ->prototype('scalar')->end()
                         ->end()
                     ->end()
                 ->end()

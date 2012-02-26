@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
@@ -43,15 +41,10 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 use Symfony\Component\Templating\TemplateReference;
 
 /**
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     protected function setUp()
     {
         if (!class_exists('Smarty')) {
@@ -59,26 +52,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
-        $this->deleteTmpDir();
         
         $this->smarty = $this->getSmarty();
         $this->loader = new ProjectTemplateLoader();
         $this->engine = $this->getSmartyEngine();
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function tearDown()
     {
         $this->deleteTmpDir();
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     protected function deleteTmpDir()
     {
         if (!file_exists($dir = $this->tmpDir)) {
@@ -89,10 +73,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $fs->remove($dir);
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getSmarty()
     {
         return new \Smarty();
@@ -107,10 +87,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
     {
         $container = $this->createContainer();
@@ -130,19 +106,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getKernel()
     {
         return new KernelForTest('test', true);
     }
 
-    /**
-     * @since  0.2.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     protected function createContainer(array $data = array())
     {
         return new ContainerBuilder(new ParameterBag(array_merge(array(
@@ -158,7 +126,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 }
 
 /**
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class KernelForTest extends Kernel
@@ -186,6 +153,9 @@ class KernelForTest extends Kernel
     }
 }
 
+/**
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
 class ProjectTemplateEngine extends SmartyEngine
 {
     public function setTemplate($name, $content)
@@ -200,7 +170,6 @@ class ProjectTemplateEngine extends SmartyEngine
 }
 
 /**
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class ProjectTemplateLoader extends Loader

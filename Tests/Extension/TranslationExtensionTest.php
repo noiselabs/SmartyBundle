@@ -23,7 +23,6 @@
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
@@ -40,15 +39,27 @@ use Symfony\Component\Translation\MessageSelector;
  */
 class TranslationExtensionTest extends TestCase
 {
+    public function testEscaping()
+    {
+        $template = 'trans_escaping.html.tpl';
+        $this->engine->setTemplate($template, '{trans vars=["%value%" => $value]}Percent: %value%% ({$msg}){/trans}');
+        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
+
+        $this->assertEquals('Percent: 12% (approx.)', $this->engine->render($template, array('value' => 12, 'msg' => 'approx.')));
+    }
+    
     /**
      * @dataProvider getTransTests
      */
-    public function testTrans($name, $content, $expected, array $variables = array())
-    {        
-        $this->engine->setTemplate($name, $content);
+    public function testTrans($content, $expected, array $variables = array())
+    {
+        static $test = 0;
+        $template = 'translation_test_'.$test++.'.html.tpl';
+
+        $this->engine->setTemplate($template, $content);
         $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
         
-        $this->assertEquals($expected, $this->engine->render($name, $variables));
+        $this->assertEquals($expected, $this->engine->render($template, $variables));
     }
 
     /**
@@ -58,34 +69,39 @@ class TranslationExtensionTest extends TestCase
     {
         return array(
             // trans block
-            array('tb1.tpl', '{trans}Hello{/trans}', 'Hello'),
-            array('tb2.tpl', '{trans}{$name}{/trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-            array('tb3.tpl', '{trans}Hello {$name}{/trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-            array('tb4.tpl', '{trans locale="pt"}Hello{/trans}', 'Hello'),
+            array('{trans}Hello{/trans}', 'Hello'),
+            array('{trans}{$name}{/trans}', 'Symfony2', array('name' => 'Symfony2')),
+
+            array('{trans domain="elsewhere"}Hello{/trans}', 'Hello'),
+            
+            array('{trans}Hello {$name}{/trans}', 'Hello Symfony2', array('name' => 'Symfony2')),
+            array('{trans vars=["%name%" => "Symfony2"]}Hello %name%{/trans}', 'Hello Symfony2'),
+            array('{$vars=["%name%" => "Symfony2"]}{trans vars=$vars}Hello %name%{/trans}', 'Hello Symfony2'),
+
+            array('{trans locale="pt"}Hello{/trans}', 'Hello'),
 
             // transchoice block
-            /*array('{% transchoice count from "messages" %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtranschoice %}',
+            array('{transchoice count=$count domain="messages"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}', 
                 'There is no apples', array('count' => 0)),
-            array('{% transchoice count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtranschoice %}',
+            array('{transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
                 'There is 5 apples', array('count' => 5)),
-            array('{% transchoice count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%){% endtranschoice %}',
+            array('{transchoice count=$count vars=["%name%" => $name]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
                 'There is 5 apples (Symfony2)', array('count' => 5, 'name' => 'Symfony2')),
-            array('{% transchoice count with { \'%name%\': \'Symfony2\' } %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%){% endtranschoice %}',
+            array('{transchoice count=$count vars=["%name%" => "Symfony2"]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
                 'There is 5 apples (Symfony2)', array('count' => 5)),
-            array('{% transchoice count into "fr"%}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtranschoice %}',
-                'There is no apples', array('count' => 0)),*/
+            array('{transchoice count=$count locale="fr"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is no apples', array('count' => 0)),
             
             // trans modifier
-            array('tm1.tpl', '{"Hello"|trans}', 'Hello'),
-            array('tm2.tpl', '{"$name"|trans}', 'SmartyBundle', array('name' => 'SmartyBundle')),
-            array('tm3.tpl', '{"Hello $name"|trans}', 'Hello SmartyBundle', array('name' => 'SmartyBundle')),
-            array('tm4.tpl', '{"Hello"|trans:array():null:"pt"}', 'Hello'),
+            array('{"Hello"|trans}', 'Hello'),
+            array('{$name|trans}', 'Symfony2', array('name' => 'Symfony2')),
+            array('{$hello|trans:$vars}', 'Hello Symfony2', array('hello' => 'Hello %name%', 'vars' => array('%name%' => 'Symfony2'))),
+            array('{"Hello"|trans:array():"messages":"pt"}', 'Hello'),
             
-           // transchoice modifier
-            /*array('{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|transchoice(count) }}', 'There is 5 apples', array('count' => 5)),
-            array('{{ text|transchoice(5, {\'%name%\': \'Symfony2\'}) }}', 'There is 5 apples (Symfony2)', array('text' => '{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%)')),
-            array('{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|transchoice(count, {}, "messages", "fr") }}', 'There is 5 apples', array('count' => 5)),*/
-
+            // transchoice modifier
+            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count}', 'There is 5 apples', array('count' => 5)),
+            array('{$text|transchoice:5:["%name%" => "Symfony2"]}', 'There is 5 apples (Symfony2)', array('text' => '[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%)')),
+            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count:[]:"messages":"pt"}', 'There is 5 apples', array('count' => 5)),
         );
     }
 }
