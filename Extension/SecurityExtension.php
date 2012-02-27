@@ -58,8 +58,8 @@ class SecurityExtension extends AbstractExtension
         return array(
             new ModifierPlugin('is_granted', $this, 'isGranted'),
         );
-    }    
-    
+    }
+
     public function isGranted($role, $object = null, $field = null)
     {
         if (null === $this->context) {
@@ -72,7 +72,7 @@ class SecurityExtension extends AbstractExtension
 
         return $this->context->isGranted($role, $object);
     }
-    
+
     /**
      * Returns the name of the extension.
      *

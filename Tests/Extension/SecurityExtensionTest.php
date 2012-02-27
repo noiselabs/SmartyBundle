@@ -42,7 +42,7 @@ class SecurityExtensionTest extends TestCase
     {
         $context = $this->createSecurityContext();
         $extension = new SecurityExtension($context);
-        
+
         $this->assertEquals('security', $extension->getName());
     }
 
@@ -52,7 +52,7 @@ class SecurityExtensionTest extends TestCase
         $extension = new SecurityExtension($context);
 
         $this->engine->addExtension($extension);
-        
+
         $this->assertInstanceOf('NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension', $this->engine->getExtension('security'));
     }
 
@@ -60,17 +60,17 @@ class SecurityExtensionTest extends TestCase
      * @dataProvider getIsGrantedTests
      */
     public function testTrans($content, $expected, $granted)
-    {      
+    {
         static $test = 0;
         $template = 'translation_test_'.$test++.'.html.tpl';
-        
+
         $this->engine->setTemplate($template, $content);
         $context = $this->createSecurityContext($granted);
         $this->engine->addExtension(new SecurityExtension($context));
-        
+
         $this->assertEquals($expected, $this->engine->render($template));
     }
-    
+
     /**
      * Returns is_granted tests (data provider).
      */
@@ -82,7 +82,7 @@ class SecurityExtensionTest extends TestCase
             array('{if "IS_AUTHENTICATED_FULLY"|is_granted}access granted{else}access denied{/if}', 'access denied', false)
         );
     }
-    
+
     protected function createSecurityContext($granted = false)
     {
         $authManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
@@ -96,7 +96,7 @@ class SecurityExtensionTest extends TestCase
             ->method('isAuthenticated')
             ->will($this->returnValue(true))
         ;
-        
+
         return $context;
     }
 }
