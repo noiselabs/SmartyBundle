@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
+use Assetic\Factory\AssetFactory;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 
@@ -37,9 +38,18 @@ use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
  */
 class AsseticExtensionTest extends TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        if (!class_exists('Assetic\\AssetManager')) {
+            $this->markTestSkipped('Assetic is not available.');
+        }
+    }
+
     public function testExtensionName()
     {
-        $extension = new AsseticExtension();
+        $extension = new AsseticExtension(new AssetFactory('/foo'));
         
         $this->assertEquals('assetic', $extension->getName());
     }    

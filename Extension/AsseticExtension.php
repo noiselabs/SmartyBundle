@@ -48,6 +48,7 @@ if (isset($_SERVER['LESSPHP'])) {
  * on your assets.
  *
  * @author Pierre-Jean Parra <parra.pj@gmail.com>
+ * @author Vítor Brandão <noisebleed@noiselabs.com>
  *
  * Pierre-Jean Parra articles about Assetic and Smarty:
  * @link   http://blog.pierrejeanparra.com/2011/12/assets-management-assetic-and-smarty/
@@ -61,6 +62,13 @@ if (isset($_SERVER['LESSPHP'])) {
  */
 class AsseticExtension extends AbstractExtension
 {
+    protected $useController;
+
+    public function __construct(AssetFactory $factory, $useController = false)
+    {
+        $this->factory = $factory;
+        $this->useController = $useController;
+    }
 
     /**
      * {@inheritdoc}
@@ -69,9 +77,27 @@ class AsseticExtension extends AbstractExtension
     {
         return array(
             new BlockPlugin('assetic', $this, 'assetic_block'),
+            new BlockPlugin('javascripts', $this, 'javascriptsBlock'),
+            new BlockPlugin('stylesheets', $this, 'stylesheetsBlock'),
+            new BlockPlugin('image', $this, 'imageBlock'),
         );
     }
 
+    public function javascriptsBlock(array $params = array(), $content = null, $template, &$repeat)
+    {
+        
+    }
+
+    public function stylesheetsBlock(array $params = array(), $content = null, $template, &$repeat)
+    {
+        
+    }    
+    
+    public function imageBlock(array $params = array(), $content = null, $template, &$repeat)
+    {
+        
+    }
+    
     /**
      * Returns the public path of an asset
      *
@@ -246,6 +272,15 @@ class AsseticExtension extends AbstractExtension
                 return $content;
             }
         }
+    }
+
+    public function getGlobals()
+    {
+        return array(
+            'assetic' => array(
+                'debug'             => $this->factory->isDebug(),
+                'use_controller'    => $this->useController
+        ));
     }
 
     /**
