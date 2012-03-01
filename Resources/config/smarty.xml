@@ -10,6 +10,7 @@
         <parameter key="smarty.class_file">Smarty.class.php</parameter>
         <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
         <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
+        <parameter key="smarty.extension.assetic.class">NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension</parameter>
         <parameter key="smarty.extension.actions.class">NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension</parameter>
         <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
         <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
@@ -40,6 +41,14 @@
         <service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
+        </service>
+
+        <service id="smarty.extension.assetic" class="%smarty.extension.assetic.class%" public="false">
+            <tag name="smarty.extension" />
+            <argument type="service" id="assetic.asset_factory" />
+            <argument type="service" id="templating.name_parser" />
+            <argument>%assetic.use_controller%</argument>
+            <argument>%assetic.bundles%</argument>
         </service>
 
         <service id="smarty.extension.actions" class="%smarty.extension.actions.class%" public="false">
