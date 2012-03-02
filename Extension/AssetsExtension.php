@@ -17,12 +17,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011 V√≠tor Brand√£o 
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @author      V√≠tor Brand√£o  <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011 V√≠tor Brand√£o  <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -51,7 +51,7 @@ if (isset($_SERVER['LESSPHP']))
  * stylesheets, etc.).
  *
  * @since  0.1.0
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
  */
 class AssetsExtension extends AbstractExtension
 {
@@ -62,7 +62,7 @@ class AssetsExtension extends AbstractExtension
      * Constructor.
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function __construct(ContainerInterface $container)
     {
@@ -73,7 +73,7 @@ class AssetsExtension extends AbstractExtension
      * {@inheritdoc}
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
@@ -95,7 +95,7 @@ class AssetsExtension extends AbstractExtension
      * @return string A public path which takes into account the base path and URL path
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
     {
@@ -120,7 +120,7 @@ class AssetsExtension extends AbstractExtension
      * @return string A public path which takes into account the base path and URL path
      *
      * @since  0.1.1
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function getAssetUrl_modifier($path, $package = null)
     {
@@ -133,7 +133,7 @@ class AssetsExtension extends AbstractExtension
      * @return int
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
     {
@@ -317,7 +317,7 @@ class AssetsExtension extends AbstractExtension
      * @return string The extension name
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author V√≠tor Brand√£o  <noisebleed@noiselabs.org>
      */
     public function getName()
     {
