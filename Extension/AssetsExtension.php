@@ -161,11 +161,11 @@ class AssetsExtension extends AbstractExtension
         static $assetsUrls;
 
         //Read config config file
-        $config_base_path = isset($params['config_path']) ? ($_SERVER['DOCUMENT_ROOT'] . '/' . $params['config_path']) : (__DIR__ . '/../../../../app/config/smarty-assetic');
+        $config_base_path = isset($params['config_path']) ? ($_SERVER['DOCUMENT_ROOT'] . '/' . $params['config_path']) : (__DIR__ . '/../../../../../../app/config/smarty-assetic');
         $config = json_decode(file_get_contents($config_base_path . '/config.json'));
 
         //Set defaults
-        $build_path = isset($params['build_path']) ? $params['build_path'] : (__DIR__ . '/../../../../web/' . $params['output']);
+        $build_path = isset($params['build_path']) ? $params['build_path'] : (__DIR__ . '/../../../../../../web/' . $params['output']);
         $debug = isset($params['debug']) ? $params['debug'] : false;
         $asset_url = isset($params['asset_url']) ? $params['asset_url'] : 'asset_url';
 
