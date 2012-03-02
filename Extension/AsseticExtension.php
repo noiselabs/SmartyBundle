@@ -27,6 +27,8 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension;
+use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
@@ -34,6 +36,7 @@ use Assetic\Util\TraversableString;
 use Symfony\Bundle\AsseticBundle\Exception\InvalidBundleException;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
+// non-Symfony
 use Assetic\AssetManager;
 use Assetic\FilterManager;
 use Assetic\Filter;
@@ -67,14 +70,37 @@ if (isset($_SERVER['LESSPHP'])) {
  */
 class AsseticExtension extends AbstractExtension
 {
+    protected $factory;
+    protected $templateNameParser;
+    protected $enabledBundles;
     protected $useController;
+    protected $extension;
+    protected $urlResolverExtension;
 
-    public function __construct(AssetFactory $factory, TemplateNameParserInterface $templateNameParser, $useController = false, $enabledBundles = array())
+    public function __construct(AssetFactory $factory, TemplateNameParserInterface $templateNameParser, $useController = false, $enabledBundles = array(), AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
     {
         $this->factory = $factory;
         $this->useController = $useController;
         $this->templateNameParser = $templateNameParser;
         $this->enabledBundles = $enabledBundles;
+
+        /*
+         * Create a function to be called by getAssetUrl() dependind on the
+         * assetic.use_controller parameter
+         */
+        if ($this->useController) {
+            // dynamic method using the routing extension
+            $this->urlResolverExtension = $routingExtension;
+            $this->_getAssetUrl = function(RoutingExtension $extension, AssetInterface $asset, $params = array()) {
+                return $extension->getPath('_assetic_'.$params['name']);
+            };
+        } else {
+            // static method using the assets extension
+            $this->urlResolverExtension = $assetsExtension;
+            $this->_getAssetUrl = function(AssetsExtension $extension, AssetInterface $asset, $params = array()) {
+                return $extension->getAssetUrl($asset->getTargetPath(), isset($params['package']) ? $params['package'] : null);
+            };
+        }
     }
 
     /**
@@ -124,99 +150,133 @@ class AsseticExtension extends AbstractExtension
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
 
+    /**
+     * Generic block function called be every other block function (javascripts,
+     * stylesheets, image).
+     */
     protected function asseticBlock(array $params = array(), $content = null, $template, &$repeat)
     {
-        //$this->checkBundle($template->template_resource, $params['_blockName']);
-
-        // The variable name that will be used to pass the asset URL to the
-        // <link> tag
-        if (!isset($params['var_name'])) {
-            $params['var_name'] = 'asset_url';
-        }
+        /*
+         * In debug mode, we have to be able to loop a certain number of times,
+         * so we store some variables using a static array
+         */
+        static $store = array();
 
         // Opening tag (first call only)
         if ($repeat) {
-            foreach ($this->getAssetsUrls($params) as $url) {
-                $template->assign($params['var_name'], $url->getTargetPath());
+
+            $explode = function($value) {
+                return array_map('trim', explode(',', $value));
+            };
+
+            /*
+             * The variable name that will be used to pass the asset URL to the
+             * <link> tag
+             */
+            if (!isset($params['var_name'])) {
+                $params['var_name'] = 'asset_url';
             }
+
+            if (isset($params['assets'])) {
+                $inputs = $explode($params['assets']);
+                unset($params['assets']);
+            } else {
+                $inputs = array();
+            }
+
+            if (isset($params['filters'])) {
+                $filters = $explode($params['filters']);
+                unset($params['filters']);
+            } else {
+                $filters = array();
+            }
+
+            if (!isset($params['debug'])) {
+                $params['debug'] = $this->factory->isDebug();
+            }
+
+            if (!isset($params['combine'])) {
+                $params['combine'] = !$params['debug'];
+            }
+
+            if (isset($params['single']) && $params['single'] && 1 < count($inputs)) {
+                $inputs = array_slice($inputs, -1);
+            }
+
+            if (!isset($params['name'])) {
+                $params['name'] = $this->factory->generateAssetName($inputs, $filters, $params);
+            }
+
+            $asset = $this->factory->createAsset($inputs, $filters, $params);
+
+            $one = $this->getAssetUrl($asset, $params);
+            $many = array();
+            if ($params['combine']) {
+                $many[] = $one;
+            } else {
+                $i = 0;
+                foreach ($asset as $leaf) {
+                    $many[] = $this->getAssetUrl($leaf, array_replace($params, array(
+                        'name' => $params['name'].'_'.$i++,
+                    )));
+                }
+            }
+
+            // AsseticHelper: $urls = new TraversableString($one, $many);
+            $store['urls'] = $many;
+            $store['debug'] = $params['debug'];
+
+            // If debug mode is active, we want to include assets separately
+            if ($params['debug']) {
+                // save parameters for next block calls until $repeat reaches 0
+                $store['debug'] = $params['debug'];
+                $store['varName'] = $params['var_name'];
+
+                $store['count'] = count($store['urls']);
+                $store['urls'] = array_reverse($store['urls']);
+                $template->assign($params['var_name'], $store['urls'][$store['count']-1]);
+
+            // Production mode, include an all-in-one asset
+            } else {
+                $template->assign($params['var_name'], $one);
+            }
+
         // Closing tag
         } else {
+            if (isset($content)) {
+                // If debug mode is active, we want to include assets separately
+                if ($store['debug']) {
+                    $store['count']--;
+                    if ($store['count'] > 0) {
+                        $template->assign($store['varName'],$store['urls'][$store['count']-1]);
+                    }
+                    $repeat = $store['count'] > 0;
+                }
+
+                return $content;
+            }
         }
     }
 
     /**
-     * Gets the URLs for the configured asset.
+     * Returns an URL for the supplied asset.
      *
-     * When in debug mode, this method returns an array of one or more URLs.
-     * When not in debug mode it returns an array of one URL.
+     * @param AssetInterface $asset   An asset
+     * @param array          $options An array of options
      *
-     * @param array $options An array of input strings, filter names and options
-     *
-     * @return array An array of URLs for the asset
+     * @return string An echo-ready URL
      */
-    protected function getAssetsUrls(array $options = array())
+    protected function getAssetUrl(AssetInterface $asset, $params = array())
     {
-        $explode = function($value) {
-            return array_map('trim', explode(',', $value));
-        };
-
-        if (isset($options['assets'])) {
-            $inputs = $explode($options['assets']);
-            unset($options['assets']);
-        } else {
-            $inputs = array();
-        }
-
-        if (isset($options['filters'])) {
-            $filters = $explode($options['filters']);
-            unset($options['filters']);
-        } else {
-            $filters = array();
-        }
-
-
-        if (!isset($options['debug'])) {
-            $options['debug'] = $this->factory->isDebug();
-        }
-
-        if (!isset($options['combine'])) {
-            $options['combine'] = !$options['debug'];
-        }
-
-        if (isset($options['single']) && $options['single'] && 1 < count($inputs)) {
-            $inputs = array_slice($inputs, -1);
-        }
-
-        if (!isset($options['name'])) {
-            $options['name'] = $this->factory->generateAssetName($inputs, $filters, $options);
-        }
-
-        $asset = $this->factory->createAsset($inputs, $filters, $options);
-
-        $one = $this->getAssetUrl($asset, $options);
-        $many = array();
-        if ($options['combine']) {
-            $many[] = $one;
-        } else {
-            $i = 0;
-            foreach ($asset as $leaf) {
-                $many[] = $this->getAssetUrl($leaf, array_replace($options, array(
-                    'name' => $options['name'].'_'.$i++,
-                )));
-            }
-        }
-
-        return new TraversableString($one, $many);
+        return call_user_func($this->_getAssetUrl, $this->urlResolverExtension, $asset, $params);
     }
 
-    protected function getAssetUrl(AssetInterface $asset, $options = array())
-    {
-
-
-
-        return $asset;
-    }
-
+    /**
+     * Check the bundle
+     *
+     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticTokenParser::parse()
+     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticNodeVisitor::leaveNode()
+     */
     protected function checkBundle($filename, $blockName)
     {
         if ($this->templateNameParser && is_array($this->enabledBundles)) {

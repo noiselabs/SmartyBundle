@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
@@ -36,7 +34,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Provides integration of the Routing component with Smarty[Bundle].
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class RoutingExtension extends AbstractExtension
@@ -45,9 +42,6 @@ class RoutingExtension extends AbstractExtension
 
     /**
      * Constructor.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function __construct(UrlGeneratorInterface $generator)
     {
@@ -56,9 +50,6 @@ class RoutingExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
@@ -71,9 +62,31 @@ class RoutingExtension extends AbstractExtension
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * Generates a URL from the given parameters.
+     *
+     * @param string  $name       The name of the route
+     * @param mixed   $parameters An array of parameters
+     *
+     * @return string The generated URL
      */
+    public function getPath($name, $parameters = array())
+    {
+        return $this->generator->generate($name, $parameters, false);
+    }
+
+    /**
+     * Generates an absolute URL from the given parameters.
+     *
+     * @param string  $name       The name of the route
+     * @param mixed   $parameters An array of parameters
+     *
+     * @return string The generated URL
+     */
+    public function getUrl($name, $parameters = array())
+    {
+        return $this->generator->generate($name, $parameters, true);
+    }
+
     public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
     {
         // only output on the closing tag
@@ -82,19 +95,11 @@ class RoutingExtension extends AbstractExtension
         }
     }
 
-    /**
-     * @since  0.1.1
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getPath_modifier($name, array $parameters = array())
     {
         return $this->generator->generate($name, $parameters, false);
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
     {
         // only output on the closing tag
@@ -103,10 +108,6 @@ class RoutingExtension extends AbstractExtension
         }
     }
 
-    /**
-     * @since  0.1.1
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getUrl_modifier($name, array $parameters = array())
     {
         return $this->generator->generate($name, $parameters, true);
@@ -116,9 +117,6 @@ class RoutingExtension extends AbstractExtension
      * Returns the name of the extension.
      *
      * @return string The extension name
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getName()
     {
