@@ -20,38 +20,37 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
 
-$vendorDir = __DIR__.'/../vendor';
-require_once $vendorDir.'/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Assetic\Factory\AssetFactory;
+use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
+use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'Symfony'   => array($vendorDir.'/symfony/src', $vendorDir.'/bundles'),
-    'Monolog'   => $vendorDir.'/monolog/src',
-    'Assetic'   => $vendorDir.'/assetic/src',
-));
-$loader->registerPrefixes(array(
-    'Smarty_'           => $vendorDir.'/smarty/libs',
-));
-$loader->register();
-
-set_include_path($vendorDir.'/smarty/libs'.PATH_SEPARATOR.$vendorDir.get_include_path());
-require_once 'Smarty.class.php';
-
-spl_autoload_register(function($class) {
-    if (0 === strpos($class, 'NoiseLabs\\Bundle\\SmartyBundle\\')) {
-        $path = __DIR__.'/../'.implode('/', array_slice(explode('\\', $class), 3)).'.php';
-        if (!stream_resolve_include_path($path)) {
-            return false;
+/**
+ * Test suite for the assetic extension.
+ *
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
+class AsseticExtensionTest extends TestCase
+{
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        if (!class_exists('Assetic\\AssetManager')) {
+            $this->markTestSkipped('Assetic is not available.');
         }
-        require_once $path;
-        return true;
     }
-});
+
+    public function testExtensionName()
+    {
+        $extension = new AsseticExtension(new AssetFactory('/foo'));
+        
+        $this->assertEquals('assetic', $extension->getName());
+    }    
+}
