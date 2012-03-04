@@ -21,7 +21,7 @@
             <file>%smarty.class_file%</file>
         </service>
 
-        <service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="false">
+        <service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="true">
             <argument type="service" id="smarty"/>
             <argument type="service" id="service_container" />
             <argument type="service" id="templating.name_parser"/>

@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle;
@@ -133,9 +131,6 @@ class SmartyEngine implements EngineInterface
 
     /**
      * Pass methods not available in this engine to the Smarty instance.
-     *
-     * @since  0.2.0
-     * @author Vítor Brandão <vbrandao@nexttoyou.pt>
      */
     public function __call($name, $args)
     {
@@ -145,11 +140,14 @@ class SmartyEngine implements EngineInterface
     /**
      * Returns the Smarty instance.
      *
-     * @since  0.2.0
-     * @author Vítor Brandão <vbrandao@nexttoyou.pt>
+     * @return Smarty The Smarty instance
      */
     public function getSmarty()
     {
+        $this->registerFilters();
+        $this->registerPlugins();
+        $this->smarty->assign($this->getGlobals());
+
         return $this->smarty;
     }
 
@@ -163,9 +161,6 @@ class SmartyEngine implements EngineInterface
      *
      * @throws \InvalidArgumentException if the template does not exist
      * @throws \RuntimeException         if the template cannot be rendered
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function render($name, array $parameters = array())
     {
@@ -192,9 +187,7 @@ class SmartyEngine implements EngineInterface
          *
          * Too learn more see {@link http://www.smarty.net/docs/en/api.assign.tpl}
          */
-        foreach ($parameters as $varname => $var) {
-            $this->smarty->assign($varname, $var);
-        }
+         $this->smarty->assign($parameters);
 
         /**
          * This returns the template output instead of displaying it. Supply a
@@ -219,9 +212,6 @@ class SmartyEngine implements EngineInterface
      * @param string $name A template name
      *
      * @return Boolean true if the template exists, false otherwise
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function exists($name)
     {
@@ -240,9 +230,6 @@ class SmartyEngine implements EngineInterface
      * @param string $name A template name
      *
      * @return Boolean True if this class supports the given resource, false otherwise
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function supports($name)
     {
@@ -263,9 +250,6 @@ class SmartyEngine implements EngineInterface
      * @param Response $response   A Response instance
      *
      * @return Response A Response instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function renderResponse($view, array $parameters = array(), Response $response = null)
     {
@@ -286,9 +270,6 @@ class SmartyEngine implements EngineInterface
      * @return mixed The resource handle of the template file or template object
      *
      * @throws \InvalidArgumentException if the template cannot be found
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      *
      * @todo Check windows filepaths as defined in
      * {@link http://www.smarty.net/docs/en/resources.tpl#templates.windows.filepath}.
@@ -315,9 +296,6 @@ class SmartyEngine implements EngineInterface
      * @param string $name The extension name
      *
      * @return Boolean Whether the extension is registered or not
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function hasExtension($name)
     {
@@ -330,9 +308,6 @@ class SmartyEngine implements EngineInterface
      * @param string $name The extension name
      *
      * @return ExtensionInterface An ExtensionInterface instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getExtension($name)
     {
@@ -347,9 +322,6 @@ class SmartyEngine implements EngineInterface
      * Registers an extension.
      *
      * @param ExtensionInterface $extension An ExtensionInterface instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function addExtension(ExtensionInterface $extension)
     {
@@ -360,9 +332,6 @@ class SmartyEngine implements EngineInterface
      * Removes an extension by name.
      *
      * @param string $name The extension name
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function removeExtension($name)
     {
@@ -373,9 +342,6 @@ class SmartyEngine implements EngineInterface
      * Registers an array of extensions.
      *
      * @param array $extensions An array of extensions
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function setExtensions(array $extensions)
     {
@@ -390,9 +356,6 @@ class SmartyEngine implements EngineInterface
      * Returns all registered extensions.
      *
      * @return array An array of extensions
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getExtensions()
     {
@@ -403,9 +366,6 @@ class SmartyEngine implements EngineInterface
      * Adds a filter to the collection.
      *
      * @param mixed  $filter A FilterInterface instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function addFilter(FilterInterface $filter)
     {
@@ -420,9 +380,6 @@ class SmartyEngine implements EngineInterface
      * Gets the collection of filters.
      *
      * @return array An array of Filters
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getFilters()
     {
@@ -438,9 +395,6 @@ class SmartyEngine implements EngineInterface
 
     /**
      * Dynamically register filters to Smarty.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function registerFilters()
     {
@@ -460,9 +414,6 @@ class SmartyEngine implements EngineInterface
      * Adds a plugin to the collection.
      *
      * @param mixed  $plugin A PluginInterface instance
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function addPlugin(PluginInterface $plugin)
     {
@@ -477,9 +428,6 @@ class SmartyEngine implements EngineInterface
      * Gets the collection of plugins.
      *
      * @return array An array of plugins
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
@@ -495,9 +443,6 @@ class SmartyEngine implements EngineInterface
 
     /**
      * Dynamically register plugins to Smarty.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function registerPlugins()
     {
@@ -518,9 +463,6 @@ class SmartyEngine implements EngineInterface
      *
      * @param string $name  The global name
      * @param mixed  $value The global value
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function addGlobal($name, $value)
     {
@@ -531,9 +473,6 @@ class SmartyEngine implements EngineInterface
      * Gets the registered Globals.
      *
      * @return array An array of Globals
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getGlobals($load_extensions = true)
     {
@@ -551,9 +490,6 @@ class SmartyEngine implements EngineInterface
      * this to load a 'real' template from a 'logical' one.
      *
      * To learn more see {@link http://www.smarty.net/docs/en/variable.default.template.handler.func.tpl}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function smartyDefaultTemplateHandler($type, $name, &$content, &$modified, \Smarty $smarty)
     {
@@ -562,9 +498,6 @@ class SmartyEngine implements EngineInterface
 
     /**
      * Get the setter method for a Smarty class variable (property).
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     protected function smartyPropertyToSetter($property)
     {
