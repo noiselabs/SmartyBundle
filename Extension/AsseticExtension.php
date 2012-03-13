@@ -74,6 +74,14 @@ class AsseticExtension extends AbstractExtension
     protected $extension;
     protected $urlResolverExtension;
 
+    /**
+     * Constructor.
+     *
+     * @param AssetFactory     $factory          The asset factory
+     * @param boolean          $useController    Handle assets dynamically
+     * @param AssetsExtension  $assetsExtension  The assets extension
+     * @param RoutingExtension $routingExtension The routing extension
+     */
     public function __construct(AssetFactory $factory, $useController = false, AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
     {
         $this->factory = $factory;
@@ -84,13 +92,19 @@ class AsseticExtension extends AbstractExtension
          * assetic.use_controller parameter
          */
         if ($this->useController) {
-            // dynamic method using the routing extension
+            /**
+             * Dynamic method using the routing extension
+             * @see Symfony\Bundle\AsseticBundle\Templating\DynamicAsseticHelper
+             */
             $this->urlResolverExtension = $routingExtension;
             $this->_getAssetUrl = function(RoutingExtension $extension, AssetInterface $asset, $params = array()) {
                 return $extension->getPath('_assetic_'.$params['name']);
             };
         } else {
-            // static method using the assets extension
+            /**
+             * Static method using the assets extension
+             * @see Symfony\Bundle\AsseticBundle\Templating\StaticAsseticHelper
+             */
             $this->urlResolverExtension = $assetsExtension;
             $this->_getAssetUrl = function(AssetsExtension $extension, AssetInterface $asset, $params = array()) {
                 return $extension->getAssetUrl($asset->getTargetPath(), isset($params['package']) ? $params['package'] : null);
