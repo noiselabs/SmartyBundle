@@ -47,9 +47,7 @@
         <service id="smarty.extension.assetic" class="%smarty.extension.assetic.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="assetic.asset_factory" />
-            <argument type="service" id="templating.name_parser" />
             <argument>%assetic.use_controller%</argument>
-            <argument>%assetic.bundles%</argument>
             <argument type="service" id="smarty.extension.assets" on-invalid="null"/>
             <argument type="service" id="smarty.extension.routing" on-invalid="null"/>
         </service>

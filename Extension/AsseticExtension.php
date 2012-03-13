@@ -34,7 +34,6 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
 use Assetic\Util\TraversableString;
 use Symfony\Bundle\AsseticBundle\Exception\InvalidBundleException;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 
 // non-Symfony
 use Assetic\AssetManager;
@@ -71,21 +70,17 @@ if (isset($_SERVER['LESSPHP'])) {
 class AsseticExtension extends AbstractExtension
 {
     protected $factory;
-    protected $templateNameParser;
-    protected $enabledBundles;
     protected $useController;
     protected $extension;
     protected $urlResolverExtension;
 
-    public function __construct(AssetFactory $factory, TemplateNameParserInterface $templateNameParser, $useController = false, $enabledBundles = array(), AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
+    public function __construct(AssetFactory $factory, $useController = false, AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
     {
         $this->factory = $factory;
         $this->useController = $useController;
-        $this->templateNameParser = $templateNameParser;
-        $this->enabledBundles = $enabledBundles;
 
         /*
-         * Create a function to be called by getAssetUrl() dependind on the
+         * Create a function to be called by getAssetUrl() depending on the
          * assetic.use_controller parameter
          */
         if ($this->useController) {
@@ -270,24 +265,6 @@ class AsseticExtension extends AbstractExtension
     protected function getAssetUrl(AssetInterface $asset, $params = array())
     {
         return call_user_func($this->_getAssetUrl, $this->urlResolverExtension, $asset, $params);
-    }
-
-    /**
-     * Check the bundle
-     *
-     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticTokenParser::parse()
-     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticNodeVisitor::leaveNode()
-     */
-    protected function checkBundle($filename, $blockName)
-    {
-        if ($this->templateNameParser && is_array($this->enabledBundles)) {
-            // check the bundle
-            $templateRef = $this->templateNameParser->parse($filename);
-            $bundle = $templateRef->get('bundle');
-            if ($bundle && !in_array($bundle, $this->enabledBundles)) {
-                throw new InvalidBundleException($bundle, "the {$blockName} block function", $templateRef->getLogicalName(), $this->enabledBundles);
-            }
-        }
     }
 
     /**
@@ -484,4 +461,64 @@ class AsseticExtension extends AbstractExtension
     {
         return 'assetic';
     }
+
+    /* TODO: Add the necessary corrections to include this method.
+     *
+     * Check the bundle
+     *
+     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticTokenParser::parse()
+     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticNodeVisitor::leaveNode()
+
+    [Resources/config/smarty.xml]
+
+    <service id="smarty.extension.assetic" class="%smarty.extension.assetic.class%" public="false">
+        <tag name="smarty.extension" />
+        <argument type="service" id="assetic.asset_factory" />
+        <argument type="service" id="templating.name_parser" />
+        <argument>%assetic.use_controller%</argument>
+        <argument>%assetic.bundles%</argument>
+        <argument type="service" id="smarty.extension.assets" on-invalid="null"/>
+        <argument type="service" id="smarty.extension.routing" on-invalid="null"/>
+    </service>
+
+
+    [Extension/AsseticExtension]
+
+    // ...
+    use Symfony\Component\Templating\TemplateNameParserInterface;
+
+    class AsseticExtension extends AbstractExtension
+    {
+        protected $factory;
+        protected $templateNameParser;
+        protected $enabledBundles;
+        protected $useController;
+        protected $extension;
+        protected $urlResolverExtension;
+
+        public function __construct(AssetFactory $factory, TemplateNameParserInterface $templateNameParser, $useController = false, $enabledBundles = array(), AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
+        {
+            $this->factory = $factory;
+            $this->useController = $useController;
+            $this->templateNameParser = $templateNameParser;
+            $this->enabledBundles = $enabledBundles;
+
+            //...
+        }
+
+        // ...
+
+        protected function checkBundle($filename, $blockName)
+        {
+            if ($this->templateNameParser && is_array($this->enabledBundles)) {
+                // check the bundle
+                $templateRef = $this->templateNameParser->parse($filename);
+                $bundle = $templateRef->get('bundle');
+                if ($bundle && !in_array($bundle, $this->enabledBundles)) {
+                    throw new InvalidBundleException($bundle, "the {$blockName} block function", $templateRef->getLogicalName(), $this->enabledBundles);
+                }
+            }
+        }
+
+    */
 }
