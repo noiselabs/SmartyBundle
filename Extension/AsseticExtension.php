@@ -225,14 +225,15 @@ class AsseticExtension extends AbstractExtension
             // AsseticHelper: $urls = new TraversableString($one, $many);
             $store['urls'] = $many;
             $store['debug'] = $params['debug'];
+            $store['count'] = count($store['urls']);
 
             // If debug mode is active, we want to include assets separately
-            if ($params['debug']) {
+            if ($store['count']>0 && $params['debug']) {
                 // save parameters for next block calls until $repeat reaches 0
                 $store['debug'] = $params['debug'];
                 $store['varName'] = $params['var_name'];
 
-                $store['count'] = count($store['urls']);
+
                 $store['urls'] = array_reverse($store['urls']);
                 $template->assign($params['var_name'], $store['urls'][$store['count']-1]);
 
