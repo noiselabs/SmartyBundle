@@ -22,6 +22,7 @@ The complete [documentation](https://github.com/noiselabs/SmartyBundle/blob/mast
 If you want to contribute to SmartyBundle please switch to the following branches when contributing to one of these extensions.
 
 * **AsseticExtension** - https://github.com/noiselabs/SmartyBundle/tree/assetic-extension
+* **FormExtension** - https://github.com/noiselabs/SmartyBundle/tree/form-extension
 * **SecurityExtension** - *completed, merged into master*
 
 Installation
