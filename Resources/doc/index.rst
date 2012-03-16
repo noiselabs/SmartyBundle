@@ -269,7 +269,7 @@ Absolute URLs can also be generated.::
     </a>
 
 Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
-    
+
 Translation Extension
 +++++++++++++++++++++
 
@@ -280,11 +280,11 @@ You may translate a message, in a template, using a block or modifier. Both meth
     - **vars**: `Message placeholders <http://symfony.com/doc/2.0/book/translation.html#message-placeholders>`_;
     - **domain**: Message domain, an optional way to organize messages into groups;
     - **locale**: The locale that the translations are for (e.g. en_GB, en, etc);
-    
+
 ``trans`` block::
 
     {trans}Hello World!{/trans}
-    
+
     {trans vars=['%name%' => 'World']}Hello %name%{/trans}
 
     {trans domain="messages" locale="pt_PT"}Hello World!{/trans}
@@ -294,7 +294,7 @@ You may translate a message, in a template, using a block or modifier. Both meth
 ``trans`` modifier::
 
     {"Hello World!"|trans}
-    
+
     {"Hello %name%"|trans:['%name%' => 'World']}
 
     {"Hello World!"|trans:[]:"messages":"pt_PT"}
@@ -305,16 +305,31 @@ You may translate a message, in a template, using a block or modifier. Both meth
     **Note:** Unlike the examples given in the `Symfony documentation <http://symfony.com/doc/2.0/book/translation.html#explicit-interval-pluralization>`_, which uses curly brackets for explicit interval pluralization we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``{0} There is no apples`` becomes ``[0] There is no apples``.
 
 ``transchoice`` block::
-    
+
     {transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}
 
 ``transchoice`` modifier::
-    
+
     {'[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples'|transchoice:$count}
     <!-- Should write: "There is 5 apples" -->
-    
+
     The transchoice block/modifier automatically gets the %count% variable from the current context and passes it to the translator. This mechanism only works when you use a placeholder following the %var% pattern.
 
+
+Security Extension
++++++++++++++++++++++
+
+This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/2.0/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/2.0/book/security.html>`_.
+
+  If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
+
+Usage::
+
+    {if 'IS_AUTHENTICATED_FULLY'|is_granted:$object:$field}
+        access granted
+    {else}
+        access denied
+    {/if}
 
 Enabling custom Extensions
 ++++++++++++++++++++++++++
