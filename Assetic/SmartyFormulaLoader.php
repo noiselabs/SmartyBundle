@@ -36,8 +36,13 @@ use Assetic\Factory\Resource\ResourceInterface;
  */
 class SmartyFormulaLoader implements FormulaLoaderInterface
 {
+    public function __construct()
+    {
+    }
+
     public function load(ResourceInterface $resource)
     {
-        // TODO
+        return array();
+        
     }
 }

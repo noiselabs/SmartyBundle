@@ -27,9 +27,6 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
-use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension;
-use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
-
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
 use Assetic\Util\TraversableString;
@@ -67,49 +64,21 @@ if (isset($_SERVER['LESSPHP'])) {
  * Assetic in Symfony2:
  * @link   http://symfony.com/doc/2.0/cookbook/assetic/asset_management.html
  */
-class AsseticExtension extends AbstractExtension
+abstract class AsseticExtension extends AbstractExtension
 {
     protected $factory;
     protected $useController;
-    protected $extension;
-    protected $urlResolverExtension;
 
     /**
      * Constructor.
      *
      * @param AssetFactory     $factory          The asset factory
      * @param boolean          $useController    Handle assets dynamically
-     * @param AssetsExtension  $assetsExtension  The assets extension
-     * @param RoutingExtension $routingExtension The routing extension
      */
-    public function __construct(AssetFactory $factory, $useController = false, AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
+    public function __construct(AssetFactory $factory, $useController = false)
     {
         $this->factory = $factory;
         $this->useController = $useController;
-
-        /*
-         * Create a function to be called by getAssetUrl() depending on the
-         * assetic.use_controller parameter
-         */
-        if ($this->useController) {
-            /**
-             * Dynamic method using the routing extension
-             * @see Symfony\Bundle\AsseticBundle\Templating\DynamicAsseticHelper
-             */
-            $this->urlResolverExtension = $routingExtension;
-            $this->_getAssetUrl = function(RoutingExtension $extension, AssetInterface $asset, $params = array()) {
-                return $extension->getPath('_assetic_'.$params['name']);
-            };
-        } else {
-            /**
-             * Static method using the assets extension
-             * @see Symfony\Bundle\AsseticBundle\Templating\StaticAsseticHelper
-             */
-            $this->urlResolverExtension = $assetsExtension;
-            $this->_getAssetUrl = function(AssetsExtension $extension, AssetInterface $asset, $params = array()) {
-                return $extension->getAssetUrl($asset->getTargetPath(), isset($params['package']) ? $params['package'] : null);
-            };
-        }
     }
 
     /**
@@ -131,7 +100,7 @@ class AsseticExtension extends AbstractExtension
             $params['output'] = 'js/*.js';
         }
 
-        $params['_blockName'] = 'javascripts';
+        $params['smartyBlockName'] = 'javascripts';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
@@ -142,7 +111,7 @@ class AsseticExtension extends AbstractExtension
             $params['output'] = 'css/*.css';
         }
 
-        $params['_blockName'] = 'stylesheets';
+        $params['smartyBlockName'] = 'stylesheets';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
@@ -154,7 +123,7 @@ class AsseticExtension extends AbstractExtension
         }
 
         $params['single'] = true;
-        $params['_blockName'] = 'image';
+        $params['smartyBlockName'] = 'image';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
@@ -272,15 +241,12 @@ class AsseticExtension extends AbstractExtension
      * Returns an URL for the supplied asset.
      *
      * @param AssetInterface $asset   An asset
-     * @param array          $options An array of options
+     * @param array          $params An array of options
      *
      * @return string An echo-ready URL
      */
-    protected function getAssetUrl(AssetInterface $asset, $params = array())
-    {
-        return call_user_func($this->_getAssetUrl, $this->urlResolverExtension, $asset, $params);
-    }
-
+    abstract protected function getAssetUrl(AssetInterface $asset, $params = array());
+    
     /**
      * Returns the public path of an asset
      *

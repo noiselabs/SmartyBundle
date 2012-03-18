@@ -54,13 +54,12 @@ class SmartyExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('smarty.xml');
+        
+
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        $engineDefinition = $container->getDefinition('templating.engine.smarty');
-
-        $container->setParameter('smarty.form.resources',
-        $config['form']['resources']);
+        $engineDefinition = $container->getDefinition('templating.engine.smarty');      
 
         if (!empty($config['globals'])) {
             foreach ($config['globals'] as $key => $global) {
@@ -74,6 +73,28 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
+        /*
+         * AsseticExtension
+         */
+        if (in_array('AsseticBundle', array_keys($container->getParameter('kernel.bundles')))) {
+            
+            $loader->load('assetic.xml');
+            
+            // choose dynamic or static
+            if ($useController = $container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
+                $container->getDefinition('smarty.extension.assetic.dynamic')->addTag('smarty.extension', array('alias' => 'assetic'));
+                $container->removeDefinition('smarty.extension.assetic.static');
+            } else {
+                $container->getDefinition('smarty.extension.assetic.static')->addTag('smarty.extension', array('alias' => 'assetic'));
+                $container->removeDefinition('smarty.extension.assetic.dynamic');
+            }
+        }
+
+        /*
+         * FormExtension
+         */
+        $container->setParameter('smarty.form.resources', $config['form']['resources']);
+        
         /**
          * @note Caching of Smarty classes was causing issues because of the
          * include_once directives used in Smarty.class.php so this

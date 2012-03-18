@@ -8,14 +8,12 @@
         <parameter key="smarty.class">Smarty</parameter>
         <parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
         <parameter key="smarty.class_file">Smarty.class.php</parameter>
-        <parameter key="smarty.extension.assetic.class">NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension</parameter>
         <parameter key="smarty.extension.actions.class">NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension</parameter>
         <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
         <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
         <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
         <parameter key="smarty.extension.security.class">NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension</parameter>
         <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
-        <parameter key="smarty.assetic.formula_loader.class">NoiseLabs\Bundle\SmartyBundle\Assetic\SmartyFormulaLoader</parameter>
     </parameters>
 
     <services>
@@ -44,15 +42,7 @@
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
         </service>
-
-        <service id="smarty.extension.assetic" class="%smarty.extension.assetic.class%" public="false">
-            <tag name="smarty.extension" />
-            <argument type="service" id="assetic.asset_factory" />
-            <argument>%assetic.use_controller%</argument>
-            <argument type="service" id="smarty.extension.assets" on-invalid="null"/>
-            <argument type="service" id="smarty.extension.routing" on-invalid="null"/>
-        </service>
-
+        
         <service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="templating.engine.smarty" />
@@ -72,19 +62,6 @@
         <service id="smarty.extension.security" class="%smarty.extension.security.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="security.context" on-invalid="ignore" />
-        </service>
-
-        <service id="smarty.assetic.formula_loader" class="%assetic.cached_formula_loader.class%" public="false">
-            <tag name="assetic.formula_loader" alias="smarty" />
-            <tag name="assetic.templating.smarty" />
-            <argument type="service" id="smarty.assetic.formula_loader.real" />
-            <argument type="service" id="assetic.config_cache" />
-            <argument>%kernel.debug%</argument>
-        </service>
-
-        <service id="smarty.assetic.formula_loader.real" class="%smarty.assetic.formula_loader.class%" public="false">
-            <tag name="assetic.templating.smarty" />
-            <argument type="service" id="smarty" />
         </service>
 
         <service id="smarty_engine" alias="templating.engine.smarty" />
