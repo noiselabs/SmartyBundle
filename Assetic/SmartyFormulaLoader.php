@@ -28,6 +28,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Assetic;
 
 use Assetic\Factory\Loader\FormulaLoaderInterface;
 use Assetic\Factory\Resource\ResourceInterface;
+use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 
 /**
  * Loads asset formulae from Smarty templates.
@@ -36,13 +37,18 @@ use Assetic\Factory\Resource\ResourceInterface;
  */
 class SmartyFormulaLoader implements FormulaLoaderInterface
 {
-    public function __construct()
+    protected $engine;
+
+    public function __construct(SmartyEngine $engine)
     {
+        $this->engine = $engine;
     }
 
     public function load(ResourceInterface $resource)
     {
-        return array();
+        $formulae = array();
+
+        var_dump($resource->getContent());die;
         
     }
 }

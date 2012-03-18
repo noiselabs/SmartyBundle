@@ -81,6 +81,11 @@ abstract class AsseticExtension extends AbstractExtension
         $this->useController = $useController;
     }
 
+    public function getAssetFactory()
+    {
+        return $this->factory;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -237,16 +242,6 @@ abstract class AsseticExtension extends AbstractExtension
         }
     }
 
-    /**
-     * Returns an URL for the supplied asset.
-     *
-     * @param AssetInterface $asset   An asset
-     * @param array          $params An array of options
-     *
-     * @return string An echo-ready URL
-     */
-    abstract protected function getAssetUrl(AssetInterface $asset, $params = array());
-    
     /**
      * Returns the public path of an asset
      *
@@ -441,6 +436,16 @@ abstract class AsseticExtension extends AbstractExtension
     {
         return 'assetic';
     }
+
+    /**
+     * Returns an URL for the supplied asset.
+     *
+     * @param AssetInterface $asset   An asset
+     * @param array          $params An array of options
+     *
+     * @return string An echo-ready URL
+     */
+    abstract protected function getAssetUrl(AssetInterface $asset, $params = array());
 
     /* TODO: Add the necessary corrections to include this method.
      *

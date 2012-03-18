@@ -35,7 +35,7 @@
 
         <service id="smarty.assetic.formula_loader.real" class="%smarty.assetic.formula_loader.class%" public="false">
             <tag name="assetic.templating.smarty" />
-            <argument type="service" id="smarty" />
+            <argument type="service" id="templating.engine.smarty" />
         </service>
     </services>
 </container>
