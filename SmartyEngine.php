@@ -30,7 +30,6 @@ namespace NoiseLabs\Bundle\SmartyBundle;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
-use Smarty_Internal_Template as SmartyTemplate;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,8 +51,6 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  */
 class SmartyEngine implements EngineInterface
 {
-    const TEMPLATE_SUFFIX = 'tpl';
-
     protected $extensions;
     protected $filters;
     protected $globals;
@@ -233,13 +230,13 @@ class SmartyEngine implements EngineInterface
      */
     public function supports($name)
     {
-        if ($name instanceof SmartyTemplate) {
+        if ($name instanceof \Smarty_Internal_Template) {
             return true;
         }
 
         $template = $this->parser->parse($name);
 
-        return static::TEMPLATE_SUFFIX === $template->get('engine');
+        return 'smarty' === $template->get('engine');
     }
 
     /**
@@ -276,7 +273,7 @@ class SmartyEngine implements EngineInterface
      */
     public function load($name)
     {
-        if ($name instanceof SmartyTemplate) {
+        if ($name instanceof \Smarty_Internal_Template) {
             return $name;
         }
 
