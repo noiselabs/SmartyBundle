@@ -28,6 +28,7 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use Assetic\Factory\AssetFactory;
+use Assetic\Asset\AssetInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 
@@ -49,8 +50,16 @@ class AsseticExtensionTest extends TestCase
 
     public function testExtensionName()
     {
-        $extension = new AsseticExtension(new AssetFactory('/foo'));
+        $extension = new AsseticExtensionForTest(new AssetFactory('/foo'));
 
         $this->assertEquals('assetic', $extension->getName());
+    }
+}
+
+class AsseticExtensionForTest extends AsseticExtension
+{
+    protected function getAssetUrl(AssetInterface $asset, $params = array())
+    {
+        return $asset->getTargetPath();
     }
 }
