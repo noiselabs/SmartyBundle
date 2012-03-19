@@ -48,7 +48,6 @@ class SmartyFormulaLoader implements FormulaLoaderInterface
     {
         $formulae = array();
 
-        var_dump($resource->getContent());die;
-        
+        return $formulae;
     }
 }

@@ -41,7 +41,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 /**
  * SmartyEngine is an engine able to render Smarty templates.
  *
- * This class is heavily inspired by \Twig_Environment. 
+ * This class is heavily inspired by \Twig_Environment.
  * See {@link http://twig.sensiolabs.org/doc/api.html} for details about \Twig_Environment.
  *
  * Thanks to Symfony developer Christophe Coevoet (@stof) for a carefully code
@@ -70,7 +70,7 @@ class SmartyEngine implements EngineInterface
      * @param GlobalVariables|null        $globals   A GlobalVariables instance or null
      * @param LoggerInterface|null        $logger    A LoggerInterface instance or null
      */
-    public function __construct(\Smarty $smarty, ContainerInterface $container, 
+    public function __construct(\Smarty $smarty, ContainerInterface $container,
     TemplateNameParserInterface $parser, LoaderInterface $loader, array $options,
     GlobalVariables $globals = null, LoggerInterface $logger = null)
     {
@@ -238,7 +238,7 @@ class SmartyEngine implements EngineInterface
 
         // keep 'tpl' for backwards compatibility. remove whent taggin '0.2.0'
         return 'smarty' === $template->get('engine');
-        return in_array($template->get('engine'), array('smarty', 'tpl'));
+        //return in_array($template->get('engine'), array('smarty', 'tpl'));
     }
 
     /**
