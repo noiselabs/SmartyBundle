@@ -62,6 +62,8 @@ function usage($exitcode = 0, $msg = false) {
     exit($exitcode);
 }
 
+$bullet = '*';
+
 // script options
 $shortopts = 'h';
 $longopts = array(
@@ -116,20 +118,25 @@ $renamed = 0;
 if ($git) {
     $exeFinder = new ExecutableFinder();
     $gitBin = $exeFinder->find('git', '/usr/bin/git');
-    echo '>> Using git ;)'.PHP_EOL;
+    echo $bullet.' Using git ;)'.PHP_EOL;
 }
 
 if ($fix) {
-    printf('>> FIXING *.php and *.%s files in "%s"...'.PHP_EOL,
+    printf('%s FIXING *.php and *.%s files in "%s"...',
+        $bullet,
         $oldExtension,
         $srcDir
     );
 } else {
-    printf('>> Analyzing *.php and *.%s files in "%s"...'.PHP_EOL,
+    printf('%s Analyzing *.php and *.%s files in "%s"...',
+        $bullet,
         $oldExtension,
         $srcDir
     );
 }
+echo PHP_EOL.PHP_EOL;
+
+// give 1 second to the user before all hell breaks loose
 sleep(1);
 
 foreach ($finder as $file) {
@@ -185,6 +192,18 @@ foreach ($finder as $file) {
     } elseif ($changed) {
         printf('%4d) %s'.PHP_EOL, $count, $file->getRelativePathname());
     }
+}
+
+if (!$fix) {
+    printf(PHP_EOL."%s No changes were made to the filesystem. Let's try again with --fix to actually fix something?".PHP_EOL,
+        $bullet
+    );
+}
+
+if (!$git) {
+    printf(PHP_EOL."%s Do you know a --git option is available? When enabled, files are renamed using 'git mv'.".PHP_EOL,
+        $bullet
+    );
 }
 
 exit($count ? 1 : 0);

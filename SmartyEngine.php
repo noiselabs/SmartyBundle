@@ -236,9 +236,8 @@ class SmartyEngine implements EngineInterface
 
         $template = $this->parser->parse($name);
 
-        // keep 'tpl' for backwards compatibility. remove whent taggin '0.2.0'
-        return 'smarty' === $template->get('engine');
-        //return in_array($template->get('engine'), array('smarty', 'tpl'));
+        // keep 'tpl' for backwards compatibility. remove when tagging '0.2.0'
+        return in_array($template->get('engine'), array('smarty', 'tpl'));
     }
 
     /**
