@@ -30,7 +30,7 @@
             <argument type="service" id="templating.globals" on-invalid="null" />
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="templating.engine" />
-            <tag name="monolog.logger" channel="smartybundle" />
+            <tag name="monolog.logger" channel="SmartyBundle" />
         </service>
 
         <service id="smarty.extension.actions" class="%smarty.extension.actions.class%" public="false">
@@ -42,7 +42,7 @@
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
         </service>
-        
+
         <service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="templating.engine.smarty" />

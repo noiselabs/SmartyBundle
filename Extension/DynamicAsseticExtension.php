@@ -23,12 +23,14 @@
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
- 
+
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 /**
  * The "dynamic" reincarnation of AsseticExtension.
@@ -48,12 +50,14 @@ class DynamicAsseticExtension extends AsseticExtension
      *
      * @see Symfony\Bundle\AsseticBundle\Templating\DynamicAsseticHelper
      */
-    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false)
+    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false, LoggerInterface $logger = null)
     {
         $this->routingExtension = $routingExtension;
+        $this->logger = $logger;
+
         parent::__construct($factory, $useController);
     }
-    
+
     /**
      * Returns an URL for the supplied asset.
      *
@@ -64,6 +68,14 @@ class DynamicAsseticExtension extends AsseticExtension
      */
     protected function getAssetUrl(AssetInterface $asset, $params = array())
     {
-        return $this->routingExtension->getPath('_assetic_'.$params['name']);
+        try {
+            return $this->routingExtension->getPath('_assetic_'.$params['name']);
+        } catch (RouteNotFoundException $e) {
+            if (isset($this->logger)) {
+                $this->logger->warn($e->getMessage());
+            }
+
+            return '';
+        }
     }
 }

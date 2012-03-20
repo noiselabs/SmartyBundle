@@ -205,7 +205,6 @@ abstract class AsseticExtension extends AbstractExtension
                 }
             }
 
-            // AsseticHelper: $urls = new TraversableString($one, $many);
             $store['urls'] = $many;
             $store['debug'] = $params['debug'];
             $store['count'] = count($store['urls']);

@@ -16,15 +16,17 @@
             <argument type="service" id="smarty.extension.routing" />
             <argument type="service" id="assetic.asset_factory" />
             <argument>%assetic.use_controller%</argument>
+            <argument type="service" id="logger" on-invalid="null"/>
+            <tag name="monolog.logger" channel="SmartyBundle" />
         </service>
 
-        <service id="smarty.extension.assetic.static" class="%smarty.extension.assetic.static.class%" scope="request">
+        <service id="smarty.extension.assetic.static" class="%smarty.extension.assetic.static.class%">
             <tag name="assetic.templating.smarty" />
             <argument type="service" id="smarty.extension.assets" />
             <argument type="service" id="assetic.asset_factory" />
             <argument>%assetic.use_controller%</argument>
-        </service>        
-        
+        </service>
+
         <service id="smarty.assetic.formula_loader" class="%assetic.cached_formula_loader.class%" public="false">
             <tag name="assetic.formula_loader" alias="smarty" />
             <tag name="assetic.templating.smarty" />
