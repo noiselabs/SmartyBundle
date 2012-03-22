@@ -30,6 +30,8 @@ use Assetic\Factory\Loader\FormulaLoaderInterface;
 use Assetic\Factory\Resource\ResourceInterface;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 
+use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
+
 /**
  * Loads asset formulae from Smarty templates.
  *
@@ -38,16 +40,73 @@ use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 class SmartyFormulaLoader implements FormulaLoaderInterface
 {
     protected $engine;
+    protected $extension;
+    protected $tags = array();
 
     public function __construct(SmartyEngine $engine)
     {
         $this->engine = $engine;
+        $this->extension = $this->engine->getExtension('assetic');
+
+        $plugins = $engine->getPlugins('assetic');
+        foreach (array_keys($plugins) as $k) {
+            $this->tags[] = $plugins[$k]->getName();
+        }
     }
 
     public function load(ResourceInterface $resource)
     {
+        $smarty = $this->engine->getSmarty();
+        $factory = $this->extension->getAssetFactory();
+
+        $filename = $this->engine->load((string) $resource);
+        $template = $smarty->createTemplate($filename);
+
+        if (!is_file($compiledFilepath = $template->compiled->filepath)) {
+            return array();
+        }
+
+        $content = file_get_contents($compiledFilepath);
+
+        $tags = implode('|', $this->tags);
+        preg_match_all('/\$_smarty_tpl-\>smarty-\>_tag_stack\[\] = array\([\'|"]('.$tags.')[\'|"], (.*?)\);/', $content, $matches, PREG_SET_ORDER);
+
         $formulae = array();
 
+        foreach ($matches as $match) {
+            if (!isset($match[1]) || !isset($match[2])) {
+                continue;
+            }
+
+            $formulae = array_merge($formulae, $this->buildAssetParameters($match[1], $match[2]));
+        }
+
         return $formulae;
+    }
+
+    /**
+     * Say hello to `eval()`.
+     *
+     * @param string $block   Block tag name.
+     * @param string $content String containing block attributes extracted
+     * from the Smarty template.
+     *
+     * @return array An array with parsed attributes to be used as a assetic
+     * formula.
+     */
+    protected function buildAssetParameters($block, $content)
+    {
+        $content = 'return '.$content.';';
+        if (!is_array($params = eval($content))) {
+            throw new \RuntimeException('Malformed '.$block.' block');
+        }
+
+        list($inputs, $filters, $attributes) = $this->extension->buildAttributes($params);
+
+        return array($attributes['name'] => array(
+            $inputs,
+            $filters,
+            $attributes
+        ));
     }
 }

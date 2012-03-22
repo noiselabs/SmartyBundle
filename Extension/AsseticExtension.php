@@ -134,6 +134,59 @@ abstract class AsseticExtension extends AbstractExtension
     }
 
     /**
+     * @param array $params An array of parameters coming straight from the
+     * Smarty block.
+     *
+     * @return array ($inputs, $filters, $params)
+     */
+    public function buildAttributes(array $params = array())
+    {
+        $explode = function($value) {
+            return array_map('trim', explode(',', $value));
+        };
+
+        /*
+         * The variable name that will be used to pass the asset URL to the
+         * <link> tag
+         */
+        if (!isset($params['var_name'])) {
+            $params['var_name'] = 'asset_url';
+        }
+
+        if (isset($params['assets'])) {
+            $inputs = $explode($params['assets']);
+            unset($params['assets']);
+        } else {
+            $inputs = array();
+        }
+
+        if (isset($params['filters'])) {
+            $filters = $explode($params['filters']);
+            unset($params['filters']);
+        } else {
+            $filters = array();
+        }
+
+        if (!isset($params['debug'])) {
+            $params['debug'] = $this->factory->isDebug();
+        }
+
+        if (!isset($params['combine'])) {
+            $params['combine'] = !$params['debug'];
+        }
+
+        if (isset($params['single']) && $params['single'] && 1 < count($inputs)) {
+            $inputs = array_slice($inputs, -1);
+        }
+
+        if (!isset($params['name'])) {
+            $params['name'] = $this->factory->generateAssetName($inputs, $filters, $params);
+        }
+
+        return array($inputs, $filters, $params);
+    }
+
+    /**
      * Generic block function called be every other block function (javascripts,
      * stylesheets, image).
      */
@@ -147,49 +200,7 @@ abstract class AsseticExtension extends AbstractExtension
 
         // Opening tag (first call only)
         if ($repeat) {
-
-            $explode = function($value) {
-                return array_map('trim', explode(',', $value));
-            };
-
-            /*
-             * The variable name that will be used to pass the asset URL to the
-             * <link> tag
-             */
-            if (!isset($params['var_name'])) {
-                $params['var_name'] = 'asset_url';
-            }
-
-            if (isset($params['assets'])) {
-                $inputs = $explode($params['assets']);
-                unset($params['assets']);
-            } else {
-                $inputs = array();
-            }
-
-            if (isset($params['filters'])) {
-                $filters = $explode($params['filters']);
-                unset($params['filters']);
-            } else {
-                $filters = array();
-            }
-
-            if (!isset($params['debug'])) {
-                $params['debug'] = $this->factory->isDebug();
-            }
-
-            if (!isset($params['combine'])) {
-                $params['combine'] = !$params['debug'];
-            }
-
-            if (isset($params['single']) && $params['single'] && 1 < count($inputs)) {
-                $inputs = array_slice($inputs, -1);
-            }
-
-            if (!isset($params['name'])) {
-                $params['name'] = $this->factory->generateAssetName($inputs, $filters, $params);
-            }
-
+            list($inputs, $filters, $attributes) = $this->buildAttributes($params);
             $asset = $this->factory->createAsset($inputs, $filters, $params);
 
             $one = $this->getAssetUrl($asset, $params);
