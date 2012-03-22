@@ -423,17 +423,31 @@ class SmartyEngine implements EngineInterface
     }
 
     /**
-     * Gets the collection of plugins.
+     * Gets the collection of plugins, optionally filtered by an extension
+     * name.
      *
      * @return array An array of plugins
      */
-    public function getPlugins()
+    public function getPlugins($extensionName = false)
     {
         if (null === $this->plugins) {
             $this->plugins = array();
             foreach ($this->getExtensions() as $extension) {
                 $this->plugins = array_merge($this->plugins, $extension->getPlugins());
             }
+        }
+
+        // filter plugins that belong to $extension
+        if ($extensionName) {
+
+            $plugins = array();
+            foreach (array_keys($this->plugins) as $k) {
+                if ($extensionName == $this->plugins[$k]->getExtension()->getName()) {
+                    $plugins[] = $this->plugins[$k];
+                }
+            }
+
+            return $plugins;
         }
 
         return $this->plugins;
