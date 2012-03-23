@@ -153,6 +153,10 @@ abstract class AsseticExtension extends AbstractExtension
             $params['var_name'] = 'asset_url';
         }
 
+        if (!isset($params['vars'])) {
+            $params['vars'] = array();
+        }
+
         if (isset($params['assets'])) {
             $inputs = $explode($params['assets']);
             unset($params['assets']);
@@ -200,7 +204,7 @@ abstract class AsseticExtension extends AbstractExtension
 
         // Opening tag (first call only)
         if ($repeat) {
-            list($inputs, $filters, $attributes) = $this->buildAttributes($params);
+            list($inputs, $filters, $params) = $this->buildAttributes($params);
             $asset = $this->factory->createAsset($inputs, $filters, $params);
 
             $one = $this->getAssetUrl($asset, $params);

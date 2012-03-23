@@ -68,6 +68,7 @@ class SmartyFormulaLoader implements FormulaLoaderInterface
 
         $content = file_get_contents($compiledFilepath);
 
+        // extract block attributes from the compiled template
         $tags = implode('|', $this->tags);
         preg_match_all('/\$_smarty_tpl-\>smarty-\>_tag_stack\[\] = array\([\'|"]('.$tags.')[\'|"], (.*?)\);/', $content, $matches, PREG_SET_ORDER);
 
