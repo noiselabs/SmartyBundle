@@ -167,9 +167,9 @@ abstract class AsseticExtension extends AbstractExtension
             $inputs = array();
         }
 
-        if (isset($params['filters'])) {
-            $filters = $explode($params['filters']);
-            unset($params['filters']);
+        if (isset($params['filter'])) {
+            $filters = $explode($params['filter']);
+            unset($params['filter']);
         } else {
             $filters = array();
         }
@@ -313,8 +313,8 @@ abstract class AsseticExtension extends AbstractExtension
             $factory->setFilterManager($fm);
             $factory->setDefaultOutput('assetic/*.'.$params['output']);
 
-            if (isset($params['filters'])) {
-                $filters = explode(',', $params['filters']);
+            if (isset($params['filter'])) {
+                $filters = explode(',', $params['filter']);
             } else {
                 $filters = array();
             }

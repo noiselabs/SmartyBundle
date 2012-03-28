@@ -1,0 +1,6 @@
+<assets>
+{stylesheets
+    assets='foo, foo/*, @foo'
+    output='packed/*'
+    name='mixture'}<asset url="{$asset_url}" />{/stylesheets}
+</assets>
