@@ -58,7 +58,7 @@ class AsseticExtensionTest extends TestCase
 
 class AsseticExtensionForTest extends AsseticExtension
 {
-    protected function getAssetUrl(AssetInterface $asset, $params = array())
+    protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
         return $asset->getTargetPath();
     }
