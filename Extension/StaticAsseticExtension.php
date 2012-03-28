@@ -23,7 +23,7 @@
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
- 
+
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use Assetic\Factory\AssetFactory;
@@ -53,17 +53,17 @@ class StaticAsseticExtension extends AsseticExtension
         $this->assetsExtension = $assetsExtension;
         parent::__construct($factory, $useController);
     }
-    
+
     /**
      * Returns an URL for the supplied asset.
      *
-     * @param AssetInterface $asset   An asset
-     * @param array          $params  An array of options
+     * @param AssetInterface $asset    An asset
+     * @param array          $options  An array of options
      *
      * @return string An echo-ready URL
      */
-    protected function getAssetUrl(AssetInterface $asset, $params = array())
+    protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
-        return $this->assetsExtension->getAssetUrl($asset->getTargetPath(), isset($params['package']) ? $params['package'] : null);
+        return $this->assetsExtension->getAssetUrl($asset->getTargetPath(), isset($options['package']) ? $options['package'] : null);
     }
 }

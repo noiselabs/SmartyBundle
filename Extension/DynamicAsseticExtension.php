@@ -61,18 +61,18 @@ class DynamicAsseticExtension extends AsseticExtension
     /**
      * Returns an URL for the supplied asset.
      *
-     * @param AssetInterface $asset   An asset
-     * @param array          $params  An array of options
+     * @param AssetInterface $asset    An asset
+     * @param array          $options  An array of options
      *
      * @return string An echo-ready URL
      */
-    protected function getAssetUrl(AssetInterface $asset, $params = array())
+    protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
         try {
-            return $this->routingExtension->getPath('_assetic_'.$params['name']);
+            return $this->routingExtension->getPath('_assetic_'.$options['name']);
         } catch (RouteNotFoundException $e) {
             if (isset($this->logger)) {
-                $this->logger->warn($e->getMessage());
+                $this->logger->warn($e->getMessage().' Omitting asset in template output.');
             }
 
             return '';

@@ -66,8 +66,10 @@ if (isset($_SERVER['LESSPHP'])) {
  */
 abstract class AsseticExtension extends AbstractExtension
 {
+    const OPTION_SMARTY_BLOCK_NAME = '_smarty_block_name';
     protected $factory;
     protected $useController;
+    protected $defaultOutput;
 
     /**
      * Constructor.
@@ -79,6 +81,12 @@ abstract class AsseticExtension extends AbstractExtension
     {
         $this->factory = $factory;
         $this->useController = $useController;
+
+        $this->defaultOutput = array(
+            'javascripts'   => 'js/*.js',
+            'stylesheets'   => 'css/*.css',
+            'image'         => 'images/*',
+        );
     }
 
     public function getAssetFactory()
@@ -95,40 +103,27 @@ abstract class AsseticExtension extends AbstractExtension
             new BlockPlugin('javascripts', $this, 'javascriptsBlock'),
             new BlockPlugin('stylesheets', $this, 'stylesheetsBlock'),
             new BlockPlugin('image', $this, 'imageBlock'),
-            new BlockPlugin('assetic', $this, 'nonSymfonyAsseticBlock'),
         );
     }
 
     public function javascriptsBlock(array $params = array(), $content = null, $template, &$repeat)
     {
-        if (!isset($params['output'])) {
-            $params['output'] = 'js/*.js';
-        }
-
-        $params['smartyBlockName'] = 'javascripts';
+        $params[self::OPTION_SMARTY_BLOCK_NAME] = 'javascripts';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
 
     public function stylesheetsBlock(array $params = array(), $content = null, $template, &$repeat)
     {
-        if (!isset($params['output'])) {
-            $params['output'] = 'css/*.css';
-        }
-
-        $params['smartyBlockName'] = 'stylesheets';
+        $params[self::OPTION_SMARTY_BLOCK_NAME] = 'stylesheets';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
 
     public function imageBlock(array $params = array(), $content = null, $template, &$repeat)
     {
-        if (!isset($params['output'])) {
-            $params['output'] = 'images/*';
-        }
-
+        $params[self::OPTION_SMARTY_BLOCK_NAME] = 'image';
         $params['single'] = true;
-        $params['smartyBlockName'] = 'image';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
@@ -144,6 +139,14 @@ abstract class AsseticExtension extends AbstractExtension
         $explode = function($value) {
             return array_map('trim', explode(',', $value));
         };
+
+        if (!isset($params[self::OPTION_SMARTY_BLOCK_NAME])) {
+            throw new \RuntimeException('The Smarty block name is undefined');
+        }
+
+        if (!isset($params['output'])) {
+            $params['output'] = $this->defaultOutput[$params[self::OPTION_SMARTY_BLOCK_NAME]];
+        }
 
         /*
          * The variable name that will be used to pass the asset URL to the
@@ -176,7 +179,7 @@ abstract class AsseticExtension extends AbstractExtension
         }
 
         if (!isset($params['combine'])) {
-            $params['combine'] = !$params['debug'];
+            $params['combine'] = null;
         }
 
         if (isset($params['single']) && $params['single'] && 1 < count($inputs)) {
@@ -204,49 +207,49 @@ abstract class AsseticExtension extends AbstractExtension
 
         // Opening tag (first call only)
         if ($repeat) {
-            list($inputs, $filters, $params) = $this->buildAttributes($params);
-            $asset = $this->factory->createAsset($inputs, $filters, $params);
+            list($inputs, $filters, $options) = $this->buildAttributes($params);
+            $asset = $this->factory->createAsset($inputs, $filters, $options);
 
-            $one = $this->getAssetUrl($asset, $params);
+            $one = $this->getAssetUrl($asset, $options);
             $many = array();
-            if ($params['combine']) {
+            if ($options['combine']) {
                 $many[] = $one;
             } else {
                 $i = 0;
                 foreach ($asset as $leaf) {
-                    $many[] = $this->getAssetUrl($leaf, array_replace($params, array(
-                        'name' => $params['name'].'_'.$i++,
+                    $many[] = $this->getAssetUrl($leaf, array_replace($options, array(
+                        'name' => $options['name'].'_'.$i++,
                     )));
                 }
             }
 
             $store['urls'] = $many;
-            $store['debug'] = $params['debug'];
+            $store['debug'] = $options['debug'];
             $store['count'] = count($store['urls']);
 
             // If debug mode is active, we want to include assets separately
-            if ($store['count']>0 && $params['debug']) {
+            if ($store['count']>0 && $options['debug']) {
                 // save parameters for next block calls until $repeat reaches 0
-                $store['debug'] = $params['debug'];
-                $store['varName'] = $params['var_name'];
+                $store['debug'] = $options['debug'];
+                $store['varName'] = $options['var_name'];
 
 
                 $store['urls'] = array_reverse($store['urls']);
-                $template->assign($params['var_name'], $store['urls'][$store['count']-1]);
+                $template->assign($options['var_name'], $store['urls'][$store['count']-1]);
 
             // Production mode, include an all-in-one asset
             } else {
-                $template->assign($params['var_name'], $one);
+                $template->assign($options['var_name'], $one);
             }
 
         // Closing tag
         } else {
-            if (isset($content)) {
+            if (isset($content) && !empty($store['urls'])) {
                 // If debug mode is active, we want to include assets separately
                 if ($store['debug']) {
                     $store['count']--;
                     if ($store['count'] > 0) {
-                        $template->assign($store['varName'],$store['urls'][$store['count']-1]);
+                        $template->assign($store['varName'], $store['urls'][$store['count']-1]);
                     }
                     $repeat = $store['count'] > 0;
                 }
@@ -255,6 +258,16 @@ abstract class AsseticExtension extends AbstractExtension
             }
         }
     }
+
+    /**
+     * Returns an URL for the supplied asset.
+     *
+     * @param AssetInterface $asset    An asset
+     * @param array          $options  An array of options
+     *
+     * @return string An echo-ready URL
+     */
+    abstract protected function getAssetUrl(AssetInterface $asset, array $options = array());
 
     /**
      * Returns the public path of an asset
@@ -450,16 +463,6 @@ abstract class AsseticExtension extends AbstractExtension
     {
         return 'assetic';
     }
-
-    /**
-     * Returns an URL for the supplied asset.
-     *
-     * @param AssetInterface $asset   An asset
-     * @param array          $params An array of options
-     *
-     * @return string An echo-ready URL
-     */
-    abstract protected function getAssetUrl(AssetInterface $asset, $params = array());
 
     /* TODO: Add the necessary corrections to include this method.
      *

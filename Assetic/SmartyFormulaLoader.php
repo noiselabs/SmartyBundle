@@ -28,6 +28,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Assetic;
 
 use Assetic\Factory\Loader\FormulaLoaderInterface;
 use Assetic\Factory\Resource\ResourceInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
@@ -41,12 +42,14 @@ class SmartyFormulaLoader implements FormulaLoaderInterface
 {
     protected $engine;
     protected $extension;
+    protected $factory;
     protected $tags = array();
 
     public function __construct(SmartyEngine $engine)
     {
         $this->engine = $engine;
         $this->extension = $this->engine->getExtension('assetic');
+        $this->factory = $this->extension->getAssetFactory();
 
         $plugins = $engine->getPlugins('assetic');
         foreach (array_keys($plugins) as $k) {
@@ -56,58 +59,70 @@ class SmartyFormulaLoader implements FormulaLoaderInterface
 
     public function load(ResourceInterface $resource)
     {
-        $smarty = $this->engine->getSmarty();
-        $factory = $this->extension->getAssetFactory();
-
-        $filename = $this->engine->load((string) $resource);
-        $template = $smarty->createTemplate($filename);
-
-        if (!is_file($compiledFilepath = $template->compiled->filepath)) {
-            return array();
-        }
-
-        $content = file_get_contents($compiledFilepath);
-
-        // extract block attributes from the compiled template
-        $tags = implode('|', $this->tags);
-        preg_match_all('/\$_smarty_tpl-\>smarty-\>_tag_stack\[\] = array\([\'|"]('.$tags.')[\'|"], (.*?)\);/', $content, $matches, PREG_SET_ORDER);
-
         $formulae = array();
 
-        foreach ($matches as $match) {
-            if (!isset($match[1]) || !isset($match[2])) {
-                continue;
-            }
+        // template source
+        $templateSource = $resource->getContent();
 
-            $formulae = array_merge($formulae, $this->buildAssetParameters($match[1], $match[2]));
+        $smarty = $this->engine->getSmarty();
+        // ask Smarty which delimiters to use
+        $ldelim = $smarty->left_delimiter;
+        $rdelim = $smarty->right_delimiter;
+        $_ldelim = preg_quote($ldelim);
+        $_rdelim = preg_quote($rdelim);
+
+        // template block tags to look for
+        $tags = implode('|', $this->tags);
+
+        /**
+         * Thanks Rodney!
+         *
+         * @see https://gist.github.com/483465490f738d1b2b5e
+         */
+        if (preg_match_all('#'.$_ldelim.'(?<type>'.$tags.').*?'.$_rdelim.'#s', $templateSource, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                if (preg_match_all('#(?<key>[a-zA-Z0-9_]+)\s*=\s*(["\']?)(?<value>[^\2]*?)\2(\s|'.$_rdelim.')#s', $match[0], $_matches, PREG_SET_ORDER)) {
+                    $t = array(
+                        'type'          => $match['type'],
+                        'attributes'    => array(),
+                    );
+
+                    foreach ($_matches as $_match) {
+                        if (empty($_match[2])) {
+                            // make eval a little bit safer
+                            preg_match('#[^\w|^\.]#', $_match['value'], $evalMatches);
+                            $_match['value'] = ($evalMatches) ? null : eval(sprintf('return %s;', $_match['value']));
+                        }
+                        $t['attributes'][$_match['key']] = $_match['value'];
+                    }
+
+                    $formulae += $this->buildFormula($match['type'], $t['attributes']);
+                }
+            }
         }
 
         return $formulae;
     }
 
     /**
-     * Say hello to `eval()`.
+     * Builds assetic attributes from parameters extracted from template
+     * source.
      *
-     * @param string $block   Block tag name.
-     * @param string $content String containing block attributes extracted
-     * from the Smarty template.
+     * @param string $blockName Smarty block name
+     * @param array  $params    Block attributes
      *
-     * @return array An array with parsed attributes to be used as a assetic
-     * formula.
+     * @return An array with assetic attributes ready to append to $formulae.
      */
-    protected function buildAssetParameters($block, $content)
+    protected function buildFormula($blockName, array $params = array())
     {
-        $content = 'return '.$content.';';
-        if (!is_array($params = eval($content))) {
-            throw new \RuntimeException('Malformed '.$block.' block');
-        }
+        // inject the block name into the $params array
+        $params[AsseticExtension::OPTION_SMARTY_BLOCK_NAME] = $blockName;
+        list($inputs, $filters, $options) = $this->extension->buildAttributes($params);
 
-        list($inputs, $filters, $attributes) = $this->extension->buildAttributes($params);
+        $asset = $this->factory->createAsset($inputs, $filters, $options);
+        $options['output'] = $asset->getTargetPath();
+        unset($options[AsseticExtension::OPTION_SMARTY_BLOCK_NAME]);
 
-        return array($attributes['name'] => array(
-            $inputs,
-            $filters,
-            $attributes
-        ));
+        return array($options['name'] => array($inputs, $filters, $options));
     }
 }
