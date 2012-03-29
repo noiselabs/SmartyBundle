@@ -30,7 +30,6 @@ namespace NoiseLabs\Bundle\SmartyBundle;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
-use Smarty_Internal_Template as SmartyTemplate;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -42,7 +41,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 /**
  * SmartyEngine is an engine able to render Smarty templates.
  *
- * This class is heavily inspired by \Twig_Environment. 
+ * This class is heavily inspired by \Twig_Environment.
  * See {@link http://twig.sensiolabs.org/doc/api.html} for details about \Twig_Environment.
  *
  * Thanks to Symfony developer Christophe Coevoet (@stof) for a carefully code
@@ -52,8 +51,6 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  */
 class SmartyEngine implements EngineInterface
 {
-    const TEMPLATE_SUFFIX = 'tpl';
-
     protected $extensions;
     protected $filters;
     protected $globals;
@@ -73,7 +70,7 @@ class SmartyEngine implements EngineInterface
      * @param GlobalVariables|null        $globals   A GlobalVariables instance or null
      * @param LoggerInterface|null        $logger    A LoggerInterface instance or null
      */
-    public function __construct(\Smarty $smarty, ContainerInterface $container, 
+    public function __construct(\Smarty $smarty, ContainerInterface $container,
     TemplateNameParserInterface $parser, LoaderInterface $loader, array $options,
     GlobalVariables $globals = null, LoggerInterface $logger = null)
     {
@@ -233,13 +230,14 @@ class SmartyEngine implements EngineInterface
      */
     public function supports($name)
     {
-        if ($name instanceof SmartyTemplate) {
+        if ($name instanceof \Smarty_Internal_Template) {
             return true;
         }
 
         $template = $this->parser->parse($name);
 
-        return static::TEMPLATE_SUFFIX === $template->get('engine');
+        // keep 'tpl' for backwards compatibility. remove when tagging '0.2.0'
+        return in_array($template->get('engine'), array('smarty', 'tpl'));
     }
 
     /**
@@ -276,7 +274,7 @@ class SmartyEngine implements EngineInterface
      */
     public function load($name)
     {
-        if ($name instanceof SmartyTemplate) {
+        if ($name instanceof \Smarty_Internal_Template) {
             return $name;
         }
 
@@ -425,17 +423,31 @@ class SmartyEngine implements EngineInterface
     }
 
     /**
-     * Gets the collection of plugins.
+     * Gets the collection of plugins, optionally filtered by an extension
+     * name.
      *
      * @return array An array of plugins
      */
-    public function getPlugins()
+    public function getPlugins($extensionName = false)
     {
         if (null === $this->plugins) {
             $this->plugins = array();
             foreach ($this->getExtensions() as $extension) {
                 $this->plugins = array_merge($this->plugins, $extension->getPlugins());
             }
+        }
+
+        // filter plugins that belong to $extension
+        if ($extensionName) {
+
+            $plugins = array();
+            foreach (array_keys($this->plugins) as $k) {
+                if ($extensionName == $this->plugins[$k]->getExtension()->getName()) {
+                    $plugins[] = $this->plugins[$k];
+                }
+            }
+
+            return $plugins;
         }
 
         return $this->plugins;

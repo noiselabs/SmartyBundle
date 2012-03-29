@@ -3,4 +3,5 @@
 phpunit.xml
 Resources/doc/phpunit*
 vendor
+tmp
 run-me-before-release.sh

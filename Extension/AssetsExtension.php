@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
@@ -38,7 +36,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
  *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class AssetsExtension extends AbstractExtension
@@ -47,9 +44,6 @@ class AssetsExtension extends AbstractExtension
 
     /**
      * Constructor.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function __construct(ContainerInterface $container)
     {
@@ -58,9 +52,6 @@ class AssetsExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
@@ -72,6 +63,21 @@ class AssetsExtension extends AbstractExtension
     }
 
     /**
+     * Returns the public path of an asset.
+     *
+     * Absolute paths (i.e. http://...) are returned unmodified.
+     *
+     * @param string $path        A public path
+     * @param string $packageName The name of the asset package to use
+     *
+     * @return string A public path which takes into account the base path and URL path
+     */
+    public function getAssetUrl($path, $packageName = null)
+    {
+        return $this->container->get('templating.helper.assets')->getUrl($path, $packageName);
+    }
+
+    /**
      * Returns the public path of an asset
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
@@ -79,9 +85,6 @@ class AssetsExtension extends AbstractExtension
      * @param string $path        A public path
      *
      * @return string A public path which takes into account the base path and URL path
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
     {
@@ -102,10 +105,8 @@ class AssetsExtension extends AbstractExtension
      *
      * @param string $path        A public path
      *
-     * @return string A public path which takes into account the base path and URL path
-     *
-     * @since  0.1.1
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @return string A public path which takes into account the base path
+     * and URL path
      */
     public function getAssetUrl_modifier($path, $package = null)
     {
@@ -116,9 +117,6 @@ class AssetsExtension extends AbstractExtension
      * Returns the version of the assets in a package
      *
      * @return int
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
     {
@@ -133,9 +131,6 @@ class AssetsExtension extends AbstractExtension
      * Returns the name of the extension.
      *
      * @return string The extension name
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getName()
     {
