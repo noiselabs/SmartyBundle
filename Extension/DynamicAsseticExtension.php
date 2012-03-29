@@ -30,7 +30,6 @@ use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 /**
  * The "dynamic" reincarnation of AsseticExtension.
@@ -50,10 +49,9 @@ class DynamicAsseticExtension extends AsseticExtension
      *
      * @see Symfony\Bundle\AsseticBundle\Templating\DynamicAsseticHelper
      */
-    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false, LoggerInterface $logger = null)
+    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false)
     {
         $this->routingExtension = $routingExtension;
-        $this->logger = $logger;
 
         parent::__construct($factory, $useController);
     }
@@ -68,14 +66,6 @@ class DynamicAsseticExtension extends AsseticExtension
      */
     protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
-        try {
-            return $this->routingExtension->getPath('_assetic_'.$options['name']);
-        } catch (RouteNotFoundException $e) {
-            if (isset($this->logger)) {
-                $this->logger->warn($e->getMessage().' Omitting asset in template output.');
-            }
-
-            return '';
-        }
+        return $this->routingExtension->getPath('_assetic_'.$options['name']);
     }
 }
