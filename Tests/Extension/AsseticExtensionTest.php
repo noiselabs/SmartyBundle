@@ -20,42 +20,46 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.2.0
  */
 
-set_time_limit(0);
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
-if (isset($argv[1])) {
-    $_SERVER['SYMFONY_VERSION'] = $argv[1];
-}
+use Assetic\Factory\AssetFactory;
+use Assetic\Asset\AssetInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
+use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 
-$vendorDir = __DIR__;
-$deps = array(
-    array('symfony', 'git://github.com/symfony/symfony', isset($_SERVER['SYMFONY_VERSION']) ? $_SERVER['SYMFONY_VERSION'] : 'origin/master'),
-    array('smarty', 'git://github.com/ericingram/smarty', 'origin/master'),
-);
+/**
+ * Test suite for the assetic extension.
+ *
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
+class AsseticExtensionTest extends TestCase
+{
+    protected function setUp()
+    {
+        parent::setUp();
 
-foreach ($deps as $dep) {
-    list($name, $url, $rev) = $dep;
-
-    echo "> Installing/Updating $name\n";
-
-    $installDir = $vendorDir.'/'.$name;
-    if (!is_dir($installDir)) {
-        $return = null;
-        system(sprintf('git clone -q %s %s', escapeshellarg($url), escapeshellarg($installDir)), $return);
-        if ($return > 0) {
-            exit($return);
+        if (!class_exists('Assetic\\AssetManager')) {
+            $this->markTestSkipped('Assetic is not available.');
         }
     }
 
-    $return = null;
-    system(sprintf('cd %s && git fetch -q origin && git reset --hard %s', escapeshellarg($installDir), escapeshellarg($rev)), $return);
-    if ($return > 0) {
-        exit($return);
+    public function testExtensionName()
+    {
+        $extension = new AsseticExtensionForTest(new AssetFactory('/foo'));
+
+        $this->assertEquals('assetic', $extension->getName());
+    }
+}
+
+class AsseticExtensionForTest extends AsseticExtension
+{
+    protected function getAssetUrl(AssetInterface $asset, array $options = array())
+    {
+        return $asset->getTargetPath();
     }
 }

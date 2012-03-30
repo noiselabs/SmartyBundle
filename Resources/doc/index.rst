@@ -1,19 +1,21 @@
+############
 SmartyBundle
-============
+############
 
 This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
 
 .. contents:: **Contents**
 
+************
 Introduction
-------------
+************
 
 This bundle was created to support `Smarty <http://www.smarty.net/>`_ in Symfony2, providing an alternative to the `Twig <http://twig.sensiolabs.org/>`_ template engine natively supported.
 
     An effort was made to provide, where possible, the same user configuration and extensions available for the Twig bundle. This is to allow easy switching between the two bundles (at least I hope so!).
 
 What is Smarty?
-+++++++++++++++
+===============
 
 Smarty is a template engine for PHP, facilitating the separation of presentation (HTML/CSS) from application logic. This implies that PHP code is application logic, and is separated from the presentation.
 
@@ -36,23 +38,26 @@ See the `Smarty3 Manual <http://www.smarty.net/docs/en/>`_ for other features an
 
 .. [#] http://www.smarty.net/docs/en/what.is.smarty.tpl
 
+************
 Requirements
-------------
+************
 
 * PHP 5.3.2 and up.
 * Smarty 3
 * Symfony 2
 
+*******
 License
--------
+*******
 
 This bundle is licensed under the LGPLv3 License. See the `LICENSE file <https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE>`_ for details.
 
+************
 Installation
-------------
+************
 
 Download SmartyBundle
-++++++++++++++++++++++++
+=====================
 
 This can be done in several ways, depending on your preference. The first method is the standard Symfony2 method.
 
@@ -77,7 +82,7 @@ If you prefer instead to use git submodules, then run the following::
     $ git submodule update --init
 
 Configure the Autoloader
-+++++++++++++++++++++++++++
+========================
 
 Add the ``NoiseLabs`` namespace to your autoloader::
 
@@ -91,7 +96,7 @@ Add the ``NoiseLabs`` namespace to your autoloader::
 
 
 Enable the bundle
-++++++++++++++++++++
+=================
 
 Enable the bundle in the kernel::
 
@@ -107,7 +112,7 @@ Enable the bundle in the kernel::
     }
 
 Enable the Smarty template engine in the config
-++++++++++++++++++++++++++++++++++++++++++++++++++
+===============================================
 
 ::
 
@@ -116,11 +121,12 @@ Enable the Smarty template engine in the config
     templating:      { engines: ['twig', 'smarty'] }
     # ...
 
+*****
 Usage
------
+*****
 
 Basic usage
-+++++++++++
+===========
 
 You can render a Smarty template instead of a Twig one simply by using the **.tpl** extension in the template name instead of .twig. The controller below renders the index.html.tpl template::
 
@@ -132,7 +138,7 @@ You can render a Smarty template instead of a Twig one simply by using the **.tp
     }
 
 Template Inheritance
-++++++++++++++++++++
+====================
 
 Like Symfony2 PHP renderer or Twig, Smarty provides template inheritance.
 
@@ -189,7 +195,7 @@ Please see `Symfony2 - Template Naming and Locations <http://symfony.com/doc/2.0
     The `.html.tpl` extension can simply be replaced by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template.
 
 Injecting variables into all templates (i.e. Global Variables)
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+==============================================================
 
 As exemplified in the `Symfony Cookbook <http://symfony.com/doc/current/cookbook/templating/global_variables.html>`_ it is possible to make a variable to be accessible to all the templates you use by configuring your `app/config/config.yml` file::
 
@@ -203,8 +209,9 @@ Now, the variable ga_tracking is available in all Smarty templates::
 
     <p>Our google tracking code is: {$ga_tracking} </p>
 
+**********
 Extensions
-----------
+**********
 
 Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.tpl>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
 
@@ -214,7 +221,7 @@ The SmartyBundle comes with a few extensions to help you right away. These are d
 
 
 Actions Extension
-+++++++++++++++++
+=================
 
 This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
 
@@ -224,13 +231,81 @@ Following the example presented in the link above, the Smarty equivalent is::
 
 
 Assetic Extension
-+++++++++++++++++
+=================
 
-*Coming soon*
+`Assetic <https://github.com/kriswallsmith/assetic>`_ is an asset management framework for PHP. This extensions provides support for it's usage in Symfony2 when using Smarty templates.
 
+Assetic combines two major ideas: assets and filters. The assets are files such as CSS, JavaScript and image files. The filters are things that can be applied to these files before they are served to the browser. This allows a separation between the asset files stored in the application and the files actually presented to the user.
+
+Using Assetic provides many advantages over directly serving the files. The files do not need to be stored where they are served from and can be drawn from various sources such as from within a bundle::
+
+    {javascripts
+        assets='@AcmeFooBundle/Resources/public/js/*'
+    }
+    <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+
+To bring in CSS stylesheets, you can use the same methodologies seen in this entry, except with the stylesheets tag::
+
+    {stylesheets
+        assets='@AcmeFooBundle/Resources/public/css/*'
+    }
+    <link rel="stylesheet" href="{$asset_url}" />
+    {/stylesheets}
+
+Combining Assets
+----------------
+
+You can also combine several files into one. This helps to reduce the number of HTTP requests, which is great for front end performance. It also allows you to maintain the files more easily by splitting them into manageable parts. This can help with re-usability as you can easily split project-specific files from those which can be used in other applications, but still serve them as a single file::
+
+    {javascripts
+        assets='@AcmeFooBundle/Resources/public/js/*,
+                @AcmeBarBundle/Resources/public/js/form.js,
+                @AcmeBarBundle/Resources/public/js/calendar.js'
+    }
+    <script src="{$asset_url}"></script>
+    {/javascripts}
+
+In the dev environment, each file is still served individually, so that you can debug problems more easily. However, in the prod environment, this will be rendered as a single script tag.
+
+Block attributes
+----------------
+
+Here is a list of the possible attributes to define in the block function.
+
+* `assets`: A comma-separated list of files to include in the build (CSS, JS or image files)
+* `debug`: If set to true, the plugin will not combine your assets to allow easier debug
+* `filter`: A coma-separated list of filters to apply. Currently, only LESS and YuiCompressor (both CSS and JS) are supported
+* `combine`: Combine all of your CSS and JS files (overrides `debug`)
+* `output`: Defines the URLs that Assetic produces
+* `var_name`: The variable name that will be used to pass the asset URL to the <link> tag
+
+Full example
+------------
+
+Example using all available attributes::
+
+    {javascripts
+        assets='@AcmeFooBundle/Resources/public/js/*,
+               @AcmeBarBundle/Resources/public/js/form.js,
+               @AcmeBarBundle/Resources/public/js/calendar.js'
+        filter='yui_js'
+        output='js/compiled/main.js'
+        var_name='js_url'
+    %}
+    <script src="{$js_url}"></script>
+    {/javascripts}
+
+Symfony/Assetic documentation
+-----------------------------
+
+For further details please refer to the Symfony documentation pages about Assetic:
+
+* `How to Use Assetic for Asset Management <http://symfony.com/doc/current/cookbook/assetic/asset_management.html>`_
+* `How to Minify JavaScripts and Stylesheets with YUI Compressor <http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html>`_
 
 Assets Extension
-++++++++++++++++
+================
 
 Templates commonly refer to images, Javascript and stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function::
 
@@ -246,13 +321,13 @@ Usage in template context::
 
 
 Form Extension
-++++++++++++++
+==============
 
 *Coming soon*.
 
 
 Routing Extension
-+++++++++++++++++
+=================
 
 To generate URLs from a Smarty template you may use two block functions (``path`` and ``url``) provided by the `RoutingExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/RoutingExtension.php>`_.
 
@@ -271,7 +346,7 @@ Absolute URLs can also be generated.::
 Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
 
 Translation Extension
-+++++++++++++++++++++
+=====================
 
 To help with message translation of static blocks of text in template context, the SmartyBundle, provides a translation extension. This extension is implemented in the class `TranslationExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/TranslationExtension.php>`_.
 
@@ -317,7 +392,7 @@ You may translate a message, in a template, using a block or modifier. Both meth
 
 
 Security Extension
-+++++++++++++++++++++
+==================
 
 This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/2.0/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/2.0/book/security.html>`_.
 
@@ -332,7 +407,7 @@ Usage::
     {/if}
 
 Enabling custom Extensions
-++++++++++++++++++++++++++
+==========================
 
 To enable a Smarty extension, add it as a regular service in one of your configuration, and tag it with ``smarty.extension``. The creation of the extension itself is described in the next section.
 
@@ -345,8 +420,8 @@ YAML example::
             tags:
                 - { name: smarty.extension }
 
-Creating a Smarty[Bundle] Extension
-+++++++++++++++++++++++++++++++++++
+Creating a SmartyBundle Extension
+=================================
 
 .. note::
 
@@ -458,8 +533,9 @@ There are no restrictions about the type of the array elements returned by ``get
         }
     }
 
+***********************
 Configuration Reference
------------------------
+***********************
 
 The example below uses YAML format. Please adapt the example if using XML or PHP.
 
@@ -520,7 +596,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             pi:                  3.14
 
 Available options
-+++++++++++++++++
+=================
 
 allow_php_templates
     By default the PHP template file resource is disabled. Setting $allow_php_templates to TRUE will enable PHP template files.
@@ -645,14 +721,16 @@ use_include_path
 use_sub_dirs
     Smarty will create subdirectories under the compiled templates and cache directories if $use_sub_dirs is set to ``TRUE``, default is ``FALSE``. In an environment where there are potentially tens of thousands of files created, this may help the filesystem speed. On the other hand, some environments do not allow PHP processes to create directories, so this must be disabled which is the default. Sub directories are more efficient, so use them if you can. Theoretically you get much better perfomance on a filesystem with 10 directories each having 100 files, than with 1 directory having 1000 files. This was certainly the case with Solaris 7 (UFS)... with newer filesystems such as ext3 and especially reiserfs, the difference is almost nothing.
 
+*******
 Authors
--------
+*******
 
 Vítor Brandão - noisebleed@noiselabs.org ~ `twitter.com/noiselabs <http://twitter.com/noiselabs>`_ ~ `blog.noiselabs.org <http://blog.noiselabs.org>`_
 
 See also the list of `contributors <https://github.com/noiselabs/SmartyBundle/contributors>`_ who participated in this project.
 
+************************************
 Submitting bugs and feature requests
-------------------------------------
+************************************
 
 Bugs and feature requests are tracked on `GitHub <https://github.com/noiselabs/SmartyBundle/issues>`_.

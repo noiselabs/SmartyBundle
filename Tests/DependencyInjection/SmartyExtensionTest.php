@@ -39,12 +39,13 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
+/**
+ * DependencyInjection\SmartyExtension tests.
+ *
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
 class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function testLoadEmptyConfiguration()
     {
         $container = $this->createContainer();
@@ -67,9 +68,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getFormats
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function testLoadFullConfiguration($format)
     {
@@ -101,10 +99,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($options['use_sub_dirs'], '->load() sets the use_sub_dirs option');
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function testGlobalsWithDifferentTypesAndValues()
     {
         $globals = array(
@@ -132,10 +126,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     public function getFormats()
     {
         return array(
@@ -145,10 +135,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     private function createContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
@@ -156,15 +142,12 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
             'kernel.charset'    => 'UTF-8',
             'kernel.debug'      => false,
             'kernel.root_dir'   => __DIR__,
+            'kernel.bundles'    => array()
         )));
 
         return $container;
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     private function compileContainer(ContainerBuilder $container)
     {
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
@@ -172,10 +155,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $container->compile();
     }
 
-    /**
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     */
     private function loadFromFile(ContainerBuilder $container, $file, $format)
     {
         $locator = new FileLocator(__DIR__.'/Fixtures/'.$format);

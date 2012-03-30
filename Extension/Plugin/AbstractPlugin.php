@@ -89,6 +89,14 @@ abstract class AbstractPlugin implements PluginInterface
     }
 
     /**
+     * Return the Extension.
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
      * Check if type is in the supported list.
      */
     public function validateType()
