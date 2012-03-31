@@ -20,11 +20,9 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
@@ -35,7 +33,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * SmartyBundle extension for Symfony actions helper.
  *
- * @since  0.1.0
+ * This extension tries to provide the same funcionality described in 
+ * {@link http://symfony.com/doc/current/book/templating.html#embedding-controllers}.
+ *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class ActionsExtension extends AbstractExtension
@@ -44,9 +44,6 @@ class ActionsExtension extends AbstractExtension
 
     /**
      * Constructor.
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function __construct(ContainerInterface $container)
     {
@@ -55,9 +52,6 @@ class ActionsExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getPlugins()
     {
@@ -73,9 +67,6 @@ class ActionsExtension extends AbstractExtension
      *
      * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
-     *
-     * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function renderAction(array $parameters = array(), $controller = null, $template, &$repeat)
     {
