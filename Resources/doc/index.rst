@@ -225,7 +225,7 @@ Actions Extension
 
 This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
 
-Following the example presented in the link above, the Smarty equivalents are::
+Following the example presented in the link above, the Smarty equivalents are:
 
 *Using a block function:*
 
