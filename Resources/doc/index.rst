@@ -128,13 +128,13 @@ Usage
 Basic usage
 ===========
 
-You can render a Smarty template instead of a Twig one simply by using the **.tpl** extension in the template name instead of .twig. The controller below renders the index.html.tpl template::
+You can render a Smarty template instead of a Twig one simply by using the **.smarty** extension in the template name instead of .twig. The controller below renders the index.html.smarty template::
 
     // src/Acme/HelloBundle/Controller/HelloController.php
 
     public function indexAction($name)
     {
-        return $this->render('AcmeHelloBundle:Hello:index.html.tpl', array('name' => $name));
+        return $this->render('AcmeHelloBundle:Hello:index.html.smarty', array('name' => $name));
     }
 
 Template Inheritance
@@ -146,7 +146,7 @@ Like Symfony2 PHP renderer or Twig, Smarty provides template inheritance.
 
 **Example:**
 
-`layout.html.tpl`::
+`layout.html.smarty`::
 
     <html>
     <head>
@@ -157,13 +157,13 @@ Like Symfony2 PHP renderer or Twig, Smarty provides template inheritance.
     </body>
     </html>
 
-`mypage.html.tpl`::
+`mypage.html.smarty`::
 
-    {extends 'file:AcmeHelloBundle:Default:layout.html.tpl'}
+    {extends 'file:AcmeHelloBundle:Default:layout.html.smarty'}
     {block name=title}My Page Title{/block}
     {block name=body}My HTML Page Body goes here{/block}
 
-Output of mypage.html.tpl::
+Output of mypage.html.smarty::
 
     <html>
     <head>
@@ -174,25 +174,25 @@ Output of mypage.html.tpl::
     </body>
     </html>
 
-Instead of using the ``file:AcmeHelloBundle:Default:layout.html.tpl`` syntax you may use ``file:[WebkitBundle]/Default/layout.html.tpl`` which should be, performance wise, slightly better/faster (since this is a native Smarty syntax).::
+Instead of using the ``file:AcmeHelloBundle:Default:layout.html.smarty`` syntax you may use ``file:[WebkitBundle]/Default/layout.html.smarty`` which should be, performance wise, slightly better/faster (since this is a native Smarty syntax).::
 
-    {extends 'file:[WebkitBundle]/Default/layout.html.tpl'}
+    {extends 'file:[WebkitBundle]/Default/layout.html.smarty'}
 
 To load a template that lives in the ``app/Resources/views`` directory of the project you should use the following syntax::
 
-    {extends 'file:base.html.tpl'}
+    {extends 'file:base.html.smarty'}
 
 Please see `Symfony2 - Template Naming and Locations <http://symfony.com/doc/2.0/book/templating.html#template-naming-locations>`_ to learn more about the naming scheme and template locations supported in Symfony2.
 
 **{include} functions** work the same way as the examples above.::
 
-    {include 'file:WebkitBundle:Default:layout.html.tpl'}
-    {include 'file:[WebkitBundle]/Default/layout.html.tpl'}
-    {include 'file:base.html.tpl'}
+    {include 'file:WebkitBundle:Default:layout.html.smarty'}
+    {include 'file:[WebkitBundle]/Default/layout.html.smarty'}
+    {include 'file:base.html.smarty'}
 
-**Important:** Note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to ``'file'``. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.tpl>`_ webpage.
+**Important:** Note the usage of the ``file:`` resource in the ``{extends}`` function. We need to declare the resource even if the Smarty class variable ``$default_resource_type`` is set to ``'file'``. This is required because we need to trigger a function to handle 'logical' file names (only mandatory if you are using the first syntax). Learn more about resources in the `Smarty Resources <http://www.smarty.net/docs/en/resources.smarty>`_ webpage.
 
-    The `.html.tpl` extension can simply be replaced by `.tpl`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.tpl`) for each template.
+    The `.html.smarty` extension can simply be replaced by `.smarty`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.smarty`) for each template.
 
 Injecting variables into all templates (i.e. Global Variables)
 ==============================================================
@@ -213,9 +213,9 @@ Now, the variable ga_tracking is available in all Smarty templates::
 Extensions
 **********
 
-Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.tpl>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
+Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.smarty>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
 
-Each extension object share a common interest (translation, routing, etc.) and provide methods that will be registered as a Smarty plugin before rendering a template. To learn about the plugin ecosystem in Smarty take a look at the `Smarty documentation page <http://www.smarty.net/docs/en/plugins.tpl>`_ on that subject.
+Each extension object share a common interest (translation, routing, etc.) and provide methods that will be registered as a Smarty plugin before rendering a template. To learn about the plugin ecosystem in Smarty take a look at the `Smarty documentation page <http://www.smarty.net/docs/en/plugins.smarty>`_ on that subject.
 
 The SmartyBundle comes with a few extensions to help you right away. These are described in the next section.
 
@@ -450,7 +450,7 @@ Plugins can be registered in an extension via the ``getPlugins()`` method. Each 
 
 For each Plugin object three parameters are required. The plugin name comes in the first parameter and should be unique for each plugin type. Second parameter is an object of type ``ExtensionInterface`` and third parameter is the name of the method in the extension object used to perform the plugin action.
 
-Please check available method parameters and plugin types in the `Extending Smarty With Plugins <http://www.smarty.net/docs/en/plugins.tpl>`_ webpage.
+Please check available method parameters and plugin types in the `Extending Smarty With Plugins <http://www.smarty.net/docs/en/plugins.smarty>`_ webpage.
 
 ::
 
@@ -629,7 +629,8 @@ caching_type
     This property specifies the name of the caching handler to use. It defaults to file, enabling the internal filesystem based cache handler.
 
 compile_check
-    Upon each invocation of the PHP application, Smarty tests to see if the current template has changed (different timestamp) since the last time it was compiled. If it has changed, it recompiles that template. If the template has yet not been compiled at all, it will compile regardless of this setting. By default this variable is set to ``TRUE``. Once an application is put into production (ie the templates won't be changing), the compile check step is no longer needed. Be sure to set $compile_check to ``FALSE`` for maximum performance. Note that if you change this to ``FALSE`` and a template file is changed, you will *not* see the change since the template will not get recompiled. If $caching is enabled and $compile_check is enabled, then the cache files will get regenerated if an involved template file or config file was updated. As of Smarty 3.1 ``$compile_check`` can be set to the value ``Smarty::COMPILECHECK_CACHEMISS``. This enables Smarty to revalidate the compiled template, once a cache file is regenerated. So if there was a cached template, but it's expired, Smarty will run a single compile_check before regenerating the cache.
+    Upon each invocation of the PHP application, Smarty tests to see if the current template has changed (different timestamp) since the last time it was compiled. If it has changed, it recompiles that template. If the template has yet not been compiled at all, it will compile regardless of this setting. By default this variable is set to ``TRUE``. Once an application is put into production (ie the templates won't be changing), the compile check step is no longer needed. Be sure to set $compile_check to ``FALSE`` for maximum performance. Note that if you change this to ``FALSE`` and a template file is changed, you will *not* see the change since the template will not get recompiled. If $caching is enabled and $compile_check is enabled, then the cache files will get regenerated if an involved template file or config file was updated. As of Smarty 3.1 ``$compile_check`` can be set to the value ``Smarty::COMPILECHECK_CACHEMISS``. This enables Smarty to revalidate the compiled template, once a cache file is
+regenerated. So if there was a cached template, but it's expired, Smarty will run a single compile_check before regenerating the cache.
 
 compile_dir
     This is the name of the directory where compiled templates are located. By default this is ``%kernel.cache_dir%/smarty/templates_c``. **This directory must be writeable by the web server**.
