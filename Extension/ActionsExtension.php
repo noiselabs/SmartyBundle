@@ -28,12 +28,13 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * SmartyBundle extension for Symfony actions helper.
  *
- * This extension tries to provide the same funcionality described in 
+ * This extension tries to provide the same funcionality described in
  * {@link http://symfony.com/doc/current/book/templating.html#embedding-controllers}.
  *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -56,7 +57,8 @@ class ActionsExtension extends AbstractExtension
     public function getPlugins()
     {
         return array(
-            new BlockPlugin('render', $this, 'renderAction')
+            new BlockPlugin('render', $this, 'renderBlockAction'),
+            new ModifierPlugin('render', $this, 'renderModifierAction')
         );
     }
 
@@ -65,20 +67,33 @@ class ActionsExtension extends AbstractExtension
      *
      * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
      *
-     * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver::render()
+     * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
-    public function renderAction(array $parameters = array(), $controller = null, $template, &$repeat)
+    public function renderBlockAction(array $parameters = array(), $controller, $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat) {
             $parameters = array_merge(array(
                 'attributes'    => array(),
-                'options'       => array(),
+                'options'       => array()
             ), $parameters);
 
             return $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']);
         }
+    }
+
+    /**
+     * Returns the Response content for a given controller or URI.
+     *
+     * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
+     *
+     * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
+     * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     */
+    public function renderModifierAction($controller, array $attributes = array(), array $options = array())
+    {
+        return $this->container->get('templating.helper.actions')->render($controller, $attributes, $options);
     }
 
     /**
@@ -87,7 +102,6 @@ class ActionsExtension extends AbstractExtension
      * @return string The extension name
      *
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
     public function getName()
     {

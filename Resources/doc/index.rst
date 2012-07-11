@@ -225,9 +225,15 @@ Actions Extension
 
 This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
 
-Following the example presented in the link above, the Smarty equivalent is::
+Following the example presented in the link above, the Smarty equivalents are::
 
-    {render max='3'}AcmeArticleBundle:Article:recentArticles{/render}
+*Using a block function:*
+
+    {render attributes=['min'=>1,'max'=>3]}AcmeArticleBundle:Article:recentArticles{/render}
+
+*Using a modifier:*
+
+    {'AcmeArticleBundle:Article:recentArticles'|render:['min'=>1,'max'=>3]}
 
 
 Assetic Extension
