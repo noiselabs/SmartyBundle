@@ -1,7 +1,10 @@
 *~
 *.kate-swp
+
 phpunit.xml
+composer.phar
 Resources/doc/phpunit*
+run-me-before-release.sh
+
 vendor
 tmp
-run-me-before-release.sh
