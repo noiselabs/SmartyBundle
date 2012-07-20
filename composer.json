@@ -4,7 +4,7 @@
     "description": "This Symfony2 bundle provides integration for the Smarty3 template engine.",
     "keywords": ["templating", "smarty", "symfony", "noiselabs"],
     "homepage": "https://github.com/noiselabs/SmartyBundle",
-    "license": "LGPLv3",
+    "license": "LGPL-3.0",
     "authors": [
         {
             "name": "Vítor Brandão",
