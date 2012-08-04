@@ -15,7 +15,7 @@ Requirements
 Installation
 ------------
 
-SmartyBundle is composer-friendly:
+SmartyBundle is composer-friendly.
 
 ### 1. Add SmartyBundle in your composer.json:
 
@@ -35,7 +35,7 @@ $ php composer.phar update noiselabs/smarty-bundle
 
 Composer will install the bundle to your project's `vendor/noiselabs` directory.
 
-### 2: Enable the bundle
+### 2. Enable the bundle
 
 Enable the bundle in the kernel:
 
@@ -52,7 +52,15 @@ public function registerBundles()
 }
 ```
 
-For other installation methods (Symfony2.0 vendors script or submodules) please refer to the documentation below.
+### 3. Enable the Smarty template engine in the config
+
+``` yml
+    # app/config/config.yml
+    framework:
+        templating:      { engines: ['twig', 'smarty'] }
+```
+
+For other installation methods (Symfony2.0 vendors script or git submodules) please refer to the documentation below.
 
 Documentation
 -------------

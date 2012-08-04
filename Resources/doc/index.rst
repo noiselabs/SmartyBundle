@@ -59,7 +59,24 @@ Installation
 Download SmartyBundle
 =====================
 
-This can be done in several ways, depending on your preference. The first method is the standard Symfony2 method.
+This can be done in several ways, depending on your preference. The first method is the standard Symfony2.1 method.
+
+**Using composer**:
+
+Add SmartyBundle in your ``composer.json``'::
+
+    {
+        "require": {
+            "noiselabs/smarty-bundle": "dev-master"
+        }
+    }
+
+
+Now tell composer to download the bundle by running the command::
+
+    $ php composer.phar update noiselabs/smarty-bundle
+
+Composer will install the bundle to your project's `vendor/noiselabs` directory.
 
 **Using the vendors script**:
 
@@ -81,8 +98,9 @@ If you prefer instead to use git submodules, then run the following::
     $ git submodule add git://github.com/noiselabs/SmartyBundle.git vendor/bundles/NoiseLabs/Bundle/SmartyBundle
     $ git submodule update --init
 
-Configure the Autoloader
-========================
+
+Configure the Autoloader (only if not using composer!)
+======================================================
 
 Add the ``NoiseLabs`` namespace to your autoloader::
 
@@ -118,8 +136,8 @@ Enable the Smarty template engine in the config
 
     # app/config/config.yml
     # ...
-    templating:      { engines: ['twig', 'smarty'] }
-    # ...
+    framework:
+        templating:      { engines: ['twig', 'smarty'] }
 
 *****
 Usage
