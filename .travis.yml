@@ -2,14 +2,19 @@ language: php
 
 php:
     - 5.3
+    - 5.3
     - 5.4
 
 env:
     - SYMFONY_VERSION=v2.0.16
     - SYMFONY_VERSION=origin/2.0
+    - SYMFONY_VERSION=v2.1.0-RC1
     - SYMFONY_VERSION=origin/master
 
-before_script: php bin/vendors.php
+before_script:
+    - php bin/vendors.php
+    #- curl -s http://getcomposer.org/installer | php -- --quiet
+    #- php composer.phar install --dev
 
 script: phpunit
 

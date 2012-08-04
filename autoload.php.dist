@@ -32,8 +32,9 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony\\Tests'   => $vendorDir.'/symfony/tests',
-    'Symfony'          => $vendorDir.'/symfony/src',
+    'Symfony'                       => $vendorDir.'/symfony/src',
+    'Assetic'                       => $vendorDir.'/assetic/src',
+    'Mopa\\Bundle\\BootstrapBundle' => $vendorDir.'/mopa-bootstrap-bundle',
 ));
 
 if (!function_exists('intl_get_error_code')) {
@@ -42,4 +43,3 @@ if (!function_exists('intl_get_error_code')) {
     $loader->registerPrefixFallbacks(array($vendorDir.'/symfony/src/Symfony/Component/Locale/Resources/stubs'));
 }
 $loader->register();
-

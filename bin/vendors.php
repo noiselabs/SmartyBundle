@@ -36,7 +36,8 @@ $vendorDir = __DIR__.'/../vendor';
 $deps = array(
     array('symfony', 'git://github.com/symfony/symfony', isset($_SERVER['SYMFONY_VERSION']) ? $_SERVER['SYMFONY_VERSION'] : 'origin/master'),
     array('smarty', 'git://github.com/ericingram/smarty', 'origin/master'),
-    array('assetic', 'git://github.com/kriswallsmith/assetic', 'origin/master')
+    array('assetic', 'git://github.com/kriswallsmith/assetic', 'origin/master'),
+    array('mopa-bootstrap-bundle', 'git://github.com/phiamo/MopaBootstrapBundle.git', 'origin/master')
 );
 
 foreach ($deps as $dep) {
