@@ -43,7 +43,8 @@ if (!is_dir($rootDir.'/vendor/symfony')) {
     );
 }
 
-function usage($exitcode = 0, $msg = false) {
+function usage($exitcode = 0, $msg = false)
+{
     if ($msg) {
         echo $msg.PHP_EOL.PHP_EOL;
     }

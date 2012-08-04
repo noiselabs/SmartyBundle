@@ -39,7 +39,7 @@ interface ExtensionInterface
     * @since  0.1.0
     * @author Vítor Brandão <noisebleed@noiselabs.org>
     */
-    function getPlugins();
+    public function getPlugins();
 
     /**
      * Returns a list of Filters to add to the existing list.
@@ -49,7 +49,7 @@ interface ExtensionInterface
      * @since  0.1.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
-    function getFilters();
+    public function getFilters();
 
     /**
      * Returns a list of Globals to add to the existing list.
@@ -59,12 +59,12 @@ interface ExtensionInterface
      * @since  0.1.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
      */
-    function getGlobals();
+    public function getGlobals();
 
     /**
      * Returns the name of the extension.
      *
      * @return string The extension name
      */
-    function getName();
+    public function getName();
 }

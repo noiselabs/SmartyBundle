@@ -55,7 +55,7 @@ class TranslationExtension extends AbstractExtension
     {
         return $this->translator;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -68,7 +68,7 @@ class TranslationExtension extends AbstractExtension
             new ModifierPlugin('transchoice', $this, 'transchoiceModifier')
         );
     }
-    
+
     /**
      * Block plugin for 'trans'.
      *

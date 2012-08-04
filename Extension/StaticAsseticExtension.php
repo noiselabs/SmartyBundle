@@ -42,9 +42,9 @@ class StaticAsseticExtension extends AsseticExtension
     /**
      * Constructor.
      *
-     * @param AssetsExtension  $assetsExtension  The assets extension
-     * @param AssetFactory     $factory          The asset factory
-     * @param boolean          $useController    Handle assets dynamically
+     * @param AssetsExtension $assetsExtension The assets extension
+     * @param AssetFactory    $factory         The asset factory
+     * @param boolean         $useController   Handle assets dynamically
      *
      * @see Symfony\Bundle\AsseticBundle\Templating\StaticAsseticHelper
      */
@@ -57,8 +57,8 @@ class StaticAsseticExtension extends AsseticExtension
     /**
      * Returns an URL for the supplied asset.
      *
-     * @param AssetInterface $asset    An asset
-     * @param array          $options  An array of options
+     * @param AssetInterface $asset   An asset
+     * @param array          $options An array of options
      *
      * @return string An echo-ready URL
      */

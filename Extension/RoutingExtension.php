@@ -64,8 +64,8 @@ class RoutingExtension extends AbstractExtension
     /**
      * Generates a URL from the given parameters.
      *
-     * @param string  $name       The name of the route
-     * @param mixed   $parameters An array of parameters
+     * @param string $name       The name of the route
+     * @param mixed  $parameters An array of parameters
      *
      * @return string The generated URL
      */
@@ -77,8 +77,8 @@ class RoutingExtension extends AbstractExtension
     /**
      * Generates an absolute URL from the given parameters.
      *
-     * @param string  $name       The name of the route
-     * @param mixed   $parameters An array of parameters
+     * @param string $name       The name of the route
+     * @param mixed  $parameters An array of parameters
      *
      * @return string The generated URL
      */

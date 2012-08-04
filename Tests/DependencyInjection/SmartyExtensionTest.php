@@ -30,7 +30,6 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\DependencyInjection;
 
 use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\SmartyExtension;
-use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -82,7 +81,7 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
         // Globals
         $calls = $container->getDefinition('templating.engine.smarty')->getMethodCalls();
-        
+
         $this->assertEquals('foo', $calls[0][1][0], '->load() registers services as Smarty globals');
         $this->assertEquals(new Reference('bar'), $calls[0][1][1], '->load() registers services as Smarty globals');
         $this->assertEquals('pi', $calls[1][1][0], '->load() registers variables as Smarty globals');

@@ -32,7 +32,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class PostfilerPlugin extends AbstractPlugin
+class PostfilterPlugin extends AbstractPlugin
 {
     public function getType()
     {

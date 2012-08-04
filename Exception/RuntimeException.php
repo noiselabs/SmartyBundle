@@ -22,20 +22,17 @@
  * @package     SmartyBundle
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
+namespace NoiseLabs\Bundle\SmartyBundle\Exception;
 
 /**
- * See {@link http://www.smarty.net/docs/en/plugins.functions.tpl}.
+ * SmartyBundle base exception.
  *
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @note This class was inspired in Twig_Error_Runtime class.
+ *
+ * @author  Vítor Brandão <noisebleed@noiselabs.com>
  */
-class CompilerPlugin extends AbstractPlugin
+class RuntimeException extends AbstractException
 {
-    public function getType()
-    {
-        return 'compiler';
-    }
 }

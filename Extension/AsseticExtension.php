@@ -29,7 +29,6 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
-use Assetic\Util\TraversableString;
 use Symfony\Bundle\AsseticBundle\Exception\InvalidBundleException;
 
 // non-Symfony
@@ -74,8 +73,8 @@ abstract class AsseticExtension extends AbstractExtension
     /**
      * Constructor.
      *
-     * @param AssetFactory     $factory          The asset factory
-     * @param boolean          $useController    Handle assets dynamically
+     * @param AssetFactory $factory       The asset factory
+     * @param boolean      $useController Handle assets dynamically
      */
     public function __construct(AssetFactory $factory, $useController = false)
     {
@@ -233,7 +232,6 @@ abstract class AsseticExtension extends AbstractExtension
                 $store['debug'] = $options['debug'];
                 $store['varName'] = $options['var_name'];
 
-
                 $store['urls'] = array_reverse($store['urls']);
                 $template->assign($options['var_name'], $store['urls'][$store['count']-1]);
 
@@ -262,8 +260,8 @@ abstract class AsseticExtension extends AbstractExtension
     /**
      * Returns an URL for the supplied asset.
      *
-     * @param AssetInterface $asset    An asset
-     * @param array          $options  An array of options
+     * @param AssetInterface $asset   An asset
+     * @param array          $options An array of options
      *
      * @return string An echo-ready URL
      */
@@ -348,8 +346,7 @@ abstract class AsseticExtension extends AbstractExtension
                         foreach ($dependencies->$params['output']->assets->$a as $ref) {
                             try {
                                 $am->get($ref);
-                            }
-                            catch (InvalidArgumentException $e) {
+                            } catch (InvalidArgumentException $e) {
                                 $assetTmp = $factory->createAsset(
                                     $dependencies->$params['output']->references->$ref
                                 );
@@ -482,7 +479,6 @@ abstract class AsseticExtension extends AbstractExtension
         <argument type="service" id="smarty.extension.assets" on-invalid="null"/>
         <argument type="service" id="smarty.extension.routing" on-invalid="null"/>
     </service>
-
 
     [Extension/AsseticExtension]
 
