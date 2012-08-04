@@ -1,0 +1,5 @@
+<assets>
+{stylesheets 
+    assets='foo'
+    filter='foo, bar'}<asset url="{$asset_url}" />{/stylesheets}
+</assets>

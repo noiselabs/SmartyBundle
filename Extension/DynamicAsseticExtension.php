@@ -28,6 +28,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
+use Assetic\ValueSupplierInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 
@@ -49,11 +50,11 @@ class DynamicAsseticExtension extends AsseticExtension
      *
      * @see Symfony\Bundle\AsseticBundle\Templating\DynamicAsseticHelper
      */
-    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false)
+    public function __construct(RoutingExtension $routingExtension, AssetFactory $factory, $useController = false, $enabledBundles = array(), ValueSupplierInterface $valueSupplier = null)
     {
         $this->routingExtension = $routingExtension;
 
-        parent::__construct($factory, $useController);
+        parent::__construct($factory, $useController, $valueSupplier);
     }
 
     /**

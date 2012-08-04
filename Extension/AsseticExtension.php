@@ -29,6 +29,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
+use Assetic\ValueSupplierInterface;
 use Symfony\Bundle\AsseticBundle\Exception\InvalidBundleException;
 
 // non-Symfony
@@ -54,20 +55,26 @@ if (isset($_SERVER['LESSPHP'])) {
  * @author Vítor Brandão <noisebleed@noiselabs.com>
  *
  * Pierre-Jean Parra articles about Assetic and Smarty:
- * @link   http://blog.pierrejeanparra.com/2011/12/assets-management-assetic-and-smarty/
- * @link   https://github.com/pjparra/assetic-smarty/blob/master/README.md
+ * - {@link http://blog.pierrejeanparra.com/2011/12/assets-management-assetic-and-smarty/}
+ * - {@link https://github.com/pjparra/assetic-smarty/blob/master/README.md}
  *
  * Assetic documentation:
- * @link   https://github.com/kriswallsmith/assetic/blob/master/README.md
+ * - {@link https://github.com/kriswallsmith/assetic/blob/master/README.md}
  *
  * Assetic in Symfony2:
- * @link   http://symfony.com/doc/2.0/cookbook/assetic/asset_management.html
+ * - {@link http://symfony.com/doc/2.0/cookbook/assetic/asset_management.html}
+ *
+ * Asset variables in Assetic
+ * - {@link http://jmsyst.com/blog/asset-variables-in-assetic}
+ * - {@link https://github.com/kriswallsmith/assetic/pull/142}
  */
 abstract class AsseticExtension extends AbstractExtension
 {
     const OPTION_SMARTY_BLOCK_NAME = '_smarty_block_name';
     protected $factory;
     protected $useController;
+    protected $enabledBundles;
+    protected $valueSupplier;
     protected $defaultOutput;
 
     /**
@@ -76,10 +83,12 @@ abstract class AsseticExtension extends AbstractExtension
      * @param AssetFactory $factory       The asset factory
      * @param boolean      $useController Handle assets dynamically
      */
-    public function __construct(AssetFactory $factory, $useController = false)
+    public function __construct(AssetFactory $factory, $useController = false, $enabledBundles = array(), ValueSupplierInterface $valueSupplier = null)
     {
         $this->factory = $factory;
         $this->useController = $useController;
+        $this->enabledBundles = $enabledBundles;
+        $this->valueSupplier = $valueSupplier;
 
         $this->defaultOutput = array(
             'javascripts'   => 'js/*.js',
@@ -151,7 +160,9 @@ abstract class AsseticExtension extends AbstractExtension
          * The variable name that will be used to pass the asset URL to the
          * <link> tag
          */
-        if (!isset($params['var_name'])) {
+        if (isset($params['as'])) {
+            $params['var_name'] = $params['as'];
+        } elseif (!isset($params['var_name'])) {
             $params['var_name'] = 'asset_url';
         }
 
@@ -185,6 +196,14 @@ abstract class AsseticExtension extends AbstractExtension
             $inputs = array_slice($inputs, -1);
         }
 
+        // Replace [foo] with {foo}
+        if (!empty($params['vars'])) {
+            $vars = implode('|', $params['vars']);
+            foreach (array_keys($inputs) as $k) {
+                $inputs[$k] = preg_replace("/(.*?)\[(".$vars.")\](.*?)/i", '$1{$2}$3', $inputs[$k]);
+            }
+        }
+
         if (!isset($params['name'])) {
             $params['name'] = $this->factory->generateAssetName($inputs, $filters, $params);
         }
@@ -207,6 +226,7 @@ abstract class AsseticExtension extends AbstractExtension
         // Opening tag (first call only)
         if ($repeat) {
             list($inputs, $filters, $options) = $this->buildAttributes($params);
+
             $asset = $this->factory->createAsset($inputs, $filters, $options);
 
             $one = $this->getAssetUrl($asset, $options);
@@ -225,6 +245,10 @@ abstract class AsseticExtension extends AbstractExtension
             $store['urls'] = $many;
             $store['debug'] = $options['debug'];
             $store['count'] = count($store['urls']);
+
+            if (!empty($options['vars'])) {
+                $store['urls'] = $this->replaceVars($store['urls'], $options['vars']);
+            }
 
             // If debug mode is active, we want to include assets separately
             if ($store['count']>0 && $options['debug']) {
@@ -447,7 +471,8 @@ abstract class AsseticExtension extends AbstractExtension
         return array(
             'assetic' => array(
                 'debug'             => $this->factory->isDebug(),
-                'use_controller'    => $this->useController
+                'use_controller'    => $this->useController,
+                'vars'              => $this->getVarValues(),
         ));
     }
 
@@ -459,6 +484,35 @@ abstract class AsseticExtension extends AbstractExtension
     public function getName()
     {
         return 'assetic';
+    }
+
+    protected function getVarValues()
+    {
+        return null !== $this->valueSupplier ? $this->valueSupplier->getValues() : array();
+    }
+
+    /**
+     * Process the urls arrays for vars and replace the placeholder with the
+     * value set in the ValueSupplierInterface instance.
+     *
+     * @return array Urls array after the vars replacement.
+     */
+    protected function replaceVars($urls, $vars)
+    {
+        $patterns = array();
+        $replacements = array();
+        $values = $this->getVarValues();
+
+        foreach (array_keys($vars) as $k) {
+            $patterns[$k] = '/\{'.$vars[$k].'\}/';
+            $replacements[$k] = $values[$vars[$k]];
+        }
+
+        foreach (array_keys($urls) as $k) {
+            $urls[$k] = preg_replace($patterns, $replacements, $urls[$k]);
+        }
+
+        return $urls;
     }
 
     /* TODO: Add the necessary corrections to include this method.

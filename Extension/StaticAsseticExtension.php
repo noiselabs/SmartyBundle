@@ -28,6 +28,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
+use Assetic\ValueSupplierInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension;
 
 /**
@@ -48,10 +49,11 @@ class StaticAsseticExtension extends AsseticExtension
      *
      * @see Symfony\Bundle\AsseticBundle\Templating\StaticAsseticHelper
      */
-    public function __construct(AssetsExtension $assetsExtension, AssetFactory $factory, $useController = false)
+    public function __construct(AssetsExtension $assetsExtension, AssetFactory $factory, $useController = false, $enabledBundles = array(), ValueSupplierInterface $valueSupplier = null)
     {
         $this->assetsExtension = $assetsExtension;
-        parent::__construct($factory, $useController);
+
+        parent::__construct($factory, $useController, $valueSupplier);
     }
 
     /**

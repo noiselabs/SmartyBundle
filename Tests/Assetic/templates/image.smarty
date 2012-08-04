@@ -1,0 +1,4 @@
+<images>
+{image
+    assets='images/foo.png'}<image url="{$asset_url}" />{/image}
+</images>

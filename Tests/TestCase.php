@@ -81,9 +81,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         return array(
             'caching'       => false,
-            'compile_dir'   => $this->tmpDir.'/templates_c',
-            'template_dir'  => __DIR__.'/Fixtures/Resources/views'
+            'compile_dir'   => $this->tmpDir.'/templates_c'
         );
+    }
+
+    public function createTemplate($filepath)
+    {
+        return $this->engine->getSmarty()->createTemplate($filepath);
     }
 
     public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
@@ -177,7 +181,7 @@ class ProjectTemplateLoader extends Loader
 
     public function setTemplate($name, $content)
     {
-        $template = new TemplateReference($name, 'tpl');
+        $template = new TemplateReference($name, 'smarty');
         $this->templates[$template->getLogicalName()] = $content;
     }
 

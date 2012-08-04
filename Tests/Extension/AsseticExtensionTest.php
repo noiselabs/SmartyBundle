@@ -35,6 +35,9 @@ use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 /**
  * Test suite for the assetic extension.
  *
+ * Includes test based on:
+ * - Assetic\Tests\Extension\Twig\AsseticExtensionTest [assetic/assetic]
+ *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class AsseticExtensionTest extends TestCase
@@ -46,6 +49,20 @@ class AsseticExtensionTest extends TestCase
         if (!class_exists('Assetic\\AssetManager')) {
             $this->markTestSkipped('Assetic is not available.');
         }
+
+        $templatesDir = realpath(__DIR__.'/../Assetic/templates');
+
+        $this->am = $this->getMock('Assetic\\AssetManager');
+        $this->fm = $this->getMock('Assetic\\FilterManager');
+
+        $this->valueSupplier = $this->getMock('Assetic\ValueSupplierInterface');
+
+        $this->factory = new AssetFactory($templatesDir);
+        $this->factory->setAssetManager($this->am);
+        $this->factory->setFilterManager($this->fm);
+
+        $this->engine->setTemplateDir($templatesDir);
+        $this->engine->addExtension(new AsseticExtensionForTest($this->factory, false, array(), $this->valueSupplier));
     }
 
     public function testExtensionName()
@@ -53,6 +70,128 @@ class AsseticExtensionTest extends TestCase
         $extension = new AsseticExtensionForTest(new AssetFactory('/foo'));
 
         $this->assertEquals('assetic', $extension->getName());
+    }
+
+    public function testAbsolutePath()
+    {
+        $xml = $this->renderXml('absolute_path.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertStringStartsWith('css/', (string) $xml->asset['url']);
+    }
+
+    public function testFilters()
+    {
+        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+
+        $this->fm->expects($this->at(0))
+            ->method('get')
+            ->with('foo')
+            ->will($this->returnValue($filter));
+        $this->fm->expects($this->at(1))
+            ->method('get')
+            ->with('bar')
+            ->will($this->returnValue($filter));
+
+        $xml = $this->renderXml('filters.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertStringStartsWith('css/', (string) $xml->asset['url']);
+    }
+
+    public function testOptionalFilter()
+    {
+        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+
+        $this->fm->expects($this->once())
+            ->method('get')
+            ->with('foo')
+            ->will($this->returnValue($filter));
+
+        $xml = $this->renderXml('optional_filter.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertStringStartsWith('css/', (string) $xml->asset['url']);
+    }
+
+    public function testOutputPattern()
+    {
+        $xml = $this->renderXml('output_pattern.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertStringStartsWith('css/packed/', (string) $xml->asset['url']);
+        $this->assertStringEndsWith('.css', (string) $xml->asset['url']);
+    }
+
+    public function testOutput()
+    {
+        $xml = $this->renderXml('output_url.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertEquals('explicit_url.css', (string) $xml->asset['url']);
+    }
+
+    public function testMixture()
+    {
+        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $this->am->expects($this->any())
+            ->method('get')
+            ->with('foo')
+            ->will($this->returnValue($asset));
+
+        $xml = $this->renderXml('mixture.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertEquals('packed/mixture', (string) $xml->asset['url']);
+    }
+
+    public function testDebug()
+    {
+        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+
+        $this->fm->expects($this->once())
+            ->method('get')
+            ->with('bar')
+            ->will($this->returnValue($filter));
+
+        $xml = $this->renderXml('debug.smarty');
+        $this->assertEquals(2, count($xml->asset));
+        $this->assertStringStartsWith('css/packed_', (string) $xml->asset[0]['url']);
+        $this->assertStringEndsWith('.css', (string) $xml->asset[0]['url']);
+    }
+
+    public function testCombine()
+    {
+        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+
+        $this->fm->expects($this->once())
+            ->method('get')
+            ->with('bar')
+            ->will($this->returnValue($filter));
+
+        $xml = $this->renderXml('combine.smarty');
+        $this->assertEquals(1, count($xml->asset));
+        $this->assertEquals('css/packed.css', (string) $xml->asset[0]['url']);
+    }
+
+    public function testImage()
+    {
+        $xml = $this->renderXml('image.smarty');
+        $this->assertEquals(1, count($xml->image));
+        $this->assertStringEndsWith('.png', (string) $xml->image[0]['url']);
+    }
+
+    public function testVariables()
+    {
+        $this->valueSupplier->expects($this->any())
+            ->method('getValues')
+            ->will($this->returnValue(array('foo' => 'a', 'bar' => 'b')));
+
+        $xml = $this->renderXml('variables.smarty');
+        $this->assertEquals(2, $xml->url->count());
+        $this->assertEquals("js/7d0828c_foo_1.a.b.js", (string) $xml->url[0]);
+        $this->assertEquals("js/7d0828c_variable_input.a_2.a.b.js", (string) $xml->url[1]);
+    }
+
+    protected function renderXml($name, $context = array())
+    {
+        $template = $this->createTemplate($name);
+
+        return new \SimpleXMLElement($this->engine->render($template));
     }
 }
 
