@@ -30,19 +30,6 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
 use Assetic\ValueSupplierInterface;
-use Symfony\Bundle\AsseticBundle\Exception\InvalidBundleException;
-
-// non-Symfony
-use Assetic\AssetManager;
-use Assetic\FilterManager;
-use Assetic\Filter;
-use Assetic\AssetWriter;
-use Assetic\Asset\AssetCache;
-use Assetic\Cache\FilesystemCache;
-
-if (isset($_SERVER['LESSPHP'])) {
-    require_once $_SERVER['LESSPHP'];
-}
 
 /**
  * Provides Smarty integration for Assetic Symfony2 component
@@ -73,21 +60,20 @@ abstract class AsseticExtension extends AbstractExtension
     const OPTION_SMARTY_BLOCK_NAME = '_smarty_block_name';
     protected $factory;
     protected $useController;
-    protected $enabledBundles;
     protected $valueSupplier;
     protected $defaultOutput;
 
     /**
      * Constructor.
      *
-     * @param AssetFactory $factory       The asset factory
-     * @param boolean      $useController Handle assets dynamically
+     * @param AssetFactory           $factory       The asset factory
+     * @param boolean                $useController Handle assets dynamically
+     * @param ValueSupplierInterface $valueSupplier Runtime values for compile-time variables.
      */
-    public function __construct(AssetFactory $factory, $useController = false, $enabledBundles = array(), ValueSupplierInterface $valueSupplier = null)
+    public function __construct(AssetFactory $factory, $useController = false, ValueSupplierInterface $valueSupplier = null)
     {
         $this->factory = $factory;
         $this->useController = $useController;
-        $this->enabledBundles = $enabledBundles;
         $this->valueSupplier = $valueSupplier;
 
         $this->defaultOutput = array(
@@ -291,181 +277,6 @@ abstract class AsseticExtension extends AbstractExtension
      */
     abstract protected function getAssetUrl(AssetInterface $asset, array $options = array());
 
-    /**
-     * Returns the public path of an asset
-     *
-     * @return string A public path
-     */
-    public function nonSymfonyAsseticBlock(array $params = array(), $content = null, $template, &$repeat)
-    {
-        // In debug mode, we have to be able to loop a certain number of times, so we use a static counter
-        static $count;
-        static $assetsUrls;
-
-        // Read config file
-        if (isset($params['config_path'])) {
-            $base_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $params['config_path'];
-        } else {
-            // Find the config file in Symfony2 config dir
-            $base_path = __DIR__.'/../../../../app/config/smarty-assetic';
-        }
-
-        $config = json_decode(file_get_contents($base_path . '/config.json'));
-
-        // Opening tag (first call only)
-        if ($repeat) {
-            // Read bundles and dependencies config files
-            $bundles = json_decode(file_get_contents($base_path . '/bundles.json'));
-            $dependencies = json_decode(file_get_contents($base_path . '/dependencies.json'));
-
-            $am = new AssetManager();
-
-            $fm = new FilterManager();
-
-            $fm->set('yui_js', new Filter\Yui\JsCompressorFilter($config->yuicompressor_path, $config->java_path));
-            $fm->set('yui_css', new Filter\Yui\CssCompressorFilter($config->yuicompressor_path, $config->java_path));
-            $fm->set('less', new Filter\LessphpFilter());
-            $fm->set('sass', new Filter\Sass\SassFilter());
-            $fm->set('closure_api', new Filter\GoogleClosure\CompilerApiFilter());
-            $fm->set('closure_jar', new Filter\GoogleClosure\CompilerJarFilter($config->closurejar_path, $config->java_path));
-
-            // Factory setup
-            $factory = new AssetFactory($_SERVER['DOCUMENT_ROOT']);
-            $factory->setAssetManager($am);
-            $factory->setFilterManager($fm);
-            $factory->setDefaultOutput('assetic/*.'.$params['output']);
-
-            if (isset($params['filter'])) {
-                $filters = explode(',', $params['filter']);
-            } else {
-                $filters = array();
-            }
-
-            // Prepare the assets writer
-            $writer = new AssetWriter($params['build_path']);
-
-            // If a bundle name is provided
-            if (isset($params['bundle'])) {
-                $asset = $factory->createAsset(
-                    $bundles->$params['output']->$params['bundle'],
-                    $filters,
-                    array($params['debug'])
-                );
-
-                $cache = new AssetCache(
-                    $asset,
-                    new FilesystemCache($params['build_path'])
-                );
-
-                $writer->writeAsset($cache);
-            // If individual assets are provided
-            } elseif (isset($params['assets'])) {
-                $assets = array();
-                // Include only the references first
-                foreach (explode(',', $params['assets']) as $a) {
-                    // If the asset is found in the dependencies file, let's create it
-                    // If it is not found in the assets but is needed by another asset and found in the references, don't worry, it will be automatically created
-                    if (isset($dependencies->$params['output']->assets->$a)) {
-                        // Create the reference assets if they don't exist
-                        foreach ($dependencies->$params['output']->assets->$a as $ref) {
-                            try {
-                                $am->get($ref);
-                            } catch (InvalidArgumentException $e) {
-                                $assetTmp = $factory->createAsset(
-                                    $dependencies->$params['output']->references->$ref
-                                );
-                                $am->set($ref, $assetTmp);
-                                $assets[] = '@'.$ref;
-                            }
-                        }
-                    }
-                }
-
-                // Now, include assets
-                foreach (explode(',', $params['assets']) as $a) {
-                    // Add the asset to the list if not already present, as a reference or as a simple asset
-                    $ref = null;
-                    if (isset($dependencies->$params['output'])) {
-                        foreach ($dependencies->$params['output']->references as $name => $file) {
-                            if ($file == $a) {
-                                $ref = $name;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (array_search($a, $assets) === FALSE && ($ref === null || array_search('@' . $ref, $assets) === FALSE)) {
-                        $assets[] = $a;
-                    }
-                }
-
-                // Create the asset
-                $asset = $factory->createAsset(
-                    $assets,
-                    $filters,
-                    array($params['debug'])
-                );
-
-                $cache = new AssetCache(
-                    $asset,
-                    new FilesystemCache($params['build_path'])
-                );
-
-                $writer->writeAsset($cache);
-            }
-
-            // If debug mode is active, we want to include assets separately
-            if ($params['debug']) {
-                $assetsUrls = array();
-                foreach ($asset as $a) {
-                    $cache = new AssetCache(
-                        $a,
-                        new FilesystemCache($params['build_path'])
-                    );
-                    $writer->writeAsset($cache);
-                    $assetsUrls[] = $a->getTargetPath();
-                }
-
-                // It's easier to fetch the array backwards, so we reverse it to insert assets in the right order
-                $assetsUrls = array_reverse($assetsUrls);
-
-                $count = count($assetsUrls);
-
-                if (isset($config->site_url)) {
-                    $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-                } else {
-                    $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-                }
-            // Production mode, include an all-in-one asset
-            } else {
-                if (isset($config->site_url)) {
-                    $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$asset->getTargetPath());
-                } else {
-                    $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$asset->getTargetPath());
-                }
-            }
-
-        // Closing tag
-        } else {
-            if (isset($content)) {
-                // If debug mode is active, we want to include assets separately
-                if ($params['debug']) {
-                    $count--;
-                    if ($count > 0) {
-                        if (isset($config->site_url)) {
-                            $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-                        } else {
-                            $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-                        }
-                    }
-                    $repeat = $count > 0;
-                }
-
-                return $content;
-            }
-        }
-    }
-
     public function getGlobals()
     {
         return array(
@@ -514,63 +325,4 @@ abstract class AsseticExtension extends AbstractExtension
 
         return $urls;
     }
-
-    /* TODO: Add the necessary corrections to include this method.
-     *
-     * Check the bundle
-     *
-     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticTokenParser::parse()
-     * @see Symfony\Bundle\AsseticBundle\Twig\AsseticNodeVisitor::leaveNode()
-
-    [Resources/config/smarty.xml]
-
-    <service id="smarty.extension.assetic" class="%smarty.extension.assetic.class%" public="false">
-        <tag name="smarty.extension" />
-        <argument type="service" id="assetic.asset_factory" />
-        <argument type="service" id="templating.name_parser" />
-        <argument>%assetic.use_controller%</argument>
-        <argument>%assetic.bundles%</argument>
-        <argument type="service" id="smarty.extension.assets" on-invalid="null"/>
-        <argument type="service" id="smarty.extension.routing" on-invalid="null"/>
-    </service>
-
-    [Extension/AsseticExtension]
-
-    // ...
-    use Symfony\Component\Templating\TemplateNameParserInterface;
-
-    class AsseticExtension extends AbstractExtension
-    {
-        protected $factory;
-        protected $templateNameParser;
-        protected $enabledBundles;
-        protected $useController;
-        protected $extension;
-        protected $urlResolverExtension;
-
-        public function __construct(AssetFactory $factory, TemplateNameParserInterface $templateNameParser, $useController = false, $enabledBundles = array(), AssetsExtension $assetsExtension = null, RoutingExtension $routingExtension = null)
-        {
-            $this->factory = $factory;
-            $this->useController = $useController;
-            $this->templateNameParser = $templateNameParser;
-            $this->enabledBundles = $enabledBundles;
-
-            //...
-        }
-
-        // ...
-
-        protected function checkBundle($filename, $blockName)
-        {
-            if ($this->templateNameParser && is_array($this->enabledBundles)) {
-                // check the bundle
-                $templateRef = $this->templateNameParser->parse($filename);
-                $bundle = $templateRef->get('bundle');
-                if ($bundle && !in_array($bundle, $this->enabledBundles)) {
-                    throw new InvalidBundleException($bundle, "the {$blockName} block function", $templateRef->getLogicalName(), $this->enabledBundles);
-                }
-            }
-        }
-
-    */
 }

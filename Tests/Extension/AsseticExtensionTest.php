@@ -62,7 +62,7 @@ class AsseticExtensionTest extends TestCase
         $this->factory->setFilterManager($this->fm);
 
         $this->engine->setTemplateDir($templatesDir);
-        $this->engine->addExtension(new AsseticExtensionForTest($this->factory, false, array(), $this->valueSupplier));
+        $this->engine->addExtension(new AsseticExtensionForTest($this->factory, false, $this->valueSupplier));
     }
 
     public function testExtensionName()

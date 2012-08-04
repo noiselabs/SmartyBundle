@@ -16,7 +16,6 @@
             <argument type="service" id="smarty.extension.routing" />
             <argument type="service" id="assetic.asset_factory" />
             <argument>%assetic.use_controller%</argument>
-            <argument>%assetic.bundles%</argument>
             <argument type="service" id="assetic.value_supplier" on-invalid="null" />
         </service>
 
@@ -25,7 +24,6 @@
             <argument type="service" id="smarty.extension.assets" />
             <argument type="service" id="assetic.asset_factory" />
             <argument>%assetic.use_controller%</argument>
-            <argument>%assetic.bundles%</argument>
             <argument type="service" id="assetic.value_supplier" on-invalid="null" />
         </service>
 
