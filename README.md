@@ -12,6 +12,48 @@ Requirements
 * [Smarty 3](http://www.smarty.net)
 * [Symfony 2](http://www.symfony.com)
 
+Installation
+------------
+
+SmartyBundle is composer-friendly:
+
+### 1. Add SmartyBundle in your composer.json:
+
+```js
+{
+    "require": {
+        "noiselabs/smarty-bundle": "dev-master"
+    }
+}
+```
+
+Now tell composer to download the bundle by running the command:
+
+``` bash
+$ php composer.phar update noiselabs/smarty-bundle
+```
+
+Composer will install the bundle to your project's `vendor/noiselabs` directory.
+
+### 2: Enable the bundle
+
+Enable the bundle in the kernel:
+
+``` php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
+    );
+}
+```
+
+For other installation methods (Symfony2.0 vendors script or submodules) please refer to the documentation below.
+
 Documentation
 -------------
 
