@@ -4,4 +4,7 @@ phpunit.xml
 Resources/doc/phpunit*
 vendor
 tmp
+
 run-me-before-release.sh
+composer.phar
+php-cs-fixer

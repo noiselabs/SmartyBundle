@@ -28,7 +28,6 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
-use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -52,7 +51,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
-        
+
         $this->smarty = $this->getSmarty();
         $this->loader = new ProjectTemplateLoader();
         $this->engine = $this->getSmartyEngine();
@@ -77,7 +76,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         return new \Smarty();
     }
-    
+
     public function getSmartyOptions()
     {
         return array(
@@ -94,7 +93,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $this->getSmartyOptions(),
             $options
         );
-        
+
         return new ProjectTemplateEngine(
             $this->smarty,
             $container,
@@ -162,7 +161,7 @@ class ProjectTemplateEngine extends SmartyEngine
     {
         $this->loader->setTemplate($name, $content);
     }
-    
+
     public function getLoader()
     {
         return $this->loader;
@@ -186,6 +185,7 @@ class ProjectTemplateLoader extends Loader
     {
         if (isset($this->templates[$template->getLogicalName()])) {
             $storage = new StringStorage($this->templates[$template->getLogicalName()]);
+
             return 'string:'.$storage->getContent();
         }
 

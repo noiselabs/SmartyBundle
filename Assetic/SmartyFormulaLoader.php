@@ -31,8 +31,6 @@ use Assetic\Factory\Resource\ResourceInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 
-use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-
 /**
  * Loads asset formulae from Smarty templates.
  *

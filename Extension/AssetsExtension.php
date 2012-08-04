@@ -82,7 +82,7 @@ class AssetsExtension extends AbstractExtension
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *
-     * @param string $path        A public path
+     * @param string $path A public path
      *
      * @return string A public path which takes into account the base path and URL path
      */
@@ -103,7 +103,7 @@ class AssetsExtension extends AbstractExtension
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *
-     * @param string $path        A public path
+     * @param string $path A public path
      *
      * @return string A public path which takes into account the base path
      * and URL path

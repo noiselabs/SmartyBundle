@@ -30,14 +30,10 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
-use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
-use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
-use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\TemplateNameParser;
 
@@ -116,8 +112,8 @@ class SmartyEngineTest extends TestCase
         $this->setExpectedException('InvalidArgumentException');
 
         $name = 'non-existent-extension';
-        
-        $engine = $this->getSmartyEngine(); 
+
+        $engine = $this->getSmartyEngine();
         $engine->getExtension($name);
     }
 
@@ -131,10 +127,10 @@ class SmartyEngineTest extends TestCase
         $extension->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('mock'));
-            
+
         $engine = $this->getSmartyEngine();
         $engine->addExtension($extension);
-        
+
         $this->assertEquals($engine->getExtension('mock'), $extension);
 
         $this->setExpectedException('InvalidArgumentException');
@@ -158,7 +154,7 @@ class SmartyEngineTest extends TestCase
         }
 
         $engine = $this->getSmartyEngine();
-        
+
         $engine->addExtension($extensions['mock1']);
         $this->assertEquals($engine->getExtension('mock1'), $extensions['mock1']);
 

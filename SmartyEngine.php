@@ -200,6 +200,7 @@ class SmartyEngine implements EngineInterface
          *
          * Too learn more see {@link http://www.smarty.net/docs/en/api.fetch.tpl}
          */
+
         return $this->smarty->fetch($template);
     }
 
@@ -363,7 +364,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Adds a filter to the collection.
      *
-     * @param mixed  $filter A FilterInterface instance
+     * @param mixed $filter A FilterInterface instance
      */
     public function addFilter(FilterInterface $filter)
     {
@@ -399,8 +400,7 @@ class SmartyEngine implements EngineInterface
         foreach ($this->getFilters() as $filter) {
             try {
                 $this->smarty->registerFilter($filter->getType(), $filter->getCallback());
-            }
-            catch (\SmartyException $e) {
+            } catch (\SmartyException $e) {
                 if (null !== $this->logger) {
                     $this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
                 }
@@ -411,7 +411,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Adds a plugin to the collection.
      *
-     * @param mixed  $plugin A PluginInterface instance
+     * @param mixed $plugin A PluginInterface instance
      */
     public function addPlugin(PluginInterface $plugin)
     {
@@ -461,8 +461,7 @@ class SmartyEngine implements EngineInterface
         foreach ($this->getPlugins() as $plugin) {
             try {
                 $this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
-            }
-            catch (\SmartyException $e) {
+            } catch (\SmartyException $e) {
                 if (null !== $this->logger) {
                     $this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
                 }

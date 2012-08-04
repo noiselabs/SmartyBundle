@@ -32,7 +32,6 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Smarty_Internal_Template as SmartyTemplate;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Exception\FormException;
 use Symfony\Component\Form\Util\FormUtil;
@@ -87,8 +86,8 @@ class FormExtension extends AbstractExtension
     /**
      * Sets a theme for a given view.
      *
-     * @param FormView $view       A FormView instance
-     * @param array    $resources   An array of resources
+     * @param FormView $view      A FormView instance
+     * @param array    $resources An array of resources
      *
      * @since  0.2.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
@@ -155,6 +154,7 @@ class FormExtension extends AbstractExtension
     public function renderEnctype($params, SmartyTemplate $template)
     {
         $view = $this->extractFunctionParameters($params);
+
         return $this->render(reset($view), $template, 'enctype');
     }
 
@@ -172,6 +172,7 @@ class FormExtension extends AbstractExtension
     public function renderRest($params, SmartyTemplate $template)
     {
         list($view, $variables) = $this->extractFunctionParameters($params);
+
         return $this->render($view, $template, 'row', $variables);
     }
 
@@ -189,6 +190,7 @@ class FormExtension extends AbstractExtension
     public function renderRow($params, SmartyTemplate $template)
     {
         list($view, $variables) = $this->extractFunctionParameters($params);
+
         return $this->render($view, $template, 'rest', $variables);
     }
 
@@ -216,6 +218,7 @@ class FormExtension extends AbstractExtension
     public function renderWidget($params, SmartyTemplate $template)
     {
         list($view, $variables) = $this->extractFunctionParameters($params);
+
         return $this->render($view, $template, 'widget', $variables);
     }
 
@@ -233,6 +236,7 @@ class FormExtension extends AbstractExtension
     public function renderErrors($params, SmartyTemplate $template)
     {
         list($view) = $this->extractFunctionParameters($params);
+
         return $this->render($view, $template, 'errors');
     }
 
@@ -250,6 +254,7 @@ class FormExtension extends AbstractExtension
     public function renderLabel($params, SmartyTemplate $template)
     {
         list($view, $variables) = $this->extractFunctionParameters($params);
+
         return $this->render($view, 'label', $variables);
     }
 
@@ -262,10 +267,10 @@ class FormExtension extends AbstractExtension
      * 3. the type name is recursively replaced by the parent type name until a
      *    corresponding block is found
      *
-     * @param FormView  $view       The form view
-     * @param string    $section    The section to render (i.e. 'row', 'widget',
+     * @param FormView $view    The form view
+     * @param string   $section The section to render (i.e. 'row', 'widget',
      * 'label', ...)
-     * @param array     $variables  Additional variables
+     * @param array $variables Additional variables
      *
      * @return string The html markup
      *
@@ -329,7 +334,6 @@ class FormExtension extends AbstractExtension
             implode('", "', array_reverse($types))
         ));
     }
-
 
     /**
      * Returns the name of the extension.
@@ -400,11 +404,11 @@ class FormExtension extends AbstractExtension
      * @since  0.2.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
      *
-     * @param string  $name A template name
-     * @param mixed   $cache_id cache id to be used with this template
+     * @param string  $name       A template name
+     * @param mixed   $cache_id   cache id to be used with this template
      * @param mixed   $compile_id compile id to be used with this template
-     * @param object  $parent next higher level of Smarty variables
-     * @param boolean $do_clone flag is Smarty object shall be cloned
+     * @param object  $parent     next higher level of Smarty variables
+     * @param boolean $do_clone   flag is Smarty object shall be cloned
      *
      * @return SmartyTemplate A SmartyTemplate instance.
      */
@@ -431,7 +435,7 @@ class FormExtension extends AbstractExtension
      * @since  0.2.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
      *
-     * @param string   $block The name of the function
+     * @param string $block The name of the function
      *
      * @return SmartyTemplate\false Return the SmartyTemplate where the function
      * is found or false if it doesn't exist in any loaded template object.
@@ -466,10 +470,12 @@ class FormExtension extends AbstractExtension
         if ($template->caching) {
             \Smarty_Internal_Function_Call_Handler::call($function,
             $template, $attributes, $template->properties['nocache_hash'], false);
+
             return true;
         } else {
             if (is_callable($function = 'smarty_template_function_'.$function)) {
                 $function($template, $attributes);
+
                 return true;
             }
         }
