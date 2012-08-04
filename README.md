@@ -75,11 +75,6 @@ If you want to contribute to SmartyBundle please switch to the following branche
 * **FormExtension** - https://github.com/noiselabs/SmartyBundle/tree/form-extension
 * **SecurityExtension** - *completed, merged into master*
 
-Installation
-------------
-
-Follow the instructions described in the [documentation](https://github.com/noiselabs/SmartyBundle/blob/master/Resources/doc/index.rst).
-
 License
 -------
 
