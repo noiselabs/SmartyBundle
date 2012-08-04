@@ -29,7 +29,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 
 /**
  * The "dynamic" reincarnation of AsseticExtension.
@@ -59,13 +59,17 @@ class DynamicAsseticExtension extends AsseticExtension
     /**
      * Returns an URL for the supplied asset.
      *
-     * @param AssetInterface $asset    An asset
-     * @param array          $options  An array of options
+     * @param AssetInterface $asset   An asset
+     * @param array          $options An array of options
      *
      * @return string An echo-ready URL
      */
     protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
-        return $this->routingExtension->getPath('_assetic_'.$options['name']);
+        try {
+            return $this->routingExtension->getPath('_assetic_'.$options['name'].'2');
+        } catch (\Exception $e) {
+            throw RuntimeException::createFromPrevious($e);
+        }
     }
 }
