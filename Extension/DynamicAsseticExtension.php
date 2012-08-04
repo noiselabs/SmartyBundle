@@ -67,7 +67,7 @@ class DynamicAsseticExtension extends AsseticExtension
     protected function getAssetUrl(AssetInterface $asset, array $options = array())
     {
         try {
-            return $this->routingExtension->getPath('_assetic_'.$options['name'].'2');
+            return $this->routingExtension->getPath('_assetic_'.$options['name']);
         } catch (\Exception $e) {
             throw RuntimeException::createFromPrevious($e);
         }
