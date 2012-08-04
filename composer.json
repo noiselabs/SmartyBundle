@@ -12,13 +12,22 @@
             "homepage": "http://blog.noiselabs.org"
         }
     ],
+    "support": {
+        "irc": "irc://irc.freenode.org/noiselabs",
+        "issues": "https://github.com/noiselabs/SmartyBundle/issues"
+    },
     "require": {
-        "php": ">=5.3.2",
+        "php": ">=5.3.3",
         "symfony/framework-bundle": ">=2.0",
         "smarty/smarty": ">=v3.1.11"
     },
+    "require-dev": {
+        "symfony/assetic-bundle": ">=2.0",
+        "mopa/bootstrap-bundle": "dev-master"
+    },
     "suggest": {
-        "symfony/assetic-bundle": ">=2.0"
+        "symfony/assetic-bundle": "Integrates Assetic into Symfony2",
+        "mopa/bootstrap-bundle": "Easy integration of Twitter Bootstrap into Symfony2"
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
