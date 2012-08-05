@@ -1,0 +1,4 @@
+<assets>
+    <asset>{'foo.js'|asset}</asset>
+    <asset>{'/foo.js'|asset}</asset>
+</assets>

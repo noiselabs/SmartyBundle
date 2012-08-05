@@ -55,7 +55,7 @@ class AsseticExtensionTest extends TestCase
         $this->am = $this->getMock('Assetic\\AssetManager');
         $this->fm = $this->getMock('Assetic\\FilterManager');
 
-        $this->valueSupplier = $this->getMock('Assetic\ValueSupplierInterface');
+        $this->valueSupplier = $this->getMock('Assetic\\ValueSupplierInterface');
 
         $this->factory = new AssetFactory($templatesDir);
         $this->factory->setAssetManager($this->am);
@@ -185,13 +185,6 @@ class AsseticExtensionTest extends TestCase
         $this->assertEquals(2, $xml->url->count());
         $this->assertEquals("js/7d0828c_foo_1.a.b.js", (string) $xml->url[0]);
         $this->assertEquals("js/7d0828c_variable_input.a_2.a.b.js", (string) $xml->url[1]);
-    }
-
-    protected function renderXml($name, $context = array())
-    {
-        $template = $this->createTemplate($name);
-
-        return new \SimpleXMLElement($this->engine->render($template));
     }
 }
 

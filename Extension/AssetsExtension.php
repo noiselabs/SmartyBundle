@@ -36,6 +36,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
  *
+ * If you need to use this class without the Symfony Container use this:
+ * <code>
+ * class MyAssetsExtension extends AssetsExtension
+ * {
+ *   public function __construct(\Symfony\Component\Templating\Helper\AssetsHelper $helper) {
+ *      $this->helper = $helper;
+ *   }
+ * }
+ * </code>
+ *
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class AssetsExtension extends AbstractExtension
@@ -47,7 +57,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->helper = $container->get('templating.helper.assets');
     }
 
     /**
@@ -74,7 +84,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function getAssetUrl($path, $packageName = null)
     {
-        return $this->container->get('templating.helper.assets')->getUrl($path, $packageName);
+        return $this->helper->getUrl($path, $packageName);
     }
 
     /**
@@ -94,7 +104,7 @@ class AssetsExtension extends AbstractExtension
                 'package'   => null,
             ), $parameters);
 
-            return $this->container->get('templating.helper.assets')->getUrl($path, $parameters['package']);
+            return $this->helper->getUrl($path, $parameters['package']);
         }
     }
 
@@ -110,7 +120,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function getAssetUrl_modifier($path, $package = null)
     {
-        return $this->container->get('templating.helper.assets')->getUrl($path, $package);
+        return $this->helper->getUrl($path, $package);
     }
 
     /**
@@ -121,10 +131,10 @@ class AssetsExtension extends AbstractExtension
     public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
     {
         $parameters = array_merge(array(
-                'package'   => null,
+            'package'   => null,
         ), $parameters);
 
-        return $this->container->get('templating.helper.assets')->getVersion($parameters['package']);
+        return $this->helper->getVersion($parameters['package']);
     }
 
     /**

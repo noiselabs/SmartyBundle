@@ -90,6 +90,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return $this->engine->getSmarty()->createTemplate($filepath);
     }
 
+    protected function renderXml($name, $context = array())
+    {
+        $template = $this->createTemplate($name);
+
+        return new \SimpleXMLElement($this->engine->render($template));
+    }
+
     public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
     {
         $container = $this->createContainer();
