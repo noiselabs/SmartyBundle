@@ -297,12 +297,16 @@ Block attributes
 
 Here is a list of the possible attributes to define in the block function.
 
-* `assets`: A comma-separated list of files to include in the build (CSS, JS or image files)
-* `debug`: If set to true, the plugin will not combine your assets to allow easier debug
-* `filter`: A coma-separated list of filters to apply. Currently, only LESS and YuiCompressor (both CSS and JS) are supported
-* `combine`: Combine all of your CSS and JS files (overrides `debug`)
-* `output`: Defines the URLs that Assetic produces
-* `var_name`: The variable name that will be used to pass the asset URL to the <link> tag
+* ``assets``: A comma-separated list of files to include in the build (CSS, JS or image files)
+* ``debug``: If set to true, the plugin will not combine your assets to allow easier debug
+* ``filter``: A coma-separated list of filters to apply. Currently, only LESS and YuiCompressor (both CSS and JS) are supported
+* ``combine``: Combine all of your CSS and JS files (overrides `debug`)
+* ``output``: Defines the URLs that Assetic produces
+* ``var_name``: The variable name that will be used to pass the asset URL to the <link> tag
+* ``as``: An alias to ``var_name``. Example: ``as='js_url'``
+* ``vars``: Array of asset variables. For a description of this recently added feature please check out the `Johannes Schmitt blog post <http://jmsyst.com/blog/asset-variables-in-assetic>`_ about Asset Variables in Assetic.
+
+    **Note:** Unlike the examples given in the `Asset Variables in Assetic <http://jmsyst.com/blog/asset-variables-in-assetic>`_, which uses curly brackets for the ``vars`` placeholder we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``js/messages.{locale}.js`` becomes ``js/messages.[locale].js``.
 
 Full example
 ------------
@@ -311,12 +315,14 @@ Example using all available attributes::
 
     {javascripts
         assets='@AcmeFooBundle/Resources/public/js/*,
-               @AcmeBarBundle/Resources/public/js/form.js,
-               @AcmeBarBundle/Resources/public/js/calendar.js'
+                @AcmeBarBundle/Resources/public/js/form.js,
+                @AcmeBarBundle/Resources/public/js/calendar.js',
+                @AcmeBarBundle/Resources/public/js/messages.[locale].js
         filter='yui_js'
         output='js/compiled/main.js'
         var_name='js_url'
-    %}
+        vars=['locale']
+    }
     <script src="{$js_url}"></script>
     {/javascripts}
 
