@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle;
 
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
@@ -201,7 +202,11 @@ class SmartyEngine implements EngineInterface
          * Too learn more see {@link http://www.smarty.net/docs/en/api.fetch.tpl}
          */
 
-        return $this->smarty->fetch($template);
+         try {
+            return $this->smarty->fetch($template);
+        } catch (\SmartyException $e) {
+            throw RuntimeException::createFromPrevious($e, $template);die;
+        }
     }
 
     /**
@@ -237,7 +242,7 @@ class SmartyEngine implements EngineInterface
 
         $template = $this->parser->parse($name);
 
-        // keep 'tpl' for backwards compatibility. remove when tagging '0.2.0'
+        // Keep 'tpl' for backwards compatibility.
         return in_array($template->get('engine'), array('smarty', 'tpl'));
     }
 

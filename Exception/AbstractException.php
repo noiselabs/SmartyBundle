@@ -76,12 +76,15 @@ class AbstractException extends \Exception
 
     /**
      * @param Exception $previous The previous exception
+     * @param string    $resource An optional template resource (type and path)
      *
      * @return Exception A SmartyBundle Exception
      */
-    public static function createFromPrevious(\Exception $e)
+    public static function createFromPrevious(\Exception $e, $resource = null)
     {
-        return new static(sprintf('[SmartyBundle] An exception has been thrown during the rendering of a template ("%s")', $e->getMessage()), -1, null, null, $e);
+        $filename = null != $resource ? $resource : null;
+
+        return new static(sprintf('[SmartyBundle] An exception has been thrown during the rendering of a template ("%s")', $e->getMessage()), -1, $resource, null, $e);
     }
 
     /**
@@ -180,6 +183,8 @@ class AbstractException extends \Exception
 
     protected function guessTemplateInfo()
     {
+        $template = null;
+
         foreach (debug_backtrace() as $trace) {
             if (!isset($trace['args'][2]) || !$trace['args'][2] instanceof \Smarty_Internal_Template) {
                 continue;
@@ -191,8 +196,6 @@ class AbstractException extends \Exception
                 $template->compiled->filepath == $trace['file']) {
                 break;
             }
-
-            $template = null;
         }
 
         // update template filename
