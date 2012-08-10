@@ -8,6 +8,7 @@
         <parameter key="smarty.class">Smarty</parameter>
         <parameter key="templating.engine.smarty.class">NoiseLabs\Bundle\SmartyBundle\SmartyEngine</parameter>
         <parameter key="smarty.class_file">Smarty.class.php</parameter>
+        <parameter key="smarty.extension.core.class">NoiseLabs\Bundle\SmartyBundle\Extension\CoreExtension</parameter>
         <parameter key="smarty.extension.actions.class">NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension</parameter>
         <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
         <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
@@ -31,6 +32,10 @@
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="templating.engine" />
             <tag name="monolog.logger" channel="SmartyBundle" />
+        </service>
+
+        <service id="smarty.extension.core" class="%smarty.extension.core.class%" public="false">
+            <tag name="smarty.extension" />
         </service>
 
         <service id="smarty.extension.actions" class="%smarty.extension.actions.class%" public="false">

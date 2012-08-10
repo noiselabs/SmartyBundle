@@ -58,6 +58,7 @@ class SmartyExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         $engineDefinition = $container->getDefinition('templating.engine.smarty');
+        $bundles = array_keys($container->getParameter('kernel.bundles'));
 
         if (!empty($config['globals'])) {
             foreach ($config['globals'] as $key => $global) {
@@ -74,8 +75,7 @@ class SmartyExtension extends Extension
         /*
          * AsseticExtension
          */
-        if (in_array('AsseticBundle', array_keys($container->getParameter('kernel.bundles')))) {
-
+        if (in_array('AsseticBundle', $bundles)) {
             $loader->load('assetic.xml');
 
             // choose dynamic or static
@@ -92,6 +92,18 @@ class SmartyExtension extends Extension
          * FormExtension
          */
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
+
+        /*
+         * Bootstrap Extensions
+         */
+        if (in_array('MopaBootstrapBundle', $bundles)) {
+            $loader->load('bootstrap.xml');
+
+            // disable the initializr extension if not set in mopa config
+            if (!$container->hasParameter('mopa_bootstrap.initializr')) {
+                $container->removeDefinition('smarty.extension.bootstrap_initializr');
+            }
+        }
 
         /**
          * @note Caching of Smarty classes was causing issues because of the
