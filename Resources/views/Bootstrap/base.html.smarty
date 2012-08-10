@@ -1,0 +1,121 @@
+{include 'file:SmartyBundle:Bootstrap:flash.html.smarty'}
+
+<!DOCTYPE html>
+
+{block html_tag}
+<html>
+{/block}
+
+{block head}
+<head>
+    <meta charset="UTF-8" />
+    {block head_style}
+    {* Override this block to add your own files! *}
+    {stylesheets
+        assets='@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
+    }
+    <link href="{$asset_url}" type="text/css" rel="stylesheet" media="screen" />
+    {/stylesheets}
+    {* To use this without less use the base_css.html.twig template as your base
+     # Be sure you understand whats going on: have a look into
+     # https://github.com/phiamo/MopaBootstrapBundle/blob/master/Resources/doc/css-vs-less.md
+     *}
+    {/block}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {block head_script}
+    {* Overwrite this block to add your own js here, to get them generated into final files *}
+    {/block}
+
+    <title>{block title}Mopa Bootstrap Bundle{/block}</title>
+    <link rel="shortcut icon" href="{'favicon.ico'|asset}" />
+    {block head_bottom}
+    {/block}
+</head>
+{/block}
+
+{block body_tag}
+<body data-spy="scroll">
+{/block}
+
+{block body_start}
+{/block}
+
+{block body}
+    {block navbar}
+    {'frontendNavbar'|mopa_bootstrap_navbar}
+    {/block}
+
+    {block container}
+    <div class="{block container_class}container-fluid{/block}">
+        {block header}
+        {/block}
+
+        <div class="content">
+            {block page_header}
+            <div class="page-header">
+                  <h1>{block headline}Mopa Bootstrap Bundle{/block}</h1>
+            </div>
+            {/block}
+
+            {block flashes}
+            {if $app.session.flashbag.peekAll|length > 0}
+            <div class="row-fluid">
+                <div class="span12">
+                {call session_flash}
+                </div>
+            </div>
+            {/if}
+            {/block}
+
+            {block content_row}
+            <div class="row-fluid">
+                {block content}
+                <div class="span9">
+                    <strong>Hier könnte Ihre Werbung stehen ... </strong>
+                </div>
+                <div class="span3">
+                    {block content_sidebar}
+                    <h2>Sidebar</h2>
+                    {/block}
+                </div>
+                {/block}
+            </div>
+            {/block}
+        </div>
+        <footer>
+            {block footer}
+            <p>&copy; <a href="http://www.mohrenweiserpartner.de" target="_blank">Mohrenweiser & Partner</a> 2011</p>
+            {/block}
+        </footer>
+    </div> <!-- /container -->
+    {/block}
+    {block foot_script}
+    {* To only use a subset or add more js overwrite and copy paste this block
+    To speed up page loads save a copy of jQuery in your project and override this block to include the correct path
+    Otherwise the regeneration is done on every load in dev more with use_controller: true
+     *}
+    {javascripts
+        assets='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-transition.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-modal.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-dropdown.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-scrollspy.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-tab.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-tooltip.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-popover.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-alert.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-button.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-collapse.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-carousel.js,
+        @MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-typeahead.js,
+        @MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js,
+        @MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
+   }
+<script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
+{/block}
+{/block}
+</body>
+</html>

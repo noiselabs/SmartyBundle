@@ -8,6 +8,7 @@ run-me-before-release.sh
 
 vendor
 tmp
+_build
 
 composer.phar
 php-cs-fixer
