@@ -30,7 +30,6 @@
     </div>
 {/function}
 
-
 {function name=session_flash close=false use_raw=false class='' domain='messages'}
     {if $app.session.flashbag.peekAll|length > 0}
         {foreach $app.session.flashbag.all as $type => $messages}
