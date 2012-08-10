@@ -468,7 +468,7 @@ class SmartyEngine implements EngineInterface
                 $this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
             } catch (\SmartyException $e) {
                 if (null !== $this->logger) {
-                    $this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
+                    $this->logger->debug(sprintf("SmartyException caught: %s.", $e->getMessage()));
                 }
             }
         }
