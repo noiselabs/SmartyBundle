@@ -1,16 +1,37 @@
 .. _ch_bootstrap:
 
-*****************
-Twitter Bootstrap
-*****************
+*****************************
+Twitter Bootstrap integration
+*****************************
+
+`Twitter Bootstrap <http://twitter.github.com/bootstrap/>`_ is an extensive front-end toolkit for developing web sites and applications released by Twitter developers.
+
+`MopaBootstrapBundle <https://github.com/phiamo/MopaBootstrapBundle>`_ is a Symfony2 Bundle that integrates Bootstrap into Symfony2 project.
+
+SmartyBundle builds upon these tools to give you a quick way to start a project using **Symfony2 + TwitterBootstrap + Smarty3**. Enjoy!
+
+.. note::
+    
+    Examples presented here use only the most common/preferred tool for a given task. For complete reference please check `MopaBootstrapBundle documentation <https://github.com/phiamo/MopaBootstrapBundle/blob/master/Resources/doc/index.md>`_.
+
+Installation
+============
+
+Composer (Symfony 2.1.x)
+---------------------------
+
+Add the following packages and scripts to ``composer.json``:
 
 .. code-block:: javascript
 
     {
         "require": {
             "php": ">=5.3.8",
+            
             "symfony/framework-standard-edition": "dev-master",
+            
             "noiselabs/smarty-bundle": "dev-master",
+            
             "mopa/bootstrap-bundle": "dev-master",
             "twitter/bootstrap": "master",
             "knplabs/knp-paginator-bundle": "dev-master",
@@ -18,6 +39,7 @@ Twitter Bootstrap
             "craue/formflow-bundle": "dev-master",
             "thomas-mcdonald/bootstrap-sass": "dev-master"
         },
+        
         "scripts": {
             "post-install-cmd": [
                 "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
@@ -36,7 +58,9 @@ Twitter Bootstrap
                 "Mopa\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::postInstallSymlinkTwitterBootstrapSass"
             ]
         },
+        
         "include-path": ["vendor/smarty/smarty/distribution/libs/"],
+        
         "repositories": [
             {
                 "type": "package",
@@ -73,5 +97,47 @@ Twitter Bootstrap
         ]
     }
 
+Now tell composer to update vendors by running the command:
+    
+.. code-block:: bash    
 
+    $ php composer.phar update
 
+Enable the bundles
+------------------
+
+.. code-block:: php
+
+    // app/AppKernel.php
+    
+    class AppKernel extends Kernel
+    {
+        public function registerBundles()
+        {
+            $bundles = array(
+                // ...
+                new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
+                
+                new NoiseLabs\Bundle\WebsiteBundle\NoiseLabsWebsiteBundle(),
+                new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+                new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle()
+            );
+
+            // ...
+
+            return $bundles;
+        }
+    }
+
+Enable the Smarty template engine in the config
+===============================================
+
+.. configuration-block::
+
+    .. code-block:: yaml
+    
+        # app/config/config.yml
+        # ...
+        framework:
+            templating:      { engines: ['twig', 'smarty'] }    
