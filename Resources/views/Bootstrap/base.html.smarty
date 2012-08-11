@@ -16,16 +16,18 @@
     }
     <link href="{$asset_url}" type="text/css" rel="stylesheet" media="screen" />
     {/stylesheets}
-    {* To use this without less use the base_css.html.twig template as your base
-     # Be sure you understand whats going on: have a look into
-     # https://github.com/phiamo/MopaBootstrapBundle/blob/master/Resources/doc/css-vs-less.md
+    {* To use this without less use the base_css.html.smarty template as your base
+     * Be sure you understand whats going on: have a look into
+     * https://github.com/phiamo/MopaBootstrapBundle/blob/master/Resources/doc/css-vs-less.md
      *}
     {/block}
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {block head_script}
-    {* Overwrite this block to add your own js here, to get them generated into final files *}
+    {* Overwrite this block to add your own js here, to get them generated into
+     * the final files.
+     *}
     {/block}
 
     <title>{block title}Mopa Bootstrap Bundle{/block}</title>
@@ -89,12 +91,13 @@
             <p>&copy; <a href="http://www.mohrenweiserpartner.de" target="_blank">Mohrenweiser & Partner</a> 2011</p>
             {/block}
         </footer>
-    </div> <!-- /container -->
+    </div>
     {/block}
     {block foot_script}
     {* To only use a subset or add more js overwrite and copy paste this block
-    To speed up page loads save a copy of jQuery in your project and override this block to include the correct path
-    Otherwise the regeneration is done on every load in dev more with use_controller: true
+     * To speed up page loads save a copy of jQuery in your project and override
+     * this block to include the correct path. Otherwise the regeneration is
+     * done on every load in dev more with use_controller: true
      *}
     {javascripts
         assets='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js,

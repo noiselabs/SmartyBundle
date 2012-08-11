@@ -130,8 +130,8 @@ Enable the bundles
         }
     }
 
-Enable the Smarty template engine in the config
-===============================================
+Enable the Smarty template engine
+---------------------------------
 
 .. configuration-block::
 
@@ -140,4 +140,17 @@ Enable the Smarty template engine in the config
         # app/config/config.yml
         # ...
         framework:
-            templating:      { engines: ['twig', 'smarty'] }    
+            templating:      { engines: ['twig', 'smarty'] }
+            
+Configuration
+=============
+
+.. configuration-block::
+
+    .. code-block:: yaml
+    
+        # app/config/config.yml
+        # ...
+        # MopaBootstrap Configuration
+        mopa_bootstrap:
+            navbar: ~

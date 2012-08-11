@@ -10,6 +10,11 @@
             "name": "Vítor Brandão",
             "email": "noisebleed@noiselabs.org",
             "homepage": "http://blog.noiselabs.org"
+        },
+        ,
+        {
+            "name": "Community contributions",
+            "homepage": "https://github.com/noiselabs/SmartyBundle/contributors"
         }
     ],
     "support": {
@@ -27,7 +32,9 @@
     },
     "suggest": {
         "symfony/assetic-bundle": "Integrates Assetic into Symfony2",
-        "mopa/bootstrap-bundle": "Easy integration of Twitter Bootstrap into Symfony2"
+        "mopa/bootstrap-bundle": "Integration of Twitter Bootstrap into Symfony2",
+        "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
+        "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)"
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
