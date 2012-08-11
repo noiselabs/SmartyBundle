@@ -65,7 +65,7 @@ For other installation methods (Symfony-2.0 vendors script or git submodules) pl
 Documentation
 -------------
 
-The complete [documentation](https://github.com/noiselabs/SmartyBundle/blob/master/Resources/doc/index.rst) is available in the [`Resources/doc/index.rst`](https://github.com/noiselabs/SmartyBundle/blob/master/Resources/doc/index.rst) file in this bundle.
+Complete documentation is available at http://smartybundle.noiselabs.org/
 
 ### Extensions under development
 
