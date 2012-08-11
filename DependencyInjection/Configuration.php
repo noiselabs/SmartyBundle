@@ -72,6 +72,13 @@ class Configuration implements ConfigurationInterface
         $this->addGlobalsSection($rootNode);
         $this->addSmartyOptions($rootNode);
 
+        $rootNode
+            ->children()
+                ->booleanNode('assetic')->end()
+                ->booleanNode('bootstrap')->defaultValue(false)->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 

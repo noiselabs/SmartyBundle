@@ -39,8 +39,21 @@ class MopaBootstrapPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('mopa_bootstrap.navbar_renderer')) {
+        if (false === $container->hasDefinition('templating.engine.smarty')) {
+            return;
+        }
+
+        if (!$container->hasDefinition('mopa_bootstrap.navbar_renderer')) {
+            $container->removeDefinition('smarty.extension.bootstrap_navbar');
+        }
+
+        if (!$container->hasParameter('mopa_bootstrap.initializr.meta')) {
+            $container->removeDefinition('smarty.extension.bootstrap_initializr');
+        }
+
+        /*if ($container->hasDefinition('mopa_bootstrap.navbar_renderer')) {
             $definition = $container->getDefinition('mopa_bootstrap.navbar_renderer');
             $definition->setClass($container->getDefinition('smarty.bootstrap.navbar_renderer.class'));
-        }
+        }*/
+    }
 }

@@ -58,7 +58,6 @@ class SmartyExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         $engineDefinition = $container->getDefinition('templating.engine.smarty');
-        $bundles = array_keys($container->getParameter('kernel.bundles'));
 
         if (!empty($config['globals'])) {
             foreach ($config['globals'] as $key => $global) {
@@ -72,11 +71,14 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
-        /*
-         * AsseticExtension
-         */
-        if (in_array('AsseticBundle', $bundles)) {
+         // Enable AsseticExtension if undefined (legacy behavior)
+        if (!isset($config['assetic'])) {
+            $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
+        }
+
+        if (true === $config['assetic']) {
             $loader->load('assetic.xml');
+            $container->setParameter('smarty.assetic', true);
 
             // choose dynamic or static
             if ($useController = $container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
@@ -93,16 +95,10 @@ class SmartyExtension extends Extension
          */
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
 
-        /*
-         * Bootstrap Extensions
-         */
-        if (in_array('MopaBootstrapBundle', $bundles)) {
+        // Bootstrap Extensions
+        if ($container->hasDefinition('mopa_bootstrap')) {
             $loader->load('bootstrap.xml');
-
-            // disable the initializr extension if not set in mopa config
-            if (!$container->hasParameter('mopa_bootstrap.initializr')) {
-                $container->removeDefinition('smarty.extension.bootstrap_initializr');
-            }
+            $container->setParameter('smarty.bootstrap', true);
         }
 
         /**
