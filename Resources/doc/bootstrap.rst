@@ -30,14 +30,16 @@ Add the following packages and scripts to ``composer.json``:
             
             "symfony/framework-standard-edition": "dev-master",
             
-            "noiselabs/smarty-bundle": "dev-master",
+            "noiselabs/smarty-bundle": "dev-twitter-bootstrap",
             
             "mopa/bootstrap-bundle": "dev-master",
             "twitter/bootstrap": "master",
             "knplabs/knp-paginator-bundle": "dev-master",
             "knplabs/knp-menu-bundle": "dev-master",
             "craue/formflow-bundle": "dev-master",
-            "thomas-mcdonald/bootstrap-sass": "dev-master"
+            "thomas-mcdonald/bootstrap-sass": "dev-master",
+            "mopa/bootstrap-sandbox-bundle": "dev-master",
+            "liip/theme-bundle": "dev-master"
         },
         
         "scripts": {
@@ -122,6 +124,8 @@ Enable the bundles
                 new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
                 new Knp\Bundle\MenuBundle\KnpMenuBundle(),
                 new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle()
+                new Mopa\Bundle\BootstrapSandboxBundle\MopaBootstrapSandboxBundle(),
+                new Liip\ThemeBundle\LiipThemeBundle()
             );
 
             // ...
@@ -138,7 +142,7 @@ Enable the Smarty template engine
     .. code-block:: yaml
     
         # app/config/config.yml
-        # ...
+        
         framework:
             templating:      { engines: ['twig', 'smarty'] }
             
@@ -150,7 +154,9 @@ Configuration
     .. code-block:: yaml
     
         # app/config/config.yml
-        # ...
+        
         # MopaBootstrap Configuration
+        #
         mopa_bootstrap:
+            # To load the navbar extensions (template helper, CompilerPass, etc.)
             navbar: ~
