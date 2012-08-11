@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="smarty.extension.bootstrap_initializr.class">NoiseLabs\Bundle\SmartyBundle\Bootstrap\Extension\InitializrExtension</parameter>
         <parameter key="smarty.extension.bootstrap_navbar.class">NoiseLabs\Bundle\SmartyBundle\Bootstrap\Extension\NavbarExtension</parameter>
+        <parameter key="smarty.bootstrap.navbar_renderer.class">NoiseLabs\Bundle\SmartyBundle\Bootstrap\Navbar\Renderer\NavbarRenderer</parameter>
     </parameters>
 
     <services>
@@ -14,12 +15,13 @@
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
         </service>
+        
         <service id="smarty.extension.bootstrap_navbar" class="%smarty.extension.bootstrap_navbar.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="mopa_bootstrap.navbar_renderer" />
         </service>
-
-        <service id="mopa_bootstrap.example.navbar" class="%mopa_bootstrap.navbar.generic%">
+        
+        <service id="smarty.bootstrap.example.navbar" class="%mopa_bootstrap.navbar.generic%">
             <argument type="collection">
                 <argument type="service" key="leftmenu" id="mopa_bootstrap.examplemenu" strict="false" />
                 <argument type="service" key="rightmenu" id="mopa_bootstrap.exampledropdown"  strict="false" />
@@ -32,7 +34,7 @@
                 <argument key="titleRoute">mopa_bootstrap_welcome</argument>
                 <argument key="fixedTop">true</argument>
                 <argument key="isFluid">false</argument>
-                <argument key="template">MopaBootstrapBundle:Navbar:navbar.html.twig</argument>
+                <argument key="template">SmartyBundle:Bootstrap:Navbar:navbar.html.smarty</argument>
             </argument>
             <tag name="mopa_bootstrap.navbar" alias="frontendNavbar" />
         </service>

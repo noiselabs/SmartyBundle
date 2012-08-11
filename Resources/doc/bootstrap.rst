@@ -120,11 +120,10 @@ Enable the bundles
                 // ...
                 new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
                 
-                new NoiseLabs\Bundle\WebsiteBundle\NoiseLabsWebsiteBundle(),
                 new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+                new Mopa\Bundle\BootstrapSandboxBundle\MopaBootstrapSandboxBundle()
                 new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle()
-                new Mopa\Bundle\BootstrapSandboxBundle\MopaBootstrapSandboxBundle(),
+                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
                 new Liip\ThemeBundle\LiipThemeBundle()
             );
 
