@@ -84,6 +84,12 @@ class SmartyEngine implements EngineInterface
         // There are no default extensions.
         $this->extensions = array();
 
+        // trim whitespace
+        if (true === $options['trim_whitespace']) {
+            $this->smarty->loadFilter('output','trimwhitespace');
+        }
+        unset($options['trim_whitespace']);
+
         /**
          * @warning If you added template dirs to the Smarty instance prior to
          * the loading of this engine these WILL BE LOST because the setter
@@ -118,8 +124,7 @@ class SmartyEngine implements EngineInterface
             if (is_dir($dir = dirname($reflection->getFilename()).'/Resources/views')) {
                 $bundlesTemplateDir[$name] = $dir;
             }
-       }
-
+        }
         $this->smarty->addTemplateDir($bundlesTemplateDir);
 
         if (null !== $globals) {
@@ -225,7 +230,8 @@ class SmartyEngine implements EngineInterface
 
         $template = $this->smarty->createTemplate($template, $this->smarty);
         if (true === $load) {
-            $template->compileTemplateSource();
+            // $template->compileTemplateSource() doesn't seem to be enough
+            $template->fetch();
         }
 
         return $template;
@@ -251,7 +257,7 @@ class SmartyEngine implements EngineInterface
             if (is_callable($function = 'smarty_template_function_'.$name)) {
                 $function($template, $attributes);
             } else {
-                throw new RuntimeException(sprintf('Template function "%s" is not defined.', $name), -1, null, $template);
+                throw new RuntimeException(sprintf('Template function "%s" is not defined in "%s".', $name, $template->source->filepath), -1, null, $template);
             }
         }
     }

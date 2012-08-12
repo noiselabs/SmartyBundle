@@ -52,6 +52,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             plugins_dir:
             smarty_debug_id:
             template_dir:                  %kernel.root_dir%/Resources/views
+            trim_whitespace :              false
             trusted_dir:
             use_include_path:              false
             use_sub_dirs:                  true
@@ -180,6 +181,9 @@ smarty_debug_id
 template_dir
     This is the name of the default template directory. If you do not supply a resource type when including files, they will be found here. By default this is ``%kernel.root_dir%/Resources/views``. ``$template_dir`` can also be an array of directory paths: Smarty will traverse the directories and stop on the first matching template found. **Note that the SmartyEngine included in this bundle already add the template directory of each registered Bundle**.
 
+trim_whitespace
+    Trim unnecessary whitespace from HTML markup.
+    
 trusted_dir
     ``$trusted_dir`` is only for use when security is enabled. This is an array of all directories that are considered trusted. Trusted directories are where you keep php scripts that are executed directly from the templates with ``{include_php}``.
 

@@ -94,11 +94,18 @@ class SmartyExtension extends Extension
         // Bootstrap Extensions
         if (true === $config['bootstrap']) {
             $loader->load('bootstrap.xml');
+            $config['menu'] = true; // "bootstrap" requires "menu" so enable it
         }
         $container->setParameter('smarty.bootstrap', $config['bootstrap']);
 
          // Form Extension
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
+
+        // Menu Extension
+        if (true === $config['menu']) {
+            $loader->load('menu.xml');
+        }
+        $container->setParameter('smarty.menu', $config['menu']);
 
         /**
          * @note Caching of Smarty classes was causing issues because of the
