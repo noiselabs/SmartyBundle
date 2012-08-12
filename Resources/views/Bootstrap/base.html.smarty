@@ -1,7 +1,5 @@
 {include 'file:SmartyBundle:Bootstrap:flash.html.smarty'}
-
 <!DOCTYPE html>
-
 {block html_tag}
 <html>
 {/block}
@@ -30,7 +28,7 @@
      *}
     {/block}
 
-    <title>{block title}Mopa Bootstrap Bundle{/block}</title>
+    <title>{block title}TwitterBootstrap by SmartyBundle{/block}</title>
     <link rel="shortcut icon" href="{'favicon.ico'|asset}" />
     {block head_bottom}
     {/block}

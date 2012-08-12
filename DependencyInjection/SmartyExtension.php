@@ -71,14 +71,14 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
-         // Enable AsseticExtension if undefined (legacy behavior)
+         // Enable AsseticExtension if undefined (legacy support)
         if (!isset($config['assetic'])) {
             $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
         }
 
+        // Assetic Extension
         if (true === $config['assetic']) {
             $loader->load('assetic.xml');
-            $container->setParameter('smarty.assetic', true);
 
             // choose dynamic or static
             if ($useController = $container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
@@ -89,17 +89,16 @@ class SmartyExtension extends Extension
                 $container->removeDefinition('smarty.extension.assetic.dynamic');
             }
         }
-
-        /*
-         * FormExtension
-         */
-        $container->setParameter('smarty.form.resources', $config['form']['resources']);
+        $container->setParameter('smarty.assetic', $config['assetic']);
 
         // Bootstrap Extensions
-        if ($container->hasDefinition('mopa_bootstrap')) {
+        if (true === $config['bootstrap']) {
             $loader->load('bootstrap.xml');
-            $container->setParameter('smarty.bootstrap', true);
         }
+        $container->setParameter('smarty.bootstrap', $config['bootstrap']);
+
+         // Form Extension
+        $container->setParameter('smarty.form.resources', $config['form']['resources']);
 
         /**
          * @note Caching of Smarty classes was causing issues because of the

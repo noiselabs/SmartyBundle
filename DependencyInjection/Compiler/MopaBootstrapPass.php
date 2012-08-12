@@ -43,17 +43,19 @@ class MopaBootstrapPass implements CompilerPassInterface
             return;
         }
 
+        if (false === $container->getParameter('smarty.bootstrap')) {
+            return;
+        }
+
         if (!$container->hasDefinition('mopa_bootstrap.navbar_renderer')) {
             $container->removeDefinition('smarty.extension.bootstrap_navbar');
+        } else {
+            $definition = $container->getDefinition('mopa_bootstrap.navbar_renderer');
+            $definition->setClass($container->getParameter('smarty.bootstrap.navbar_renderer.class'));
         }
 
         if (!$container->hasParameter('mopa_bootstrap.initializr.meta')) {
             $container->removeDefinition('smarty.extension.bootstrap_initializr');
         }
-
-        /*if ($container->hasDefinition('mopa_bootstrap.navbar_renderer')) {
-            $definition = $container->getDefinition('mopa_bootstrap.navbar_renderer');
-            $definition->setClass($container->getDefinition('smarty.bootstrap.navbar_renderer.class'));
-        }*/
     }
 }

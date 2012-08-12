@@ -205,7 +205,9 @@ class SmartyEngine implements EngineInterface
          try {
             return $this->smarty->fetch($template);
         } catch (\SmartyException $e) {
-            throw RuntimeException::createFromPrevious($e, $template);die;
+            throw RuntimeException::createFromPrevious($e, $template);
+        } catch (\ErrorException $e) {
+            throw RuntimeException::createFromPrevious($e, $template);
         }
     }
 
