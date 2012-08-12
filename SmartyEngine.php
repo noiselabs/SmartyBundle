@@ -225,7 +225,7 @@ class SmartyEngine implements EngineInterface
 
         $template = $this->smarty->createTemplate($template, $this->smarty);
         if (true === $load) {
-            $template->fetch();
+            $template->compileTemplateSource();
         }
 
         return $template;
