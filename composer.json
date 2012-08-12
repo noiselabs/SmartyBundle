@@ -34,7 +34,9 @@
         "symfony/assetic-bundle": "Integrates Assetic into Symfony2",
         "mopa/bootstrap-bundle": "Integration of Twitter Bootstrap into Symfony2",
         "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
-        "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)"
+        "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)",
+        "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
+        
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }

@@ -31,8 +31,8 @@
 {/function}
 
 {function name=session_flash close=false use_raw=false class='' domain='messages'}
-    {if $app.session.flashbag.peekAll|length > 0}
-        {foreach $app.session.flashbag.all as $type => $messages}
+    {if $app->geSession()->getFlashBag()->peekAll()|length > 0}
+        {foreach $app->getSession()->getFlashBag()->all() as $type => $messages}
             {foreach $messages as $message}
                 {if $type == 'fos_user_success'}
                     {$type='success'}

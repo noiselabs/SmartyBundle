@@ -56,7 +56,7 @@ class NavbarRenderer extends BaseNavbarRenderer
 
         $navbar = $this->getNavbar($name);
         $navbar = $this->createFormViews($navbar);
-        $function = 'hello';
+        $function = 'navbar';
 
         try {
             $template = $navbar->getOption('template');

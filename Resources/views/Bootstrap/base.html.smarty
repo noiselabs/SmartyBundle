@@ -1,9 +1,6 @@
-{include 'file:SmartyBundle:Bootstrap:flash.html.smarty'}
 <!DOCTYPE html>
-{block html_tag}
-<html>
-{/block}
-
+{block html_tag}<html>{/block}
+{include 'file:SmartyBundle:Bootstrap:flash.html.smarty'}
 {block head}
 <head>
     <meta charset="UTF-8" />
@@ -55,12 +52,12 @@
         <div class="content">
             {block page_header}
             <div class="page-header">
-                  <h1>{block headline}Mopa Bootstrap Bundle{/block}</h1>
+                  <h1>{block headline}TwitterBootstrap by SmartyBundle{/block}</h1>
             </div>
             {/block}
 
             {block flashes}
-            {if $app.session.flashbag.peekAll|length > 0}
+            {if $app->getSession()->getFlashBag()->peekAll()|length > 0}
             <div class="row-fluid">
                 <div class="span12">
                 {call session_flash}
@@ -73,7 +70,7 @@
             <div class="row-fluid">
                 {block content}
                 <div class="span9">
-                    <strong>Hier könnte Ihre Werbung stehen ... </strong>
+                    <strong>This could be your advertising stand...</strong>
                 </div>
                 <div class="span3">
                     {block content_sidebar}
@@ -86,7 +83,7 @@
         </div>
         <footer>
             {block footer}
-            <p>&copy; <a href="http://www.mohrenweiserpartner.de" target="_blank">Mohrenweiser & Partner</a> 2011</p>
+            <p>&copy; <a href="http://smartybundle.noiselabs.org" target="_blank">SmartyBundle</a> 2012</p>
             {/block}
         </footer>
     </div>
