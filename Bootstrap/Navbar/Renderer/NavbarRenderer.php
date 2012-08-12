@@ -35,7 +35,6 @@ use Mopa\Bundle\BootstrapBundle\Navbar\Renderer\NavbarRenderer as BaseNavbarRend
 class NavbarRenderer extends BaseNavbarRenderer
 {
     protected $container;
-    protected $formFactory;
     protected $navbars;
 
     public function __construct(ContainerInterface $container, array $navbars)
@@ -57,7 +56,7 @@ class NavbarRenderer extends BaseNavbarRenderer
 
         $navbar = $this->getNavbar($name);
         $navbar = $this->createFormViews($navbar);
-        $block = 'navbar';
+        $function = 'navbar';
 
         try {
             $template = $navbar->getOption('template');
@@ -65,9 +64,19 @@ class NavbarRenderer extends BaseNavbarRenderer
             $template = $options['template'];
         }
 
+        if (!$template instanceof \Smarty_Internal_Template) {
+            echo "$template\n";
+            var_dump($this->container->get('templating')->renderResponse($template));die;
+            }
+
         $html = '';
 
         return $html;
+    }
+
+    protected function getSmartyEngine()
+    {
+        return $this->container->get('templating.engine.smarty');
     }
 
     protected function createFormViews(NavbarInterface $navbar)

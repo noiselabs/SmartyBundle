@@ -15,7 +15,7 @@
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
         </service>
-        
+
         <service id="smarty.extension.bootstrap_navbar" class="%smarty.extension.bootstrap_navbar.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="mopa_bootstrap.navbar_renderer" />

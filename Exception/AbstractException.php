@@ -84,7 +84,8 @@ class AbstractException extends \Exception
     {
         $filename = null != $resource ? $resource : null;
 
-        return new static(sprintf('[SmartyBundle] An exception has been thrown during the rendering of a template ("%s")', $e->getMessage()), -1, $resource, null, $e);
+        // An exception has been thrown during the rendering of a template
+        return new static(sprintf('@SmartyBundle: "%s"', $e->getMessage()), -1, $resource, null, $e);
     }
 
     /**

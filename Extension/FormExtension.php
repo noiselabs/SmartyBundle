@@ -463,6 +463,8 @@ class FormExtension extends AbstractExtension
      *
      * @since  0.2.0
      * @author Vítor Brandão <noisebleed@noiselabs.org>
+     *
+     * @deprecated by SmartyEngine::renderTemplateFunction()
      */
     protected function displayTemplateFunction(SmartyTemplate $template, $function,
     array $attributes = array())
