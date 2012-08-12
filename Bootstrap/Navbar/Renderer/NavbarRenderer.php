@@ -56,7 +56,7 @@ class NavbarRenderer extends BaseNavbarRenderer
 
         $navbar = $this->getNavbar($name);
         $navbar = $this->createFormViews($navbar);
-        $function = 'navbar';
+        $function = 'hello';
 
         try {
             $template = $navbar->getOption('template');
@@ -64,12 +64,8 @@ class NavbarRenderer extends BaseNavbarRenderer
             $template = $options['template'];
         }
 
-        if (!$template instanceof \Smarty_Internal_Template) {
-            echo "$template\n";
-            var_dump($this->container->get('templating')->renderResponse($template));die;
-            }
-
-        $html = '';
+        $html = $this->getSmartyEngine()->fetchTemplateFunction($template, $function,
+            array('navbar' => $navbar));
 
         return $html;
     }

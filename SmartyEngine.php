@@ -212,6 +212,26 @@ class SmartyEngine implements EngineInterface
     }
 
     /**
+     * Creates a template object.
+     *
+     * @param mixed   $name A template name
+     * @param boolean $load If we should load template content right away. Default: true
+     *
+     * @return Smarty_Internal_Template
+     */
+    public function createTemplate($name, $load = true)
+    {
+        $template = $this->load($name);
+
+        $template = $this->smarty->createTemplate($template, $this->smarty);
+        if (true === $load) {
+            $template->fetch();
+        }
+
+        return $template;
+    }
+
+    /**
      * @note The template functions do not return the HTML output, but put it
      * directly into the output buffer.
      *
@@ -221,7 +241,9 @@ class SmartyEngine implements EngineInterface
      */
     public function renderTemplateFunction($template, $name, array $attributes = array())
     {
-        $template = $this->load($template);
+        if (!$template instanceof \Smarty_Internal_Template) {
+            $template = $this->createTemplate($template);
+        }
 
         if ($template->caching) {
             \Smarty_Internal_Function_Call_Handler::call ($name, $template, $attributes, $template->properties['nocache_hash'], false);
@@ -229,7 +251,7 @@ class SmartyEngine implements EngineInterface
             if (is_callable($function = 'smarty_template_function_'.$name)) {
                 $function($template, $attributes);
             } else {
-                throw new RuntimeException(sprintf('Template function "%s" is not defined', $name), -1, null, $template);
+                throw new RuntimeException(sprintf('Template function "%s" is not defined.', $name), -1, null, $template);
             }
         }
     }

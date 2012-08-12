@@ -25,12 +25,12 @@
         </div>
     </div>
 </div>
-{/block}
+{/function}
 
-{block form_widget}
+{*block form_widget}
 {{ block('field_rows') }}
-{/block}
+{/block*}
 
-{block field_row}
+{*block field_row}
 {{ form_widget(form) }}
-{/block}
+{/block*}
