@@ -11,7 +11,6 @@
             "email": "noisebleed@noiselabs.org",
             "homepage": "http://blog.noiselabs.org"
         },
-        ,
         {
             "name": "Community contributions",
             "homepage": "https://github.com/noiselabs/SmartyBundle/contributors"
@@ -36,7 +35,7 @@
         "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
         "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)",
         "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
-        
+
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
@@ -47,5 +46,6 @@
         "branch-alias": {
             "dev-master": "0.2-dev"
         }
-    }
+    },
+    "include-path": ["vendor/smarty/smarty/distribution/libs/"]
 }
