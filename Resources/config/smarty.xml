@@ -18,9 +18,7 @@
     </parameters>
 
     <services>
-        <service id="smarty" class="%smarty.class%">
-            <file>%smarty.class_file%</file>
-        </service>
+        <service id="smarty" class="%smarty.class%"></service>
 
         <service id="templating.engine.smarty" class="%templating.engine.smarty.class%" public="true">
             <argument type="service" id="smarty"/>
