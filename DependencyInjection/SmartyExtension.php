@@ -99,6 +99,7 @@ class SmartyExtension extends Extension
         $container->setParameter('smarty.bootstrap', $config['bootstrap']);
 
          // Form Extension
+        $loader->load('form.xml');
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
 
         // Menu Extension

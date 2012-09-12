@@ -11,7 +11,6 @@
         <parameter key="smarty.extension.core.class">NoiseLabs\Bundle\SmartyBundle\Extension\CoreExtension</parameter>
         <parameter key="smarty.extension.actions.class">NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension</parameter>
         <parameter key="smarty.extension.assets.class">NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension</parameter>
-        <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
         <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
         <parameter key="smarty.extension.security.class">NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension</parameter>
         <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
@@ -44,12 +43,6 @@
         <service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="service_container" />
-        </service>
-
-        <service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
-            <tag name="smarty.extension" />
-            <argument type="service" id="templating.engine.smarty" />
-            <argument>%smarty.form.resources%</argument>
         </service>
 
         <service id="smarty.extension.routing" class="%smarty.extension.routing.class%" public="false">
