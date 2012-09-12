@@ -1,5 +1,5 @@
 .. _ch_extensions:
-    
+
 **********
 Extensions
 **********
@@ -34,90 +34,7 @@ Following the example presented in the link above, the Smarty equivalents are:
 Assetic Extension
 =================
 
-`Assetic <https://github.com/kriswallsmith/assetic>`_ is an asset management framework for PHP. This extensions provides support for it's usage in Symfony2 when using Smarty templates.
-
-Assetic combines two major ideas: assets and filters. The assets are files such as CSS, JavaScript and image files. The filters are things that can be applied to these files before they are served to the browser. This allows a separation between the asset files stored in the application and the files actually presented to the user.
-
-Using Assetic provides many advantages over directly serving the files. The files do not need to be stored where they are served from and can be drawn from various sources such as from within a bundle:
-
-.. code-block:: html+smarty
-
-    {javascripts
-        assets='@AcmeFooBundle/Resources/public/js/*'
-    }
-    <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-
-To bring in CSS stylesheets, you can use the same methodologies seen in this entry, except with the stylesheets tag:
-
-.. code-block:: html+smarty
-
-    {stylesheets
-        assets='@AcmeFooBundle/Resources/public/css/*'
-    }
-    <link rel="stylesheet" href="{$asset_url}" />
-    {/stylesheets}
-
-Combining Assets
-----------------
-
-You can also combine several files into one. This helps to reduce the number of HTTP requests, which is great for front end performance. It also allows you to maintain the files more easily by splitting them into manageable parts. This can help with re-usability as you can easily split project-specific files from those which can be used in other applications, but still serve them as a single file:
-
-.. code-block:: html+smarty
-
-    {javascripts
-        assets='@AcmeFooBundle/Resources/public/js/*,
-                @AcmeBarBundle/Resources/public/js/form.js,
-                @AcmeBarBundle/Resources/public/js/calendar.js'
-    }
-    <script src="{$asset_url}"></script>
-    {/javascripts}
-
-In the dev environment, each file is still served individually, so that you can debug problems more easily. However, in the prod environment, this will be rendered as a single script tag.
-
-Block attributes
-----------------
-
-Here is a list of the possible attributes to define in the block function.
-
-* ``assets``: A comma-separated list of files to include in the build (CSS, JS or image files)
-* ``debug``: If set to true, the plugin will not combine your assets to allow easier debug
-* ``filter``: A coma-separated list of filters to apply. Currently, only LESS and YuiCompressor (both CSS and JS) are supported
-* ``combine``: Combine all of your CSS and JS files (overrides `debug`)
-* ``output``: Defines the URLs that Assetic produces
-* ``var_name``: The variable name that will be used to pass the asset URL to the <link> tag
-* ``as``: An alias to ``var_name``. Example: ``as='js_url'``
-* ``vars``: Array of asset variables. For a description of this recently added feature please check out the `Johannes Schmitt blog post <http://jmsyst.com/blog/asset-variables-in-assetic>`_ about Asset Variables in Assetic.
-
-    **Note:** Unlike the examples given in the `Asset Variables in Assetic <http://jmsyst.com/blog/asset-variables-in-assetic>`_, which uses curly brackets for the ``vars`` placeholder we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``js/messages.{locale}.js`` becomes ``js/messages.[locale].js``.
-
-Full example
-------------
-
-Example using all available attributes:
-
-.. code-block:: html+smarty
-
-    {javascripts
-        assets='@AcmeFooBundle/Resources/public/js/*,
-                @AcmeBarBundle/Resources/public/js/form.js,
-                @AcmeBarBundle/Resources/public/js/calendar.js',
-                @AcmeBarBundle/Resources/public/js/messages.[locale].js
-        filter='yui_js'
-        output='js/compiled/main.js'
-        var_name='js_url'
-        vars=['locale']
-    }
-    <script src="{$js_url}"></script>
-    {/javascripts}
-
-Symfony/Assetic documentation
------------------------------
-
-For further details please refer to the Symfony documentation pages about Assetic:
-
-* `How to Use Assetic for Asset Management <http://symfony.com/doc/current/cookbook/assetic/asset_management.html>`_
-* `How to Minify JavaScripts and Stylesheets with YUI Compressor <http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html>`_
+See chpater :ref:`ch_assetic` for complete documentation about Assetic support in SmartyBundle.
 
 Assets Extension
 ================
@@ -142,54 +59,8 @@ Usage in template context:
 Form Extension
 ==============
 
-Rendering a Form
-----------------
+Form extension provides support for `Symfony2 Forms <http://symfony.com/doc/current/book/forms.html>`_ and it is described in its own chapter. :ref:`Go there now <ch_forms>`.
 
-First you need to create a form instance as described in `Creating a Simple Form <http://symfony.com/doc/current/book/forms.html#creating-a-simple-form>`_. 
-
-.. code-block:: php
-    :emphasize-lines: 23
-
-    // src/Acme/TaskBundle/Controller/DefaultController.php
-    namespace Acme\TaskBundle\Controller;
-
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    use Acme\TaskBundle\Entity\Task;
-    use Symfony\Component\HttpFoundation\Request;
-
-    class DefaultController extends Controller
-    {
-        public function newAction(Request $request)
-        {
-            // create a task and give it some dummy data for this example
-            $task = new Task();
-            $task->setTask('Write a blog post');
-            $task->setDueDate(new \DateTime('tomorrow'));
-
-            $form = $this->createFormBuilder($task)
-                ->add('task', 'text')
-                ->add('dueDate', 'date')
-                ->getForm();
-
-            return $this->render('AcmeTaskBundle:Default:new.html.twig', array(
-                'form' => $form->createView(),
-            ));
-        }
-    }
-
-Once you create a form instance, the next step is to render it. This is done by passing a special form "view" object to your template (notice the $form->createView() in the controller above) and using a set of form helper functions:
-
-.. code-block:: html+smarty
-
-    {# src/Acme/TaskBundle/Resources/views/Default/new.html.smarty #}
-    <form action="{'task_new'|path}" method="post" {form_enctype form=$form}>
-        {form_widget form=$form}
-
-        <input type="submit" />
-    </form>
-
-*More examples coming soon...*
-    
 Routing Extension
 =================
 
@@ -235,7 +106,7 @@ You may translate a message, in a template, using a block or modifier. Both meth
     <!-- In case you're curious, the latter returns "Olá Mundo!" :) -->
 
 ``trans`` modifier:
-    
+
 .. code-block:: html+smarty
 
     {"Hello World!"|trans}
@@ -248,7 +119,7 @@ You may translate a message, in a template, using a block or modifier. Both meth
 `Message pluralization <http://symfony.com/doc/2.0/book/translation.html#pluralization>`_ can be achieved using ``transchoice``:
 
 .. warning::
-    
+
     Unlike the examples given in the `Symfony documentation <http://symfony.com/doc/2.0/book/translation.html#explicit-interval-pluralization>`_, which uses curly brackets for explicit interval pluralization we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``{0} There is no apples`` becomes ``[0] There is no apples``.
 
 ``transchoice`` block:
@@ -258,8 +129,8 @@ You may translate a message, in a template, using a block or modifier. Both meth
     {transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}
 
 ``transchoice`` modifier:
-    
-.. code-block:: html+smarty    
+
+.. code-block:: html+smarty
 
     {'[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples'|transchoice:$count}
     <!-- Should write: "There is 5 apples" -->
@@ -275,7 +146,7 @@ This extension provides access control inside a Smarty template. This part of th
   If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
 
 Usage:
-    
+
 .. code-block:: html+smarty
 
     {if 'IS_AUTHENTICATED_FULLY'|is_granted:$object:$field}
@@ -315,7 +186,7 @@ The ``getName()`` method must return a unique identifier for your extension:
 .. code-block:: php
 
     namespace NoiseLabs\Bundle\SmartyBundle\Extension;
-    
+
     class TranslationExtension extends AbstractExtension
     {
         public function getName()
@@ -406,4 +277,3 @@ There are no restrictions about the type of the array elements returned by ``get
             );
         }
     }
-    

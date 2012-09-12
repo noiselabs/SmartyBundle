@@ -21,6 +21,8 @@ This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smar
     installation
     usage
     extensions
+    assetic
+    forms
     bootstrap
     reference
 
