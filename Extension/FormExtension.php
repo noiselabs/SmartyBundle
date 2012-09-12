@@ -312,7 +312,7 @@ class FormExtension extends AbstractExtension
                 $this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
                 ob_start();
-                $functionExists = $this->displayTemplateFunction($template,
+                $functionExists = $this->engine->renderTemplateFunction($template,
                     $function, $this->varStack[$rendering]['variables']);
                 $html = ob_get_clean();
 
@@ -387,7 +387,7 @@ class FormExtension extends AbstractExtension
 
         foreach ($resources as $resource) {
             if ($this->engine->exists($resource)) {
-                $this->templates->attach($this->loadTemplate($resource));
+                $this->templates->attach($this->engine->createTemplate($resource));
             }
         }
 
@@ -396,32 +396,6 @@ class FormExtension extends AbstractExtension
         }
 
         return $this->templates;
-    }
-
-    /**
-     * Creates a SmartyTemplate from a logical template name.
-     *
-     * @since  0.2.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     *
-     * @param string  $name       A template name
-     * @param mixed   $cache_id   cache id to be used with this template
-     * @param mixed   $compile_id compile id to be used with this template
-     * @param object  $parent     next higher level of Smarty variables
-     * @param boolean $do_clone   flag is Smarty object shall be cloned
-     *
-     * @return SmartyTemplate A SmartyTemplate instance.
-     */
-    protected function loadTemplate($name, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
-    {
-        $smarty = $this->engine->getSmarty();
-        $filename = $this->engine->load($name);
-
-        $template = $smarty->createTemplate($filename, $cache_id, $compile_id,
-        $parent, $do_clone);
-        $template->fetch();
-
-        return $template;
     }
 
     /**
@@ -445,40 +419,6 @@ class FormExtension extends AbstractExtension
         foreach ($this->templates as $template) {
             if (in_array($function, array_keys($template->template_functions))) {
                 return $template;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Renders the Smarty template function.
-     *
-     * Thanks to Uwe Tews for providing information on Smarty inner workings
-     * allowing the call to the template function from within the plugin:
-     * {@link http://stackoverflow.com/questions/9152047/in-smarty3-call-a-template-function-defined-by-the-function-tag-from-within-a}.
-     *
-     * \Smarty_Internal_Function_Call_Handler is defined in file
-     * smarty/libs/sysplugins/smarty_internal_function_call_handler.php.
-     *
-     * @since  0.2.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
-     *
-     * @deprecated by SmartyEngine::renderTemplateFunction()
-     */
-    protected function displayTemplateFunction(SmartyTemplate $template, $function,
-    array $attributes = array())
-    {
-        if ($template->caching) {
-            \Smarty_Internal_Function_Call_Handler::call($function,
-            $template, $attributes, $template->properties['nocache_hash'], false);
-
-            return true;
-        } else {
-            if (is_callable($function = 'smarty_template_function_'.$function)) {
-                $function($template, $attributes);
-
-                return true;
             }
         }
 

@@ -230,7 +230,10 @@ class SmartyEngine implements EngineInterface
 
         $template = $this->smarty->createTemplate($template, $this->smarty);
         if (true === $load) {
-            // $template->compileTemplateSource() doesn't seem to be enough
+            /**
+             * We use `$template->fetch()`because `$template->compileTemplateSource()`
+             * doesn't seem to be enough.
+             */
             $template->fetch();
         }
 
@@ -238,6 +241,15 @@ class SmartyEngine implements EngineInterface
     }
 
     /**
+     * Renders the Smarty template function.
+     *
+     * Thanks to Uwe Tews for providing information on Smarty inner workings
+     * allowing the call to the template function from within the plugin:
+     * {@link http://stackoverflow.com/questions/9152047/in-smarty3-call-a-template-function-defined-by-the-function-tag-from-within-a}.
+     *
+     * \Smarty_Internal_Function_Call_Handler is defined in file
+     * smarty/libs/sysplugins/smarty_internal_function_call_handler.php.
+     *
      * @note The template functions do not return the HTML output, but put it
      * directly into the output buffer.
      *
