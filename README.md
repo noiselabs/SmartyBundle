@@ -1,6 +1,11 @@
 SmartyBundle
 ============
 
+[@documentation]:   http://smartybundle.noiselabs.org/  "SmartyBundle Documentation"
+[@php]:             http://php.net/                     "PHP: Hypertext Preprocessor"
+[@smarty]:          http://www.smarty.net/              "The compiling PHP template engine"
+[@symfony]:         http://www.symfony.com/             "High Performance PHP Framework for Web Development"
+
 This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
 [![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png?branch=master)](http://travis-ci.org/noiselabs/SmartyBundle)
@@ -11,9 +16,9 @@ For maximum compatibility with Symfony 2.0.x, you need to use releases 1.0.x of 
 Requirements
 ------------
 
-* PHP 5.3.2 and up.
-* [Smarty 3](http://www.smarty.net)
-* [Symfony 2](http://www.symfony.com)
+* [PHP][@php] 5.3.3 and up.
+* [Smarty 3][@smarty]
+* [Symfony 2][@symfony]
 
 Installation
 ------------
@@ -68,7 +73,7 @@ For other installation methods (Symfony-2.0 vendors script or git submodules) pl
 Documentation
 -------------
 
-Complete documentation is available at http://smartybundle.noiselabs.org/
+Complete documentation is available at [@documentation]
 
 License
 -------
