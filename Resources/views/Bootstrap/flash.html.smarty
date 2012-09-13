@@ -1,0 +1,45 @@
+{function name=flash type=false close=false use_raw=false class='' domain='messages'}
+    <div class="alert{($type) ? " alert-$type" : ""} fade in {$class}">
+    {if $close}
+        <a class="close" data-dismiss="alert" href="#">×</a>
+    {/if}
+    {if $use_raw}
+        {$message|trans:[]:$domain}{*|raw*}
+    {else}
+        {$message|trans:[]:$domain}
+    {/if}
+    </div>
+{/function}
+
+{function name=advanced_flash type=false heading=false message='' close_tag=false use_raw=false class='' domain='messages'}
+    <div class="alert{($type) ? " alert-$type" : "" } alert-block fade in {$class}">
+    {if $close_tag}
+        {if $close_tag == true}
+            {$close_tag = 'a'}
+        {/if}
+        <{$close_tag} class="close" data-dismiss="alert" {if $close_tag == 'a'}href="#"{/if}>×</{$close_tag}>
+    {/if}
+    {if $heading}
+    <h4 class="alert-heading">{$heading}</h4>
+    {/if}
+    {if $use_raw}
+        {$message|trans:[]:$domain|default:'messages'}{*|raw*}
+    {else}
+        {$message|trans:[]:$domain|default:'messages'}
+    {/if}
+    </div>
+{/function}
+
+{function name=session_flash close=false use_raw=false class='' domain='messages'}
+    {if $app->geSession()->getFlashBag()->peekAll()|length > 0}
+        {foreach $app->getSession()->getFlashBag()->all() as $type => $messages}
+            {foreach $messages as $message}
+                {if $type == 'fos_user_success'}
+                    {$type='success'}
+                    {$domain='FOSUserBundle'}
+                {/if}
+                {flash type=$type message=$message close=$close use_raw=$use_raw class=$class domain=$domain}
+            {/foreach}
+        {/foreach}
+    {/if}
+{/function}

@@ -16,29 +16,24 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.1.0
+ * @since       0.2.0
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Form;
 
-require_once (defined('SMARTY_DIR')) ?
-    SMARTY_DIR.'Smarty.class.php' :
-    'Smarty.class.php';
+use Symfony\Component\Form\FormRendererInterface;
 
 /**
- * Smarty.
- *
- * @since  0.1.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class Smarty extends \Smarty
+interface SmartyRendererInterface extends FormRendererInterface
 {
 }

@@ -71,11 +71,13 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
-        /*
-         * AsseticExtension
-         */
-        if (in_array('AsseticBundle', array_keys($container->getParameter('kernel.bundles')))) {
+         // Enable AsseticExtension if undefined (legacy support)
+        if (!isset($config['assetic'])) {
+            $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
+        }
 
+        // Assetic Extension
+        if (true === $config['assetic']) {
             $loader->load('assetic.xml');
 
             // choose dynamic or static
@@ -87,11 +89,24 @@ class SmartyExtension extends Extension
                 $container->removeDefinition('smarty.extension.assetic.dynamic');
             }
         }
+        $container->setParameter('smarty.assetic', $config['assetic']);
 
-        /*
-         * FormExtension
-         */
+        // Bootstrap Extensions
+        if (true === $config['bootstrap']) {
+            $loader->load('bootstrap.xml');
+            $config['menu'] = true; // "bootstrap" requires "menu" so enable it
+        }
+        $container->setParameter('smarty.bootstrap', $config['bootstrap']);
+
+         // Form Extension
+        $loader->load('form.xml');
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
+
+        // Menu Extension
+        if (true === $config['menu']) {
+            $loader->load('menu.xml');
+        }
+        $container->setParameter('smarty.menu', $config['menu']);
 
         /**
          * @note Caching of Smarty classes was causing issues because of the

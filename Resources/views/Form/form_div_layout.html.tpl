@@ -2,7 +2,7 @@
 
 {function form_widget}
     <div {call widget_container_attributes}>
-        {call field_rows}
+        {call form_rows}
         {form_rest form=$form}
     </div>
 {/function}
@@ -69,7 +69,7 @@
 
 {function datetime_widget}
     {if $widget == 'single_text'}
-        {call field_widget}
+        {call form_widget}
     {else}
         <div {call widget_container_attributes}>
             {form_errors form=$form.date}
@@ -82,7 +82,7 @@
 
 {function date_widget}
     {if widget == 'single_text'}
-        {call field_widget}
+        {call form_widget}
     {else}
         {*<div {call widget_container_attributes}>
             {{ date_pattern|replace({
@@ -96,7 +96,7 @@
 
 {function time_widget}
     {if widget == 'single_text'}
-        {call field_widget}
+        {call form_widget}
     {else}
         {call slacker_notice function="time_widget"}
         {*<div {call widget_container_attributes}>
@@ -108,54 +108,54 @@
 {function number_widget}
     {* type="number" doesn't work with floats *}
     {$type=$type|default:'text'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function integer_widget}
     {$type=$type|default:'number'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function money_widget}
     {call slacker_notice function="money_widget"}
-    {*$_money_pattern.widget={call field_widget}}
+    {*$_money_pattern.widget={call form_widget}}
     {$money_pattern=array_replace($money_pattern, $_money_pattern)*}
-    {*{ money_pattern|replace({ '{{ widget }}': {call field_widget})|raw }*}
+    {*{ money_pattern|replace({ '{{ widget }}': {call form_widget})|raw }*}
 {/function}
 
 {function url_widget}
     {$type=$type|default:'url'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function search_widget}
     {$type=$type|default:'search'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function percent_widget}
     {$type=$type|default:'text'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
-{function field_widget}
+{function form_widget}
     {$type=$type|default:'text'}
     <input type="{$typ}" {call widget_attributes} {if !empty($value)}value="{$value}" {/if}/>
 {/function}
 
 {function password_widget}
     {$type=$type|default:'password'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function hidden_widget}
     {$type=$type|default:'hidden'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {function email_widget}
     {$type=$type|default:'email'}
-    {call field_widget}
+    {call form_widget}
 {/function}
 
 {* Labels *}
@@ -167,7 +167,7 @@
     <label{foreach $attr as $attrname=>$attrvalue} {$attrname}="{$attrvalue}"{/foreach}>{$label|trans}</label>
 {/function}
 
-{function field_label}
+{function form_label}
     {$_attr.for=$id}
     {$attr=array_merge($attr, $_attr)}
     {call generic_label}
@@ -180,10 +180,10 @@
 {* Rows *}
 
 {function repeated_row}
-    {call field_rows}
+    {call form_rows}
 {/function}
 
-{function field_row}
+{function form_row}
     <div>
         {form_label form=$form label=$label|default:null}
         {form_errors form=$form}
@@ -197,11 +197,11 @@
 
 {* Misc *}
 
-{function field_enctype}
+{function form_enctype}
     {if $multipart}enctype="multipart/form-data"{/if}
 {/function}
 
-{function field_errors}
+{function form_errors}
     {if errors|count > 0}
     <ul>
         {foreach $errors as $error}
@@ -211,7 +211,7 @@
     {/if}
 {/function}
 
-{function field_rest}
+{function form_rest}
     {foreach $form as $child}
         {if !$child.rendered}
             {form_row form=$child}
@@ -221,7 +221,7 @@
 
 {* Support *}
 
-{function field_rows}
+{function form_rows}
     {form_errors form=$form}
     {foreach $form as $child}
         {form_row form=$child}

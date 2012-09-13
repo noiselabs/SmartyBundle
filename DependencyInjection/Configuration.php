@@ -72,6 +72,14 @@ class Configuration implements ConfigurationInterface
         $this->addGlobalsSection($rootNode);
         $this->addSmartyOptions($rootNode);
 
+        $rootNode
+            ->children()
+                ->booleanNode('assetic')->end()
+                ->booleanNode('bootstrap')->defaultValue(false)->end()
+                ->booleanNode('menu')->defaultValue(false)->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 
@@ -197,6 +205,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('plugins_dir')->end()
                         ->scalarNode('smarty_debug_id')->end()
                         ->scalarNode('template_dir')->defaultValue('%kernel.root_dir%/Resources/views')->cannotBeEmpty()->end()
+                        ->booleanNode('trim_whitespace')->defaultFalse()->end()
                         ->scalarNode('trusted_dir')->end()
                         ->scalarNode('use_include_path')->defaultFalse()->end()
                         ->scalarNode('use_sub_dirs')->defaultTrue()->end()

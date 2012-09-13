@@ -1,0 +1,36 @@
+{function name=navbar navbar=null}
+<div class="navbar {($navbar->hasOption('fixedTop') &&  $navbar->getOption('fixedTop')) ? 'navbar-fixed-top' : '' }">
+    <div class="navbar-inner">
+        <div class="container{($navbar->hasOption('isFluid') && $navbar->getOption('isFluid')) ? '-fluid' : '' }">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            {if $navbar->hasOption('title')}<a class="brand" href="{$navbar->getOption('titleRoute')|path}">{$navbar->getOption('title')}</a>{/if}
+            <div class="nav-collapse">
+                {($navbar->hasMenu('leftmenu')) ? {$navbar->getMenu('leftmenu')|knp_menu_render:['currentClass'=>'active','ancestorClass'=>'active','allow_safe_labels'=>'true']} : '' }
+                {if $navbar->hasFormView('searchform')}
+                    {$form_view=$navbar->getFormView('searchform')}
+                    {$form_type=$navbar->getFormType('searchform')}
+                    {$form_attrs=$form_view.vars.attr}
+                    {$form_theme=$form_view}
+                    <form class="navbar-search pull-{$form_attrs.pull|default:'left'}" method="{ $form_attrs.method|default:'post'}" action="{$navbar->getFormRoute('searchform')|path}">
+                    {call form_widget form=$form_view}
+                    </form>
+                {/if}
+                {($navbar->hasMenu('rightmenu')) ? {$navbar->getMenu('rightmenu')|knp_menu_render:['currentClass'=>'active','ancestorClass'=>'active','allow_safe_labels'=>'true']} : ''}
+            </div>
+
+        </div>
+    </div>
+</div>
+{/function}
+
+{*block form_widget}
+{{ block('field_rows') }}
+{/block*}
+
+{*block field_row}
+{{ form_widget(form) }}
+{/block*}
