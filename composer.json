@@ -26,8 +26,7 @@
         "mopa/bootstrap-bundle": "dev-master"
     },
     "suggest": {
-        "symfony/assetic-bundle": "Integrates Assetic into Symfony2",
-        "mopa/bootstrap-bundle": "Easy integration of Twitter Bootstrap into Symfony2"
+        "symfony/assetic-bundle": "Integrates Assetic into Symfony2"
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
@@ -36,7 +35,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
