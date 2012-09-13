@@ -24,7 +24,6 @@
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.2.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Form;
@@ -37,11 +36,14 @@ use Symfony\Component\Form\FormView;
  */
 class SmartyRendererEngine extends AbstractRendererEngine implements SmartyRendererEngineInterface
 {
-/**
+    /**
      * {@inheritdoc}
      */
     public function renderBlock(FormView $view, $resource, $blockName, array $variables = array())
     {
+        $cacheKey = $view->vars[self::CACHE_KEY_VAR];
+
+        // TODO: Move body of FormExtension::render() to here.
     }
 
     /**

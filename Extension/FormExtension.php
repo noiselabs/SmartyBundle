@@ -24,7 +24,6 @@
  * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
- * @since       0.2.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
@@ -53,7 +52,6 @@ use Symfony\Component\Templating\EngineInterface;
  * Thanks to Smarty developers Uwe Tews and Rodney Rehm for 1) patience and 2)
  * insight on Smarty internals.
  *
- * @since  0.2.0
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class FormExtension extends AbstractExtension

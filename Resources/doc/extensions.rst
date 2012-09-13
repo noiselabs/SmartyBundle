@@ -34,7 +34,7 @@ Following the example presented in the link above, the Smarty equivalents are:
 Assetic Extension
 =================
 
-See chpater :ref:`ch_assetic` for complete documentation about Assetic support in SmartyBundle.
+See chapter :ref:`ch_assetic` for complete documentation about Assetic support in SmartyBundle.
 
 Assets Extension
 ================

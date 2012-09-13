@@ -7,11 +7,15 @@
 SmartyBundle
 ############
 
-:Author: Vítor Brandão (noisebleed@noiselabs.org)
-:Version: |release|
-:Date: |today|
+    This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
 
-This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
+.. image:: _static/images/symfony.png
+    :target: http://symfony.com
+    :height: 80px
+
+.. image:: _static/images/smarty.png
+    :target: http://smarty.net
+    :height: 80px
 
 .. toctree::
     :maxdepth: 3
@@ -25,20 +29,7 @@ This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smar
     forms
     bootstrap
     reference
-
-*******
-Authors
-*******
-
-Vítor Brandão - noisebleed@noiselabs.org ~ `twitter.com/noiselabs <http://twitter.com/noiselabs>`_ ~ `blog.noiselabs.org <http://blog.noiselabs.org>`_
-
-See also the list of `contributors <https://github.com/noiselabs/SmartyBundle/contributors>`_ who participated in this project.
-
-************************************
-Submitting bugs and feature requests
-************************************
-
-Bugs and feature requests are tracked on `GitHub <https://github.com/noiselabs/SmartyBundle/issues>`_.
+    contributing
 
 *******************
 Indices and tables
@@ -46,3 +37,7 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
+
+:Author: Vítor Brandão (noisebleed@noiselabs.org)
+:Version: |release|
+:Date: |today|

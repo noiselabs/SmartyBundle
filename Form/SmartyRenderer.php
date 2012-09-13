@@ -30,6 +30,7 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Form;
 
 use Symfony\Component\Form\FormRenderer;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 
 /**
@@ -55,4 +56,16 @@ class SmartyRenderer extends FormRenderer implements SmartyRendererInterface
 
         $this->engine = $engine;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see
+     */
+    public function searchAndRenderBlock2(FormView $view, $blockNameSuffix, array $variables = array())
+    {
+        var_dump($blockNameSuffix);
+        die('not found');
+    }
+
 }
