@@ -73,7 +73,7 @@ For other installation methods (Symfony-2.0 vendors script or git submodules) pl
 Documentation
 -------------
 
-Complete documentation is available at [@documentation]
+Complete documentation is available in the [SmartyBundle website][@documentation].
 
 License
 -------
