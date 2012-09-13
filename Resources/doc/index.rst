@@ -25,7 +25,9 @@ Summary
 .. toctree::
     :maxdepth: 3
     :numbered:
+    :hidden:
 
+    quickstart
     intro
     installation
     usage
@@ -36,74 +38,73 @@ Summary
     reference
     contributing
 
-**********
 Quickstart
-**********
+----------
 
-Requirements
+.. toctree::
+    :maxdepth: 3
+
+    quickstart
+
+Introduction
 ------------
 
-* `PHP <http://php.net>`_ 5.3.3 and up.
-* `Symfony 2 <http://www.symfony.com>`_
-* `Smarty 3 <http://www.smarty.net>`_
+.. toctree::
+    :maxdepth: 3
+
+    intro
 
 Installation
 ------------
 
-SmartyBundle is composer-friendly.
+.. toctree::
+    :maxdepth: 3
 
-Add SmartyBundle in your composer.json
+    installation
 
-.. code-block:: json
+.. toctree::
 
-    {
-        "require": {
-            "noiselabs/smarty-bundle": "dev-master"
-        }
-    }
+Simple usage
+------------
 
-Now tell composer to download the bundle by running the command:
+.. toctree::
+    :maxdepth: 3
 
-.. code-block:: bash
+    usage
 
-    $ php composer.phar update noiselabs/smarty-bundle
+SmartyBundle Extensions
+-----------------------
 
+.. toctree::
+    :maxdepth: 3
 
-Composer will install the bundle to your project's `vendor/noiselabs` directory.
+    extensions
 
-Enable the bundle
------------------
+Major components: Assetic, Forms and Twitter-Bootstrap
+------------------------------------------------------
 
-Enable the bundle in the kernel:
+.. toctree::
+    :maxdepth: 3
 
-.. code-block:: php
+    assetic
+    forms
+    bootstrap
 
-    <?php
-    // app/AppKernel.php
+Configuration Reference
+-----------------------
 
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-            new NoiseLabs\Bundle\SmartyBundle\SmartyBundle(),
-        );
-    }
+.. toctree::
+    :maxdepth: 3
 
-Enable the Smarty template engine in the config
+    reference
 
-.. code-block:: yaml
+Contributing to SmartyBundle (Coding Standards)
+------------------------------------------------
 
-    # app/config/config.yml
-    framework:
-        templating:      { engines: ['twig', 'smarty'] }
+.. toctree::
+    :maxdepth: 3
 
-
-*******************
-Indices and tables
-*******************
-
-* :ref:`genindex`
-* :ref:`search`
+    contributing
 
 *******
 License
@@ -115,10 +116,25 @@ This bundle is licensed under the LGPL-3 License. See the `LICENSE file <https:/
 Credits
 *******
 
+Documentation
+--------------
+
 :Author: Vítor Brandão (noisebleed@noiselabs.org)
 :Version: |release|
 :Date: |today|
 
+Code
+----
+
+A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/SmartyBundle/graphs/contributors>`_ and everyone who helped along the way.
+
 .. note::
 
     A lot of the content found in this documentation was "borrowed" from Smarty and Symfony2 documentation pages and websites. Credits goes to Smarty and Symfony authors and contributors.
+
+*******************
+Indices and tables
+*******************
+
+* :ref:`genindex`
+* :ref:`search`

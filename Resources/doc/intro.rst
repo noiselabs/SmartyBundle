@@ -1,5 +1,5 @@
 .. _ch_intro:
-    
+
 ************
 Introduction
 ************
@@ -7,7 +7,7 @@ Introduction
 This bundle was created to support `Smarty <http://www.smarty.net/>`_ in Symfony2, providing an alternative to the `Twig <http://twig.sensiolabs.org/>`_ template engine natively supported.
 
 .. note::
-    
+
     An effort was made to provide, where possible, the same user configuration and extensions available for the Twig bundle. This is to allow easy switching between the two bundles (at least I hope so!).
 
 What is Smarty?
@@ -37,11 +37,11 @@ See the `Smarty3 Manual <http://www.smarty.net/docs/en/>`_ for other features an
 Requirements
 ============
 
-* PHP 5.3.2 and up.
-* Smarty 3
-* Symfony 2
+* `PHP <http://php.net>`_ 5.3.3 and up.
+* `Symfony 2 <http://www.symfony.com>`_
+* `Smarty 3 <http://www.smarty.net>`_
 
 License
 =======
 
-This bundle is licensed under the LGPLv3 License. See the `LICENSE file <https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE>`_ for details.    
+This bundle is licensed under the LGPL-3 License. See the `LICENSE file <https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE>`_ for details.

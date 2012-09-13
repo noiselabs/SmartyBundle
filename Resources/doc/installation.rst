@@ -1,5 +1,5 @@
 .. _ch_installation:
-    
+
 ************
 Installation
 ************
@@ -24,8 +24,8 @@ Add SmartyBundle in your ``composer.json``':
 
 
 Now tell composer to download the bundle by running the command:
-    
-.. code-block:: bash    
+
+.. code-block:: bash
 
     $ php composer.phar update noiselabs/smarty-bundle
 
@@ -53,8 +53,8 @@ Using submodules
 ----------------
 
 If you prefer instead to use git submodules, then run the following:
-    
-.. code-block:: bash    
+
+.. code-block:: bash
 
     $ git submodule add git://github.com/noiselabs/SmartyBundle.git vendor/bundles/NoiseLabs/Bundle/SmartyBundle
     $ git submodule update --init
@@ -98,9 +98,8 @@ Enable the Smarty template engine in the config
 .. configuration-block::
 
     .. code-block:: yaml
-    
+
         # app/config/config.yml
         # ...
         framework:
             templating:      { engines: ['twig', 'smarty'] }
-    

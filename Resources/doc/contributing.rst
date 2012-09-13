@@ -10,7 +10,7 @@ Submitting bugs and feature requests
 Bugs and feature requests are tracked on `GitHub <https://github.com/noiselabs/SmartyBundle/issues>`_.
 
 Coding Standards
-----------------
+================
 
 When contributing to SmartyBundle you should follow the standards defined in the `PSR-0`_, `PSR-1`_ and `PSR-2`_. documents.
 
