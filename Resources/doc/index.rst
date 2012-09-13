@@ -84,23 +84,22 @@ Configuration Reference
 
     reference
 
-Contributing to SmartyBundle (coding standards)
-------------------------------------------------
+Contributing to SmartyBundle: coding standards and API
+------------------------------------------------------
 
 .. toctree::
     :maxdepth: 3
 
     contributing
+    api
 
-*******
 License
-*******
+=======
 
 This bundle is licensed under the LGPL-3 License. See the `LICENSE file <https://github.com/noiselabs/SmartyBundle/blob/master/Resources/meta/LICENSE>`_ for details.
 
-*******
 Credits
-*******
+=======
 
 Documentation
 --------------
@@ -118,10 +117,8 @@ A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/Sma
 
     A lot of the content found in this documentation was "borrowed" from Smarty and Symfony2 documentation pages and websites. Credits goes to Smarty and Symfony authors and contributors.
 
-
-*******************
 Indices and tables
-*******************
+==================
 
 * :ref:`genindex`
 * :ref:`search`
