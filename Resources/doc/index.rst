@@ -17,17 +17,11 @@ SmartyBundle
     :target: http://smarty.net
     :height: 50px
 
-
-********
-Summary
-********
-
 .. toctree::
     :maxdepth: 3
     :numbered:
     :hidden:
 
-    quickstart
     intro
     installation
     usage
@@ -37,14 +31,6 @@ Summary
     bootstrap
     reference
     contributing
-
-Quickstart
-----------
-
-.. toctree::
-    :maxdepth: 3
-
-    quickstart
 
 Introduction
 ------------
@@ -98,7 +84,7 @@ Configuration Reference
 
     reference
 
-Contributing to SmartyBundle (Coding Standards)
+Contributing to SmartyBundle (coding standards)
 ------------------------------------------------
 
 .. toctree::
@@ -131,6 +117,7 @@ A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/Sma
 .. note::
 
     A lot of the content found in this documentation was "borrowed" from Smarty and Symfony2 documentation pages and websites. Credits goes to Smarty and Symfony authors and contributors.
+
 
 *******************
 Indices and tables
