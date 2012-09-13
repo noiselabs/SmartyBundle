@@ -5,6 +5,9 @@ This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty
 
 [![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png?branch=master)](http://travis-ci.org/noiselabs/SmartyBundle)
 
+**Caution:** This bundle is developed in sync with [Symfony's repository](https://github.com/symfony/symfony).
+For maximum compatibility with Symfony 2.0.x, you need to use the 1.0.0 release of the bundle (or lower).
+
 Requirements
 ------------
 
@@ -66,15 +69,6 @@ Documentation
 -------------
 
 Complete documentation is available at http://smartybundle.noiselabs.org/
-
-### Extensions under development
-
-If you want to contribute to SmartyBundle please switch to the following branches when contributing to one of these extensions.
-
-* **Assetic** - [assetic-extension](https://github.com/noiselabs/SmartyBundle/tree/assetic-extension)
-* **Twitter Bootstrap** - [twitter-bootstrap](https://github.com/noiselabs/SmartyBundle/tree/twitter-bootstrap)
-* **Forms** - [form-extension](https://github.com/noiselabs/SmartyBundle/tree/form-extension)
-* **Security** - *completed, merged into master*
 
 License
 -------
