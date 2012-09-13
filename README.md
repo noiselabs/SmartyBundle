@@ -6,7 +6,7 @@ This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty
 [![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png?branch=master)](http://travis-ci.org/noiselabs/SmartyBundle)
 
 **Caution:** This bundle is developed in sync with [Symfony's repository](https://github.com/symfony/symfony).
-For maximum compatibility with Symfony 2.0.x, you need to use the 1.0.0 release of the bundle (or lower).
+For maximum compatibility with Symfony 2.0.x, you need to use releases 1.0.x of this bundle.
 
 Requirements
 ------------
