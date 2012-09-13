@@ -22,7 +22,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.0",
+        "symfony/framework-bundle": "2.1.*@beta",
         "smarty/smarty": "3.1.*@stable"
     },
     "require-dev": {
@@ -30,12 +30,11 @@
         "mopa/bootstrap-bundle": "dev-master"
     },
     "suggest": {
-        "symfony/assetic-bundle": "Integrates Assetic into Symfony2"
+        "symfony/assetic-bundle": "Assetic support in Smarty templates",
         "mopa/bootstrap-bundle": "Integration of Twitter Bootstrap into Symfony2",
         "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
         "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)",
         "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
-
     },
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
@@ -44,8 +43,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.1-dev"
         }
-    },
-    "include-path": ["../../smarty/smarty/distribution/libs/"]
+    }
 }
