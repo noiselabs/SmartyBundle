@@ -104,17 +104,17 @@ This bundle is licensed under the LGPL-3 License. See the `LICENSE file <https:/
 Credits
 =======
 
+Code
+----
+
+A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/SmartyBundle/graphs/contributors>`_ and everyone who helped along the way.
+
 Documentation
 --------------
 
 :Author: Vítor Brandão (noisebleed@noiselabs.org)
 :Version: |release|
 :Date: |today|
-
-Code
-----
-
-A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/SmartyBundle/graphs/contributors>`_ and everyone who helped along the way.
 
 .. note::
 
