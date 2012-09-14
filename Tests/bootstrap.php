@@ -16,19 +16,19 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011 Vítor Brandão
+ * Copyright (C) 2011-2012 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
  */
 
-if (file_exists($file = __DIR__.'/autoload.php')) {
-    require_once $file;
-} elseif (file_exists($file = __DIR__.'/autoload.php.dist')) {
-    require_once $file;
+if (!is_file($autoloadFile = __DIR__.'/../vendor/autoload.php')) {
+    throw new \LogicException('Could not find autoload.php in vendor/. Did you run "composer install --dev"?');
 }
+
+require $autoloadFile;

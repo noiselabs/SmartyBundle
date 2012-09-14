@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
     bootstrap="Tests/bootstrap.php"
     colors="true"
@@ -14,7 +13,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="NoiseLabs-SmartyBundle Test Suite">
+        <testsuite name="NoiseLabs SmartyBundle Test Suite">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
@@ -25,6 +24,7 @@
             <exclude>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
+                <directory>./vendor</directory>
             </exclude>
         </whitelist>
     </filter>
