@@ -3,20 +3,23 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+ 
 ############
 SmartyBundle
 ############
 
-    This `Symfony2 <http://symfony.com/>`_ bundle provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
+.. note::
 
-.. image:: _static/images/symfony.png
-    :target: http://symfony.com
-    :height: 50px
+    A `Symfony2 <http://symfony.com/>`_ bundle that provides integration for the `Smarty3 <http://www.smarty.net/>`_ template engine.
 
-.. image:: _static/images/smarty.png
-    :target: http://smarty.net
-    :height: 50px
+    .. image:: _static/images/symfony-50.png
+        :target: http://symfony.com
+        :height: 50px
 
+    .. image:: _static/images/smarty-50.png
+        :target: http://smarty.net
+        :height: 50px
+   
 .. toctree::
     :maxdepth: 3
     :numbered:
@@ -33,7 +36,7 @@ SmartyBundle
     contributing
 
 Introduction
-------------
+============
 
 .. toctree::
     :maxdepth: 3
@@ -41,7 +44,7 @@ Introduction
     intro
 
 Installation
-------------
+============
 
 .. toctree::
     :maxdepth: 3
@@ -51,7 +54,7 @@ Installation
 .. toctree::
 
 Simple usage
-------------
+============
 
 .. toctree::
     :maxdepth: 3
@@ -59,7 +62,7 @@ Simple usage
     usage
 
 SmartyBundle Extensions
------------------------
+=======================
 
 .. toctree::
     :maxdepth: 3
@@ -67,7 +70,7 @@ SmartyBundle Extensions
     extensions
 
 Major components: Assetic, Forms and Twitter-Bootstrap
-------------------------------------------------------
+======================================================
 
 .. toctree::
     :maxdepth: 3
@@ -77,7 +80,7 @@ Major components: Assetic, Forms and Twitter-Bootstrap
     bootstrap
 
 Configuration Reference
------------------------
+=======================
 
 .. toctree::
     :maxdepth: 3
@@ -85,7 +88,7 @@ Configuration Reference
     reference
 
 Contributing to SmartyBundle: coding standards and API
-------------------------------------------------------
+======================================================
 
 .. toctree::
     :maxdepth: 3
