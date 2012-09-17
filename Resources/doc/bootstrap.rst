@@ -1,3 +1,6 @@
+.. index::
+    single: Twitter Bootstrap
+
 .. _ch_bootstrap:
 
 *****************************

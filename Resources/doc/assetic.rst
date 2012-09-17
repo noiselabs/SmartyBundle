@@ -1,3 +1,6 @@
+.. index::
+    single: Assetic
+
 .. _ch_assetic:
 
 *******

@@ -90,23 +90,4 @@ Please see `Symfony2 - Template Naming and Locations <http://symfony.com/doc/2.0
 .. note::
     
     The `.html.smarty` extension can simply be replaced by `.smarty`. We are prefixing with `.html` to stick with the Symfony convention of defining the format (`.html`) and engine (`.smarty`) for each template.
-
-Injecting variables into all templates (i.e. Global Variables)
-==============================================================
-
-As exemplified in the `Symfony Cookbook <http://symfony.com/doc/current/cookbook/templating/global_variables.html>`_ it is possible to make a variable to be accessible to all the templates you use by configuring your `app/config/config.yml` file:
-    
-.. code-block:: yaml    
-
-    # app/config/config.yml
-    smarty:
-        # ...
-        globals:
-            ga_tracking: UA-xxxxx-x
-
-Now, the variable ga_tracking is available in all Smarty templates:
-    
-.. code-block:: html+smarty    
-
-    <p>Our google tracking code is: {$ga_tracking} </p>
-    
+   

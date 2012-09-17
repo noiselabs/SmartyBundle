@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
- 
+
 ############
 SmartyBundle
 ############
@@ -19,7 +19,7 @@ SmartyBundle
     .. image:: _static/images/smarty-50.png
         :target: http://smarty.net
         :height: 50px
-   
+
 .. toctree::
     :maxdepth: 3
     :numbered:
@@ -28,6 +28,7 @@ SmartyBundle
     intro
     installation
     usage
+    cookbook
     extensions
     assetic
     forms
@@ -53,13 +54,14 @@ Installation
 
 .. toctree::
 
-Simple usage
-============
+Basic Usage / Tips & Tricks
+============================
 
 .. toctree::
     :maxdepth: 3
 
     usage
+    cookbook
 
 SmartyBundle Extensions
 =======================
