@@ -84,12 +84,11 @@ class SmartyEngine implements EngineInterface
         // There are no default extensions.
         $this->extensions = array();
 
-        foreach (array('autoload_filters') as $property) {
-            if (isset($options[$property])) {
-                $this->smarty->$property = $options[$property];
-                unset($options[$property]);
-            }
+        // trim whitespace
+        if (true === $options['trim_whitespace']) {
+            $this->smarty->loadFilter('output','trimwhitespace');
         }
+        unset($options['trim_whitespace']);
 
         /**
          * @warning If you added template dirs to the Smarty instance prior to
