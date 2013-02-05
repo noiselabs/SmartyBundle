@@ -169,6 +169,8 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('allow_php_templates')->end()
                         ->scalarNode('auto_literal')->end()
+                        ->scalarNode('left_delimiter')->end()
+                        ->scalarNode('right_delimiter')->end()
                         ->arrayNode('autoload_filters')
                             ->info('filters that you wish to load on every template invocation')
                             ->canBeUnset()
