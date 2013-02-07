@@ -17,11 +17,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2012 Vítor Brandão
+ * Copyright (C) 2011-2013 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
