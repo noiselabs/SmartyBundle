@@ -14,6 +14,7 @@
         <parameter key="smarty.extension.routing.class">NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension</parameter>
         <parameter key="smarty.extension.security.class">NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension</parameter>
         <parameter key="smarty.extension.trans.class">NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension</parameter>
+        <parameter key="smarty.templating.finder.class">NoiseLabs\Bundle\SmartyBundle\CacheWarmer\SmartyTemplateFinder</parameter>
         <parameter key="smarty.cache_warmer.class">NoiseLabs\Bundle\SmartyBundle\CacheWarmer\SmartyCacheWarmer</parameter>
     </parameters>
 
@@ -64,10 +65,16 @@
         <service id="smarty_engine" alias="templating.engine.smarty" />
         <service id="smarty.engine" alias="templating.engine.smarty" />
 
+        <service id="smarty.templating.finder" class="%smarty.templating.finder.class%" public="true">
+            <argument type="service" id="kernel" />
+            <argument type="service" id="templating.filename_parser" />
+            <argument>%kernel.root_dir%/Resources</argument>
+        </service>
+
         <service id="smarty.cache_warmer" class="%smarty.cache_warmer.class%" public="false">
             <tag name="kernel.cache_warmer" />
             <argument type="service" id="service_container" />
-            <argument type="service" id="templating.finder" />
+            <argument type="service" id="smarty.templating.finder" />
         </service>
 
     </services>

@@ -75,10 +75,6 @@ class SmartyCacheWarmer implements CacheWarmerInterface
         $logger = $this->container->has('logger') ? $this->container->get('logger') : null;
 
         foreach ($this->finder->findAllTemplates() as $template) {
-            if (!in_array($template->get('engine'), array('smarty', 'tpl'))) {
-                continue;
-            }
-
             try {
                 $engine->compileTemplate($template, false);
             } catch (\Exception $e) {
