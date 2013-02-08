@@ -65,17 +65,27 @@ class SmartyCacheWarmer implements CacheWarmerInterface
      */
     public function warmUp($cacheDir)
     {
-        $smarty = $this->container->get('templating.engine.smarty');
+        // switch off time limit
+        if (function_exists('set_time_limit')) {
+            @set_time_limit($time_limit);
+        }
+
+        $engine = $this->container->get('templating.engine.smarty');
+        $smarty = $engine->getSmarty();
+        $logger = $this->container->has('logger') ? $this->container->get('logger') : null;
 
         foreach ($this->finder->findAllTemplates() as $template) {
-            if ('smarty' !== $template->get('engine')) {
+            if (!in_array($template->get('engine'), array('smarty', 'tpl'))) {
                 continue;
             }
 
             try {
-                $smarty->createTemplate($template);
+                $engine->compileTemplate($template, false);
             } catch (\Exception $e) {
-                // problem during compilation, give up
+                // problem during compilation, log it and give up
+                if ($logger) {
+                    $logger->warn(sprintf('Failed to compile Smarty template "%s": "%s"', (string) $template, $e->getMessage()));
+                }
             }
         }
     }
