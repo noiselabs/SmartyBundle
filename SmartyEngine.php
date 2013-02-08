@@ -228,14 +228,33 @@ class SmartyEngine implements EngineInterface
     public function createTemplate($name, $load = true)
     {
         $template = $this->load($name);
-
         $template = $this->smarty->createTemplate($template, $this->smarty);
+
         if (true === $load) {
             /**
              * We use `$template->fetch()`because `$template->compileTemplateSource()`
              * doesn't seem to be enough.
              */
             $template->fetch();
+        }
+
+        return $template;
+    }
+
+    /**
+     * Compiles a template object.
+     *
+     * @param mixed $name A template name
+     *
+     * @return Smarty_Internal_Template
+     */
+    public function compileTemplate($name, $forceCompile = false)
+    {
+        $template = $this->load($name);
+        $template = $this->smarty->createTemplate($template, $this->smarty);
+
+        if ($forceCompile || $template->mustCompile()) {
+            $template->compileTemplateSource();
         }
 
         return $template;
