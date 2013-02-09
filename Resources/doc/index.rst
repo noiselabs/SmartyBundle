@@ -29,6 +29,7 @@ SmartyBundle
     installation
     usage
     cookbook
+    commands
     extensions
     assetic
     forms
@@ -55,13 +56,14 @@ Installation
 .. toctree::
 
 Basic Usage / Tips & Tricks
-============================
+===========================
 
 .. toctree::
     :maxdepth: 3
 
     usage
     cookbook
+    commands
 
 SmartyBundle Extensions
 =======================

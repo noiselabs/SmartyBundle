@@ -58,7 +58,7 @@ class CompileCommand extends ContainerAwareCommand
                 'Force the compilation of all templates even if they weren\'t modified'
             )
             ->setHelp(<<<EOF
-The following command finds all known Smarty templates compiles them:
+The following command finds all known Smarty templates and compiles them:
 
 <info>php %command.full_name%</info>
 
