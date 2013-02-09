@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\CacheWarmer;
 
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
@@ -65,11 +66,6 @@ class SmartyCacheWarmer implements CacheWarmerInterface
      */
     public function warmUp($cacheDir)
     {
-        // switch off time limit
-        if (function_exists('set_time_limit')) {
-            @set_time_limit($time_limit);
-        }
-
         $engine = $this->container->get('templating.engine.smarty');
         $smarty = $engine->getSmarty();
         $logger = $this->container->has('logger') ? $this->container->get('logger') : null;
@@ -79,6 +75,7 @@ class SmartyCacheWarmer implements CacheWarmerInterface
                 $engine->compileTemplate($template, false);
             } catch (\Exception $e) {
                 // problem during compilation, log it and give up
+                $e = SmartyBundleRuntimeException::createFromPrevious($e, $template);
                 if ($logger) {
                     $logger->warn(sprintf('Failed to compile Smarty template "%s": "%s"', (string) $template, $e->getMessage()));
                 }

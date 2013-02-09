@@ -83,7 +83,7 @@ class SmartyTemplateFinder implements TemplateFinderInterface
     }
 
     /**
-     * Find templates in the given directory.
+     * Find Smarty templates in the given directory.
      *
      * @param string $dir The folder where to look for templates
      *

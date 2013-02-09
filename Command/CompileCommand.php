@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Command;
 
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,12 +58,14 @@ class CompileCommand extends ContainerAwareCommand
                 'Force the compilation of all templates even if they weren\'t modified'
             )
             ->setHelp(<<<EOF
+The following command finds all known Smarty templates compiles them:
+
 <info>php %command.full_name%</info>
 
+Alternatively you may pass an optional <comment>@AcmeMyBundle</comment> argument to only search
+for templates in a specific bundle:
+
 <info>php %command.full_name% @AcmeMyBundle</info>
-
-The command finds all Smarty templates in the <comment>AcmeMyBundle</comment> bundle and compiles each Smarty template.
-
 EOF
             )
         ;
@@ -98,26 +101,30 @@ EOF
                     $compiled = $tpl->compiled;
 
                     if ($verbose) {
-                        $output->writeln(sprintf("Compiled <info>%s</info>\n(into \"%s\", <comment>in %f secs</comment>)", $source->resource, $compiled->filepath, $ctime));
+                        $output->writeln(sprintf("Compiled <info>%s</info>\n(into \"%s\") <comment>in %f secs</comment>", $source->resource, $compiled->filepath, $ctime));
                     }
                     $count['ok']++;
                 } else {
                     throw new \RuntimeException('Unable to create a Smarty_Internal_Template instance');
                 }
             } catch (\Exception $e) {
+                $e = SmartyBundleRuntimeException::createFromPrevious($e, $template);
                 // problem during compilation, log it and give up
                 if ($verbose) {
                     $output->writeln("");
                 }
-                $output->writeln(sprintf("<error>! Failed to compile Smarty template \"%s\":</error>\n-> %s\n", (string) $template, $e->getMessage()));
+                $output->writeln(sprintf("<error>ERROR: Failed to compile Smarty template \"%s\"</error>\n-> %s\n", (string) $template, $e->getMessage()));
                 $count['failed']++;
             }
         }
 
-        $output->write(sprintf("\n<comment>Summary:</comment>\n".
-        "- Successfully compiled <info>%s</info> files.\n".
-        "- Failed to compile <comment>%d</comment> files.\n".
-        "- Total compilation time: <comment>%f secs</comment>.\n",
-            $count['ok'], $count['failed'], $totalCtime));
+        $output->write("\n<comment>Summary:</comment>\n");
+        if ($count['ok'] > 0) {
+            $output->write(sprintf("- Successfully compiled <info>%s</info> files.\n", $count['ok']));
+        }
+        if ($count['failed'] > 0) {
+            $output->write(sprintf("- Failed to compile <error>%d</error> files.\n", $count['failed']));
+        }
+        $output->write(sprintf("- Total compilation time: <comment>%f secs</comment>.\n", $totalCtime));
     }
 }

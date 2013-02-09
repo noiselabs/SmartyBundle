@@ -69,7 +69,8 @@ class AbstractException extends \Exception
             $this->guessTemplateInfo();
         }
 
-        $this->rawMessage = $message;
+        $this->rawMessage = str_replace(array('&quot;', '&gt;', '&lt;'),
+            array('"', '>', '<'), html_entity_decode($message));
 
         $this->updateRepr();
     }

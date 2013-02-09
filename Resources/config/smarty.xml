@@ -71,11 +71,11 @@
             <argument>%kernel.root_dir%/Resources</argument>
         </service>
 
-        <service id="smarty.cache_warmer" class="%smarty.cache_warmer.class%" public="false">
-            <tag name="kernel.cache_warmer" />
+        <!--service id="smarty.cache_warmer" class="%smarty.cache_warmer.class%" public="false">
+            <tag name="kernel.cache_warmer" priority="255" />
             <argument type="service" id="service_container" />
             <argument type="service" id="smarty.templating.finder" />
-        </service>
+        </service-->
 
     </services>
 </container>
