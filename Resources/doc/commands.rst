@@ -4,7 +4,7 @@
 Commands
 ********
 
-SmartyBundles extends the default Symfony2 command line interface by providing the following commands:
+SmartyBundle extends the default Symfony2 command line interface by providing the commands described below.
 
 Compile Command
 ===============

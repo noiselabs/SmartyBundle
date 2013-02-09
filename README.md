@@ -1,10 +1,10 @@
 SmartyBundle
 ============
 
-[@documentation]:   http://smartybundle.noiselabs.org/  "SmartyBundle Documentation"
-[@php]:             http://php.net/                     "PHP: Hypertext Preprocessor"
-[@smarty]:          http://www.smarty.net/              "The compiling PHP template engine"
-[@symfony]:         http://www.symfony.com/             "High Performance PHP Framework for Web Development"
+[@documentation]:   https://smartybundle.readthedocs.org/   "SmartyBundle Documentation"
+[@php]:             http://php.net/                         "PHP: Hypertext Preprocessor"
+[@smarty]:          http://www.smarty.net/                  "The compiling PHP template engine"
+[@symfony]:         http://www.symfony.com/                 "High Performance PHP Framework for Web Development"
 
 This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
@@ -73,7 +73,7 @@ For other installation methods (Symfony-2.0 vendors script or git submodules) pl
 Documentation
 -------------
 
-Complete documentation is available in the [SmartyBundle website][@documentation].
+Complete documentation is available on [Read the Docs][@documentation].
 
 ### Extensions under development
 

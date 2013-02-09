@@ -46,10 +46,12 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             escape_html:
             force_cache:
             force_compile:
+            left_delimiter:
             locking_timeout:
             merge_compiled_includes:
             php_handling:
             plugins_dir:
+            right_delimiter:
             smarty_debug_id:
             template_dir:                  %kernel.root_dir%/Resources/views
             trim_whitespace :              false
@@ -163,6 +165,9 @@ force_cache
 force_compile
     This forces Smarty to (re)compile templates on every invocation. This setting overrides ``$compile_check``. By default this is ``FALSE``. This is handy for development and debugging. It should never be used in a production environment. If ``$caching`` is enabled, the cache file(s) will be regenerated every time.
 
+left_delimiter
+    This is the left delimiter used by the template language. Default is ``{``.
+
 locking_timeout
     This is maximum time in seconds a cache lock is valid to avoid dead locks. The deafult value is 10 seconds.
 
@@ -174,6 +179,9 @@ php_handling
 
 plugins_dir
     This is the directory or directories where Smarty will look for the plugins that it needs. Default is ``plugins/`` under the ``SMARTY_DIR``. If you supply a relative path, Smarty will first look under the ``SMARTY_DIR``, then relative to the current working directory, then relative to the PHP include_path. If ``$plugins_dir`` is an array of directories, Smarty will search for your plugin in each plugin directory in the order they are given. **While using the SmartyBundle you may add plugins by setting services tagged with smarty.extension. See section Extensions for more information.**
+
+right_delimiter
+    This is the right delimiter used by the template language. Default is ``}``.
 
 smarty_debug_id
     The value of ``$smarty_debug_id`` defines the URL keyword to enable debugging at browser level. The default value is ``SMARTY_DEBUG``.
