@@ -16,30 +16,27 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2012 Vítor Brandão
+ * Copyright (C) 2011-2013 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2012 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
 
-$vendorDir = __DIR__.'/vendor';
-require_once $vendorDir.'/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+if (version_compare(PHP_VERSION, '5.4', '>=') && gc_enabled()) {
+    // Disabling Zend Garbage Collection to prevent segfaults with PHP5.4+
+    // https://bugs.php.net/bug.php?id=53976
+    gc_disable();
+}
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
+$loader = require_once __DIR__.'/vendor/autoload.php';
 
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'Symfony'                       => $vendorDir.'/symfony/src',
-    'Assetic'                       => $vendorDir.'/assetic/src',
-    'Mopa\\Bundle\\BootstrapBundle' => $vendorDir.'/mopa-bootstrap-bundle',
-));
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 if (!function_exists('intl_get_error_code')) {
-    require_once $vendorDir.'/symfony/src/Symfony/Component/Locale/Resources/stubs/functions.php';
-
-    $loader->registerPrefixFallbacks(array($vendorDir.'/symfony/src/Symfony/Component/Locale/Resources/stubs'));
+    require_once __DIR__.'/src/Symfony/Component/Locale/Resources/stubs/functions.php';
 }
-$loader->register();
+
+AnnotationRegistry::registerLoader(array($loader, 'loadClass'));

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit
-    bootstrap="Tests/bootstrap.php"
+    backupGlobals="false"
+    backupStaticAttributes="false"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
+    processIsolation="false"
+    stopOnFailure="false"
     syntaxCheck="true"
+    bootstrap="autoload.php.dist"
 >
     <php>
         <!-- <server name="SMARTYBUNDLE_TEST_VENDOR_DIR" value="/path/to/vendors" /> -->

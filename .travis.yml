@@ -16,12 +16,9 @@ env:
     - SYMFONY_VERSION=origin/master
 
 before_script:
-    - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
-    - pear install pear/PHP_CodeSniffer
-    - phpenv rehash
+    - composer --dev install
 
-script:
-    - phpcs --standard=PSR1 ./ && phpunit --coverage-text
+script: phpunit
 
 notifications:
     irc: "irc.freenode.org#noiselabs"

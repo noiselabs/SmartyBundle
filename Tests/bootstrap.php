@@ -27,8 +27,9 @@
  * @since       0.1.0
  */
 
-if (!is_file($autoloadFile = __DIR__.'/../vendor/autoload.php')) {
-    throw new \LogicException('Could not find autoload.php in vendor/. Did you run "composer install --dev"?');
+if (!@include __DIR__ . '/../vendor/autoload.php') {
+    die("You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install --dev
+");
 }
-
-require $autoloadFile;
