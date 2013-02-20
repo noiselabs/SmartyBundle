@@ -20,8 +20,8 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+ * @author      Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -39,13 +39,13 @@ use Symfony\Component\Templating\TemplateNameParser;
 
 /**
  * @since  0.1.0
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class SmartyEngineTest extends TestCase
 {
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testEvaluateAddsAppGlobal()
     {
@@ -60,7 +60,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testEvaluateWithoutAvailableRequest()
     {
@@ -76,7 +76,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGlobalVariables()
     {
@@ -90,7 +90,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGlobalsGetPassedToTemplate()
     {
@@ -105,7 +105,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGetUnsetExtension()
     {
@@ -119,7 +119,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGetSetRemoveExtension()
     {
@@ -140,7 +140,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGetSetExtensionsArray()
     {
@@ -167,7 +167,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     public function testGetLoader()
     {
@@ -180,7 +180,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.2.0
-     * @author Vítor Brandão <noisebleed@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.org>
      */
     protected function createContainer(array $data = array())
     {

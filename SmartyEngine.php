@@ -20,7 +20,7 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -48,7 +48,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  * Thanks to Symfony developer Christophe Coevoet (@stof) for a carefully code
  * review of this bundle.
  *
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class SmartyEngine implements EngineInterface
 {

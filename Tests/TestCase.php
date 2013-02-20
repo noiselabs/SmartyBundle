@@ -20,7 +20,7 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -40,7 +40,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 use Symfony\Component\Templating\TemplateReference;
 
 /**
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -136,7 +136,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 }
 
 /**
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class KernelForTest extends Kernel
 {
@@ -164,7 +164,7 @@ class KernelForTest extends Kernel
 }
 
 /**
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class ProjectTemplateEngine extends SmartyEngine
 {
@@ -180,7 +180,7 @@ class ProjectTemplateEngine extends SmartyEngine
 }
 
 /**
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class ProjectTemplateLoader extends Loader
 {

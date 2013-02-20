@@ -20,8 +20,8 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <noisebleed@noiselabs.org>
- * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+ * @author      Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.2.0
@@ -36,7 +36,7 @@ use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 /**
  * Renders a Symfony2 form in a Smarty template.
  *
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.org>
  */
 
 class SmartyRenderer extends FormRenderer implements SmartyRendererInterface

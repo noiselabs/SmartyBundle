@@ -20,7 +20,7 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+ * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
@@ -32,7 +32,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Exception;
  * @note This class was heavily inspired in Twig_Error class. Credits goes to
  * Fabien Potencier (<fabien@symfony.com>) and the Twig community.
  *
- * @author  Vítor Brandão <noisebleed@noiselabs.com>
+ * @author  Vítor Brandão <vitor@noiselabs.com>
  */
 class AbstractException extends \Exception
 {

@@ -40,8 +40,8 @@ Here's a short example:
     *
     * @category    NoiseLabs
     * @package     SmartyBundle
-    * @author      Vítor Brandão <noisebleed@noiselabs.org>
-    * @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+    * @author      Vítor Brandão <vitor@noiselabs.org>
+    * @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
     * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
     * @link        http://www.noiselabs.org
     */
@@ -147,7 +147,7 @@ License
 Authors
 =======
 
-Vítor Brandão - noisebleed@noiselabs.org ~ `twitter.com/noiselabs <http://twitter.com/noiselabs>`_ ~ `blog.noiselabs.org <http://blog.noiselabs.org>`_
+Vítor Brandão - vitor@noiselabs.org ~ `twitter.com/noiselabs <http://twitter.com/noiselabs>`_ ~ `blog.noiselabs.org <http://blog.noiselabs.org>`_
 
 See also the list of `contributors <https://github.com/noiselabs/SmartyBundle/contributors>`_ who participated in this project.
 

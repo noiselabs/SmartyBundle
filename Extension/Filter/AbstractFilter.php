@@ -20,7 +20,7 @@
 *
 * @category    NoiseLabs
 * @package     SmartyBundle
-* @copyright   (C) 2011-2013 Vítor Brandão <noisebleed@noiselabs.org>
+* @copyright   (C) 2011-2013 Vítor Brandão <vitor@noiselabs.org>
 * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
 * @link        http://www.noiselabs.org
 */
@@ -35,7 +35,7 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 *
 * See {@link http://www.smarty.net/docs/en/api.register.filter.tpl}.
 *
-* @author Vítor Brandão <noisebleed@noiselabs.org>
+* @author Vítor Brandão <vitor@noiselabs.org>
 */
 abstract class AbstractFilter implements FilterInterface
 {

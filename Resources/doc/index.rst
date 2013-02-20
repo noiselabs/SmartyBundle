@@ -116,7 +116,7 @@ A big thanks to all `SmartyBundle contributors <https://github.com/noiselabs/Sma
 Documentation
 --------------
 
-:Author: Vítor Brandão (noisebleed@noiselabs.org)
+:Author: Vítor Brandão (vitor@noiselabs.org)
 :Version: |release|
 :Date: |today|
 
