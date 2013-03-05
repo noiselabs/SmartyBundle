@@ -30,6 +30,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * SmartyBundle extension for Symfony actions helper.
