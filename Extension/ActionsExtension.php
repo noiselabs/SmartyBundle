@@ -75,11 +75,11 @@ class ActionsExtension extends AbstractExtension
         // only output on the closing tag
         if (!$repeat) {
             $parameters = array_merge(array(
-                'attributes'    => array(),
-                'options'       => array()
-            ), $parameters);
+                    'attributes'    => array(),
+                    'options'       => array()
+                ), $parameters);
 
-            return $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']);
+            return $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
     }
 
@@ -93,9 +93,19 @@ class ActionsExtension extends AbstractExtension
      */
     public function renderModifierAction($controller, array $attributes = array(), array $options = array())
     {
-        return $this->container->get('templating.helper.actions')->render($controller, $attributes, $options);
+        return $this->render($controller, $attributes, $options);
     }
 
+    protected function render($controller, array $attributes = array(), array $options = array())
+    {
+        $renderOptions = array();
+        if (isset($options['standalone']) && true === $options['standalone']) {
+            $renderOptions['strategy'] = 'esi';
+            unset($options['standalone']);
+        }
+
+        return $this->container->get('templating.helper.actions')->render(new ControllerReference($controller, $attributes, $options), $renderOptions);
+    }
     /**
      * Returns the name of the extension.
      *

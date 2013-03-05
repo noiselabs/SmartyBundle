@@ -12,3 +12,4 @@ tmp
 _build
 
 composer.lock
+.idea
