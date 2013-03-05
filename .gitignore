@@ -1,6 +1,7 @@
 *~
 *.kate-swp
 *.pyc
+.idea
 
 phpunit.xml
 composer.phar
