@@ -83,7 +83,7 @@
         </div>
         <footer>
             {block footer}
-            <p>&copy; <a href="http://smartybundle.noiselabs.org" target="_blank">SmartyBundle</a> 2012</p>
+            <p>&copy; <a href="https://smartybundle.readthedocs.org/" target="_blank">SmartyBundle</a> 2012</p>
             {/block}
         </footer>
     </div>

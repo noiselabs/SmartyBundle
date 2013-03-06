@@ -11,7 +11,7 @@ matrix:
     - php: 5.5
 
 env:
-    - SYMFONY_VERSION=v2.1.7
+    - SYMFONY_VERSION=v2.1.8
     - SYMFONY_VERSION=origin/2.1
     - SYMFONY_VERSION=origin/master
 
@@ -23,4 +23,4 @@ script: phpunit
 notifications:
     irc: "irc.freenode.org#noiselabs"
     email:
-        - noisebleed@noiselabs.org
+        - vitor@noiselabs.org
