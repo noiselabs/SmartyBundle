@@ -610,7 +610,16 @@ class SmartyEngine implements EngineInterface
      */
     public function smartyDefaultTemplateHandler($type, $name, &$content, &$modified, \Smarty $smarty)
     {
-        return ($type == 'file') ? (string) $this->load($name) : false;
+        if ($type == 'file') {
+            foreach ($smarty->template_dir as $directory) {
+                $path = $directory . $name;
+                if (file_exists($path)) {
+                    return (string) $this->load($path);
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
