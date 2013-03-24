@@ -29,6 +29,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
+use Symfony\Component\HttpKernel\Kernel as Symfony;
 
 /**
  * Test suite for the actions extension.
@@ -37,11 +38,25 @@ use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
  */
 class ActionsExtensionTest extends TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $templatesDir = __DIR__.'/templates/actions';
+        $this->engine->setTemplateDir($templatesDir);
+    }
+
     public function testExtensionName()
     {
-        $container = $this->createContainer();
-        $extension = new ActionsExtension($container);
+        $extension = $this->createActionsExtension();
 
         $this->assertEquals('actions', $extension->getName());
+    }
+
+    protected function createActionsExtension()
+    {
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+
+        return new ActionsExtension($container);
     }
 }

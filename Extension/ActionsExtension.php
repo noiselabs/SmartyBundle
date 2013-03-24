@@ -31,25 +31,33 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Kernel as Symfony;
 
 /**
  * SmartyBundle extension for Symfony actions helper.
  *
- * This extension tries to provide the same funcionality described in
+ * This extension tries to provide the same functionality described in
  * {@link http://symfony.com/doc/current/book/templating.html#embedding-controllers}.
  *
  * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Igor Vovk (igorynia)
  */
 class ActionsExtension extends AbstractExtension
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     protected $container;
 
     /**
      * Constructor.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+
     }
 
     /**
@@ -80,7 +88,10 @@ class ActionsExtension extends AbstractExtension
                     'options'       => array()
                 ), $parameters);
 
-            return $this->render($controller, $parameters['attributes'], $parameters['options']);
+
+            return ('1' == Symfony::MINOR_VERSION ) ?
+                $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']) :
+                $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
     }
 
@@ -94,9 +105,19 @@ class ActionsExtension extends AbstractExtension
      */
     public function renderModifierAction($controller, array $attributes = array(), array $options = array())
     {
-        return $this->render($controller, $attributes, $options);
+        return ('1' == Symfony::MINOR_VERSION ) ?
+            $this->container->get('templating.helper.actions')->render($controller, $attributes, $options) :
+            $this->render($controller, $attributes, $options);
     }
 
+    /**
+     * @param $controller
+     * @param array $attributes
+     * @param array $options
+     * @return mixed
+     *
+     * @since Symfony-2.2
+     */
     protected function render($controller, array $attributes = array(), array $options = array())
     {
         $renderOptions = array();

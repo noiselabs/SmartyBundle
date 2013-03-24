@@ -11,8 +11,8 @@ matrix:
     - php: 5.5
 
 env:
-    - SYMFONY_VERSION=v2.1.8
     - SYMFONY_VERSION=origin/2.1
+    - SYMFONY_VERSION=origin/2.2
     - SYMFONY_VERSION=origin/master
 
 before_script:

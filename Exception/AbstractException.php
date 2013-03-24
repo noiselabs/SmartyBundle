@@ -171,6 +171,10 @@ class AbstractException extends \Exception
         }
 
         if (null !== $this->filename) {
+            if ($this->filename instanceof \Smarty_Internal_Template) {
+                $this->filename = ($this->filename->source instanceof \Smarty_Template_Source) ?
+                    $this->filename->source->filepath : $this->filename->template_resource;
+            }
             $this->message .= sprintf(' in %s', is_string($this->filename) ? '"'.$this->filename.'"' : json_encode($this->filename));
         }
 
@@ -205,5 +209,55 @@ class AbstractException extends \Exception
             $this->filename = ($template->source instanceof \Smarty_Template_Source) ?
                 $template->source->filepath : $template->template_resource;
         }
+    }
+
+    /**
+     * Because json_encode doesn't handle recursion.
+     * @see {@link http://blog.jezmckean.com/php-bug-json_encode-misleading-warning-on-object-with-private-properties/}
+     *
+     * This function returns a JSON representation of $param. It uses json_encode
+     * to accomplish this, but converts objects and arrays containing objects to
+     * associative arrays first. This way, objects that do not expose (all) their
+     * properties directly but only through an Iterator interface are also encoded
+     * correctly.
+     * @see {@link http://www.php.net/manual/en/function.json-encode.php#78688}
+     */
+    protected function jsonEncode($param)
+    {
+        /**
+         * Convert an object into an associative array
+         *
+         * This function converts an object into an associative array by iterating
+         * over its public properties. Because this function uses the foreach
+         * construct, Iterators are respected. It also works on arrays of objects.
+         *
+         * @return array
+         */
+        function objectToArray($var) {
+            $result = array();
+            $references = array();
+
+            // loop over elements/properties
+            foreach ($var as $key => $value) {
+                // recursively convert objects
+                if (is_object($value) || is_array($value)) {
+                    // but prevent cycles
+                    if (!in_array($value, $references)) {
+                        $result[$key] = objectToArray($value);
+                        $references[] = $value;
+                    }
+                } else {
+                    // simple values are untouched
+                    $result[$key] = $value;
+                }
+            }
+            return $result;
+        }
+
+        if (is_object($param) || is_array($param)) {
+            $param = objectToArray($param);
+        }
+
+        return json_encode($param);
     }
 }
