@@ -29,8 +29,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Kernel as Symfony;
 
 /**
@@ -84,13 +84,12 @@ class ActionsExtension extends AbstractExtension
         // only output on the closing tag
         if (!$repeat) {
             $parameters = array_merge(array(
-                    'attributes'    => array(),
-                    'options'       => array()
-                ), $parameters);
+                'attributes'    => array(),
+                'options'       => array()
+            ), $parameters);
 
-
-            return ('1' == Symfony::MINOR_VERSION ) ?
-                $this->container->get('templating.helper.actions')->render($controller, $parameters['attributes'], $parameters['options']) :
+            return ('1' == Symfony::MINOR_VERSION) ?
+                $this->getActionsHelper()->render($controller, $parameters['attributes'], $parameters['options']) :
                 $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
     }
@@ -105,8 +104,8 @@ class ActionsExtension extends AbstractExtension
      */
     public function renderModifierAction($controller, array $attributes = array(), array $options = array())
     {
-        return ('1' == Symfony::MINOR_VERSION ) ?
-            $this->container->get('templating.helper.actions')->render($controller, $attributes, $options) :
+        return ('1' == Symfony::MINOR_VERSION) ?
+            $this->getActionsHelper()->render($controller, $attributes, $options) :
             $this->render($controller, $attributes, $options);
     }
 
@@ -126,8 +125,20 @@ class ActionsExtension extends AbstractExtension
             unset($options['standalone']);
         }
 
-        return $this->container->get('templating.helper.actions')->render(new ControllerReference($controller, $attributes, $options), $renderOptions);
+        return $this->getActionsHelper()->render(
+            $this->getActionsHelper()->controller($controller, $attributes, $options),
+            $renderOptions
+        );
     }
+
+    /**
+     * @return ActionsHelper
+     */
+    protected function getActionsHelper()
+    {
+        return $this->container->get('templating.helper.actions');
+    }
+
     /**
      * Returns the name of the extension.
      *
