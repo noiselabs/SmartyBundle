@@ -23,7 +23,7 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/framework-bundle": ">=2.1.0",
-        "smarty/smarty": "3.1.*@stable"
+        "noiselabs/smarty": "dev-noiselabs/master"
     },
     "require-dev": {
         "symfony/security": ">=2.1.0",
