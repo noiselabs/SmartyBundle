@@ -9,6 +9,7 @@ SmartyBundle
 This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
 [![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png)](http://travis-ci.org/noiselabs/SmartyBundle)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/noiselabs/smartybundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 **Caution:** This bundle is developed in sync with [Symfony's repository](https://github.com/symfony/symfony).
 For maximum compatibility with Symfony 2.0.x, you need to use releases 1.0.x of this bundle.
