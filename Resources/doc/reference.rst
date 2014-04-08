@@ -17,7 +17,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             allow_php_templates:
             auto_literal:
             autoload_filters:
-            cache_dir:                     %kernel.cache_dir%/smarty/cache
+            cache_dir:                           %kernel.cache_dir%/smarty/cache
             cache_id:
             cache_lifetime:
             cache_locking:
@@ -25,12 +25,12 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             caching:
             caching_type:
             compile_check:
-            compile_dir:                   %kernel.cache_dir%/smarty/templates_c
+            compile_dir:                         %kernel.cache_dir%/smarty/templates_c
             compile_id:
             compile_locking:
             compiler_class:
             config_booleanize:
-            config_dir:                    %kernel.root_dir%/config/smarty
+            config_dir:                          %kernel.root_dir%/config/smarty
             config_overwrite:
             config_read_hidden:
             debug_tpl:
@@ -38,7 +38,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             debugging_ctrl:
             default_config_type:
             default_modifiers:
-            default_resource_type:         file
+            default_resource_type:               file
             default_config_handler_func:
             default_template_handler_func:
             direct_access_security:
@@ -46,6 +46,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             escape_html:
             force_cache:
             force_compile:
+            inheritance_merge_compiled_includes: true
             left_delimiter:
             locking_timeout:
             merge_compiled_includes:
@@ -53,11 +54,11 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             plugins_dir:
             right_delimiter:
             smarty_debug_id:
-            template_dir:                  %kernel.root_dir%/Resources/views
-            trim_whitespace :              false
+            template_dir:                        %kernel.root_dir%/Resources/views
+            trim_whitespace :                    false
             trusted_dir:
-            use_include_path:              false
-            use_sub_dirs:                  true
+            use_include_path:                    false
+            use_sub_dirs:                        true
 
         globals:
 
@@ -164,6 +165,28 @@ force_cache
 
 force_compile
     This forces Smarty to (re)compile templates on every invocation. This setting overrides ``$compile_check``. By default this is ``FALSE``. This is handy for development and debugging. It should never be used in a production environment. If ``$caching`` is enabled, the cache file(s) will be regenerated every time.
+
+inheritance_merge_compiled_includes
+    In Smarty 3.1 template inheritance is a compile time process. All the extending of ``{block}`` tags is done at compile time and the parent and child templates are compiled in a single compiled template. ``{include}`` subtemplate could also ``{block}`` tags. Such subtemplate could not compiled by it's own because it could be used in other context where the ``{block}`` extended with a different result. For that reason the compiled code of ``{include}`` subtemplates gets also merged in compiled inheritance template.
+
+    Merging the code into a single compile template has some drawbacks.
+    1. You could not use variable file names in ``{include}`` Smarty would use the ``{include}`` of compilation time.
+    2. You could not use individual compile_id in ``{include}``.
+    3. Seperate caching of subtemplate was not possible.
+    4. Any change of the template directory structure between calls was not necessarily seen.
+
+    Starting with 3.1.15 some of the above conditions got checked and resulted in an exception. It turned out that a couple of users did use some of above and now got exceptions.
+
+    To resolve this starting with 3.1.16 there is a new configuration parameter ``$inheritance_merge_compiled_includes``. For most backward compatibility its default setting is true. With this setting all ``{include}`` subtemplate will be merge into the compiled inheritance template, but the above cases could be rejected by exception.
+
+    If ``$smarty->inheritance_merge_compiled_includes = false;`` ``{include}`` subtemplate will not be merged. You must now manually merge all ``{include}`` subtemplate which do contain ``{block}`` tags. This is done by setting the ``"inline"`` option. ``{include file='foo.bar' inline}``
+
+    1. In case of a variable file name like {include file=$foo inline} you must you the variable in a compile_id  ``$smarty->compile_id = $foo;``
+    2. If you use individual compile_id in {include file='foo.tpl' compile_id=$bar inline} it must be used in the global compile_id as well  ``$smarty->compile_id = $foo;``
+    3. If call templates with different template_dir configurations and a parent could same named child template from different folders
+    you must make the folder name part of the compile_id.
+
+    In the upcomming major release Smarty 3.2 inheritance will no longer be a compile time process. All restrictions will be then removed.
 
 left_delimiter
     This is the left delimiter used by the template language. Default is ``{``.
