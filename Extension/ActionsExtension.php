@@ -121,7 +121,12 @@ class ActionsExtension extends AbstractExtension
     {
         $renderOptions = array();
         if (isset($options['standalone']) && true === $options['standalone']) {
-            $renderOptions['strategy'] = 'esi';
+		if(isset($options['strategy'])){
+			$renderOptions['strategy'] = $options['strategy'];
+			unset($options['strategy']);
+		}else{
+			$renderOptions['strategy'] = 'esi';
+		}
             unset($options['standalone']);
         }
 
