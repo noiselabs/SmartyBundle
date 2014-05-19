@@ -14,7 +14,7 @@ The SmartyBundle comes with a few extensions to help you right away. These are d
 Actions Extension
 =================
 
-This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/2.0/book/templating.html#embedding-controllers>`_.
+This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/current/book/templating.html#embedding-controllers>`_.
 
 Following the example presented in the link above, the Smarty equivalents are:
 
@@ -85,7 +85,7 @@ Absolute URLs can also be generated.
         Read this blog post.
     </a>
 
-Please see the `Symfony2 - Routing <http://symfony.com/doc/2.0/book/routing.html>`_ for full information about routing features and options in Symfony2.
+Please see the `Symfony2 - Routing <http://symfony.com/doc/current/book/routing.html>`_ for full information about routing features and options in Symfony2.
 
 Translation Extension
 =====================
@@ -94,7 +94,7 @@ To help with message translation of static blocks of text in template context, t
 
 You may translate a message, in a template, using a block or modifier. Both methods support the following arguments:
     - **count**: In pluralization context, used to determine which translation to use and also to populate the %count% placeholder *(only available in transchoice)*;
-    - **vars**: `Message placeholders <http://symfony.com/doc/2.0/book/translation.html#message-placeholders>`_;
+    - **vars**: `Message placeholders <http://symfony.com/doc/current/book/translation.html#message-placeholders>`_;
     - **domain**: Message domain, an optional way to organize messages into groups;
     - **locale**: The locale that the translations are for (e.g. en_GB, en, etc);
 
@@ -121,11 +121,11 @@ You may translate a message, in a template, using a block or modifier. Both meth
     {"Hello World!"|trans:[]:"messages":"pt_PT"}
 
 
-`Message pluralization <http://symfony.com/doc/2.0/book/translation.html#pluralization>`_ can be achieved using ``transchoice``:
+`Message pluralization <http://symfony.com/doc/current/book/translation.html#pluralization>`_ can be achieved using ``transchoice``:
 
 .. warning::
 
-    Unlike the examples given in the `Symfony documentation <http://symfony.com/doc/2.0/book/translation.html#explicit-interval-pluralization>`_, which uses curly brackets for explicit interval pluralization we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``{0} There is no apples`` becomes ``[0] There is no apples``.
+    Unlike the examples given in the `Symfony documentation <http://symfony.com/doc/current/book/translation.html#explicit-interval-pluralization>`_, which uses curly brackets for explicit interval pluralization we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``{0} There is no apples`` becomes ``[0] There is no apples``.
 
 ``transchoice`` block:
 
@@ -146,19 +146,50 @@ The transchoice block/modifier automatically gets the %count% variable from the 
 Security Extension
 ==================
 
-This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/2.0/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/2.0/book/security.html>`_.
+This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/current/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/current/book/security.html>`_.
 
-  If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
+If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
 
 Usage:
 
 .. code-block:: html+smarty
 
     {if 'IS_AUTHENTICATED_FULLY'|is_granted:$object:$field}
-        access granted
+        <a href="...">Delete</a>
     {else}
-        access denied
+        <!-- no delete for you -->
     {/if}
+
+.. note::
+
+    If you use this function and are *not* at a URL behind a firewall
+    active, an exception will be thrown. Again, it's almost always a good
+    idea to have a main firewall that covers all URLs.
+
+Complex Access Controls with Expressions
+----------------------------------------
+
+.. note::
+
+    The ``expression`` functionality was introduced in Symfony 2.4.
+
+In addition to a role like ``ROLE_ADMIN``, the ``isGranted`` method also
+accepts an `Expression <https://github.com/symfony/symfony/blob/master/src/Symfony/Component/ExpressionLanguage/Expression.php>`_ object.
+
+You can use expressions inside your templates like this:
+
+.. code-block:: html+smarty
+
+    {if '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'|expression|is_granted}
+        <a href="...">Delete</a>
+    {/if}
+
+In this example, if the current user has ``ROLE_ADMIN`` or if the current
+user object's ``isSuperAdmin()`` method returns ``true``, then access will
+be granted (note: your User object may not have an ``isSuperAdmin`` method,
+that method is invented for this example).
+
+For more details on expressions and security, see the section `Complex Access Controls with Expressions <http://symfony.com/doc/current/book/security.html#book-security-expressions>`_ in the Symfony book.
 
 Enabling custom Extensions
 ==========================
