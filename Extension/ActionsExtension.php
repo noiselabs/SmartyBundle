@@ -121,13 +121,20 @@ class ActionsExtension extends AbstractExtension
     {
         $renderOptions = array();
         if (isset($options['standalone']) && true === $options['standalone']) {
-            $renderOptions['strategy'] = 'esi';
+		if(isset($options['strategy'])){
+			$renderOptions['strategy'] = $options['strategy'];
+			unset($options['strategy']);
+		}else{
+			$renderOptions['strategy'] = 'esi';
+		}
             unset($options['standalone']);
         }
 
+	$isControllerReference = strpos($controller, ":") !== false;
+		
         return $this->getActionsHelper()->render(
-            $this->getActionsHelper()->controller($controller, $attributes, $options),
-            $renderOptions
+            $isControllerReference ? $this->getActionsHelper()->controller($controller, $attributes, $options) : $controller,
+            $isControllerReference ? $renderOptions : array_merge($renderOptions, $attributes)
         );
     }
 
