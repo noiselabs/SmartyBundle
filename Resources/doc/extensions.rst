@@ -39,15 +39,20 @@ See chapter :ref:`ch_assetic` for complete documentation about Assetic support i
 Assets Extension
 ================
 
-Templates commonly refer to images, Javascript and stylesheets as assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but the SmartyBundle provides a more dynamic option via the ``assets`` function:
+Templates commonly refer to images, JavaScript, stylesheets and other
+assets. You could hard-code the path to these assets (e.g. ``/images/logo.png``), but SmartyBundle provides a more dynamic option via the ``asset`` modifier:
 
 .. code-block:: html+smarty
 
-    <img src="{asset}images/logo.png{/asset}" />
+    <img src="{'images/logo.png'|asset}" />
+
+or ``asset`` block:
+
+.. code-block:: html+smarty
 
     <link href="{asset}css/blog.css{/asset}" rel="stylesheet" type="text/css" />
 
-This bundle also provides the ``assets_version`` function to return the version of the assets in a package. To set the version see the `assets_version configuration option in Symfony's Framework Bundle <http://symfony.com/doc/2.0/reference/configuration/framework.html#ref-framework-assets-version>`_.
+This bundle also provides the ``assets_version`` function to return the version of the assets in a package. To set the version see the `assets_version configuration option in Symfony's Framework Bundle <http://symfony.com/doc/current/reference/configuration/framework.html#ref-framework-assets-version>`_.
 
 Usage in template context:
 
