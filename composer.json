@@ -22,13 +22,13 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.1.0",
-        "noiselabs/smarty": "dev-noiselabs/master"
+        "symfony/framework-bundle": "~2.1",
+        "smarty/smarty": "3.1.*@stable"
     },
     "require-dev": {
-        "symfony/security": ">=2.1.0",
-        "symfony/yaml": ">=2.1.0",
-        "symfony/assetic-bundle": ">=2.0"
+        "symfony/security": "~2.1",
+        "symfony/yaml": "~2.1",
+        "symfony/assetic-bundle": "~2.0"
     },
     "suggest": {
         "symfony/assetic-bundle": "Assetic support in Smarty templates",
