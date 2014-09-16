@@ -81,7 +81,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
         // Globals
         $calls = $container->getDefinition('templating.engine.smarty')->getMethodCalls();
-
         $this->assertEquals('foo', $calls[0][1][0], '->load() registers services as Smarty globals');
         $this->assertEquals(new Reference('bar'), $calls[0][1][1], '->load() registers services as Smarty globals');
         $this->assertEquals('pi', $calls[1][1][0], '->load() registers variables as Smarty globals');
@@ -93,6 +92,10 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($appDir.'/cache/smarty/templates_c', $options['compile_dir'], '->load() sets the compile_dir option');
         $this->assertEquals($appDir.'/config/smarty', $options['config_dir'], '->load() sets the config_dir option');
         $this->assertEquals('string', $options['default_resource_type'], '->load() sets the default_resource_type option');
+        $this->assertEquals(array(
+            '/tmp/noiselabs-smarty-bundle-test/app/Resources/plugins',
+            '/tmp/noiselabs-smarty-bundle-test/app/Resources/smarty/plugins'
+        ), $options['plugins_dir'], '->load() adds directories to the default list of directories where plugins are stored');
         $this->assertEquals($appDir.'/Resources/views', $options['template_dir'], '->load() sets the template_dir option');
         $this->assertTrue($options['use_include_path'], '->load() sets the use_include_path option');
         $this->assertFalse($options['use_sub_dirs'], '->load() sets the use_sub_dirs option');
@@ -154,6 +157,12 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $container->compile();
     }
 
+    /**
+     * @param  ContainerBuilder          $container
+     * @param $file
+     * @param $format
+     * @throws \InvalidArgumentException
+     */
     private function loadFromFile(ContainerBuilder $container, $file, $format)
     {
         $locator = new FileLocator(__DIR__.'/Fixtures/'.$format);
@@ -169,7 +178,7 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
                 $loader = new YamlFileLoader($container, $locator);
                 break;
             default:
-                throw new \InvalidArgumentException('Unsupported format: '.$format);
+                throw new \InvalidArgumentException(sprintf('Unsupported format: %s', $format));
         }
 
         $loader->load($file.'.'.$format);

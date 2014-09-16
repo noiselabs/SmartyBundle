@@ -97,8 +97,8 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('resources')
                             ->defaultValue(array('form_div_layout.html.tpl'))
                             ->validate()
-                                ->ifTrue(function($v) { return !in_array('form_div_layout.html.tpl', $v); })
-                                ->then(function($v){
+                                ->ifTrue(function ($v) { return !in_array('form_div_layout.html.tpl', $v); })
+                                ->then(function ($v) {
                                     return array_merge(array('form_div_layout.html.tpl'), $v);
                                 })
                             ->end()
@@ -122,11 +122,11 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('key')
                     ->prototype('array')
                         ->beforeNormalization()
-                            ->ifTrue(function($v){ return is_string($v) && '@' === substr($v, 0, 1); })
-                            ->then(function($v){ return array('id' => substr($v, 1), 'type' => 'service'); })
+                            ->ifTrue(function ($v) { return is_string($v) && '@' === substr($v, 0, 1); })
+                            ->then(function ($v) { return array('id' => substr($v, 1), 'type' => 'service'); })
                         ->end()
                         ->beforeNormalization()
-                            ->ifTrue(function($v){
+                            ->ifTrue(function ($v) {
                                 if (is_array($v)) {
                                     $keys = array_keys($v);
                                     sort($keys);
@@ -136,7 +136,7 @@ class Configuration implements ConfigurationInterface
 
                                 return true;
                             })
-                            ->then(function($v){ return array('value' => $v); })
+                            ->then(function ($v) { return array('value' => $v); })
                         ->end()
                         ->children()
                             ->scalarNode('id')->end()
@@ -177,8 +177,8 @@ class Configuration implements ConfigurationInterface
                                     ->example(array('trim', 'stamp'))
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function($v){ return !is_array($v); })
-                                        ->then(function($v){ return array($v); })
+                                        ->ifTrue(function ($v) { return !is_array($v); })
+                                        ->then(function ($v) { return array($v); })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()
@@ -186,8 +186,8 @@ class Configuration implements ConfigurationInterface
                                     ->example(array('add_header_comment'))
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function($v){ return !is_array($v); })
-                                        ->then(function($v){ return array($v); })
+                                        ->ifTrue(function ($v) { return !is_array($v); })
+                                        ->then(function ($v) { return array($v); })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()
@@ -195,8 +195,8 @@ class Configuration implements ConfigurationInterface
                                     ->example(array('convert'))
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function($v){ return !is_array($v); })
-                                        ->then(function($v){ return array($v); })
+                                        ->ifTrue(function ($v) { return !is_array($v); })
+                                        ->then(function ($v) { return array($v); })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()
@@ -236,7 +236,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('locking_timeout')->end()
                         ->scalarNode('merge_compiled_includes')->end()
                         ->scalarNode('php_handling')->end()
-                        ->scalarNode('plugins_dir')->end()
+                        ->arrayNode('plugins_dir')
+                            ->info('Add directories to the default list of directories where plugins are stored')
+                            ->prototype('scalar')->end()
+                        ->end()
                         ->scalarNode('right_delimiter')->end()
                         ->scalarNode('smarty_debug_id')->end()
                         ->scalarNode('template_dir')->defaultValue('%kernel.root_dir%/Resources/views')->cannotBeEmpty()->end()

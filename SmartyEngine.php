@@ -91,16 +91,20 @@ class SmartyEngine implements EngineInterface
             }
         }
 
-        /**
-         * @warning If you added template dirs to the Smarty instance prior to
-         * the loading of this engine these WILL BE LOST because the setter
-         * method setTemplateDir() is used below. Please use the following
-         * method instead:
-         *   $container->get('templating.engine.smarty')->addTemplateDir(
-         *   '/path/to/template_dir');
-         */
+        // addSomeProperty()
+        foreach (array('plugins_dir', 'template_dir') as $property) {
+            if (!isset($options[$property])) {
+                continue;
+            }
+
+            $value = $options[$property];
+            $this->smarty->{$this->smartyPropertyToSetter($property, 'add')}($value);
+            unset($options[$property]);
+        }
+
+        // setSomeProperty()
         foreach ($options as $property => $value) {
-            $this->smarty->{$this->smartyPropertyToSetter($property)}($value);
+            $this->smarty->{$this->smartyPropertyToSetter($property, 'set')}($value);
         }
 
         /**
@@ -615,16 +619,15 @@ class SmartyEngine implements EngineInterface
 
     /**
      * Get the setter method for a Smarty class variable (property).
+     *
+     * You may use this method to generate addSomeProperty() or getSomeProperty()
+     * kind of methods by setting the $prefix parameter to "add" or "get".
+     *
+     * @param string $property
+     * @param string $prefix
      */
-    protected function smartyPropertyToSetter($property)
+    protected function smartyPropertyToSetter($property, $prefix = 'set')
     {
-        $words = explode('_', strtolower($property));
-
-        $setter = 'set';
-        foreach ($words as $word) {
-            $setter .= ucfirst(trim($word));
-        }
-
-        return $setter;
+        return $prefix . str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
     }
 }

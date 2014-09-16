@@ -37,6 +37,8 @@ smarty:
         merge_compiled_includes:
         php_handling:
         plugins_dir:
+            - /tmp/noiselabs-smarty-bundle-test/app/Resources/plugins
+            - /tmp/noiselabs-smarty-bundle-test/app/Resources/smarty/plugins
         smarty_debug_id:
         template_dir:          /tmp/noiselabs-smarty-bundle-test/app/Resources/views
         trusted_dir:

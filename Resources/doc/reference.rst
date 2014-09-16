@@ -51,7 +51,7 @@ The example below uses YAML format. Please adapt the example if using XML or PHP
             locking_timeout:
             merge_compiled_includes:
             php_handling:
-            plugins_dir:
+            plugins_dir:                         []
             right_delimiter:
             smarty_debug_id:
             template_dir:                        %kernel.root_dir%/Resources/views
