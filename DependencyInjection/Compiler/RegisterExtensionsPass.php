@@ -16,7 +16,7 @@
 * License along with NoiseLabs-SmartyBundle; if not, see
 * <http://www.gnu.org/licenses/>.
 *
-* Copyright (C) 2011-2014 Vítor Brandão
+* Copyright (C) 2011-2015 Vítor Brandão
 *
 * @category    NoiseLabs
 * @package     SmartyBundle
