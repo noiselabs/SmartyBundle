@@ -38,9 +38,8 @@
         "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
     },
     "autoload": {
-        "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
+        "psr-4": { "NoiseLabs\\Bundle\\SmartyBundle\\": "" }
     },
-    "target-dir": "NoiseLabs/Bundle/SmartyBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
