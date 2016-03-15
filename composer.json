@@ -21,15 +21,16 @@
         "issues": "https://github.com/noiselabs/SmartyBundle/issues"
     },
     "require": {
-        "php": "^5.3.3 || ^7.0",
-        "symfony/framework-bundle": "~2.1",
-        "smarty/smarty": "3.1.*",
-        "symfony/templating": "~2.1"
+        "php": ">=5.5.0",
+        "ext-intl": "*",
+        "symfony/framework-bundle": "~2.8",
+        "symfony/templating": "~2.8",
+        "smarty/smarty": "3.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0|~5.0",
-        "symfony/security": "~2.1",
-        "symfony/yaml": "~2.1",
+        "symfony/security": "~2.8",
+        "symfony/yaml": "~2.8",
         "symfony/assetic-bundle": "~2.0"
     },
     "suggest": {
