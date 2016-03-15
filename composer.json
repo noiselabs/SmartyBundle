@@ -31,7 +31,8 @@
         "phpunit/phpunit": "~4.0|~5.0",
         "symfony/security": "~2.8",
         "symfony/yaml": "~2.8",
-        "symfony/assetic-bundle": "~2.0"
+        "symfony/assetic-bundle": "~2.0",
+        "symfony/phpunit-bridge": "^3.0"
     },
     "suggest": {
         "symfony/assetic-bundle": "Assetic support in Smarty templates",
