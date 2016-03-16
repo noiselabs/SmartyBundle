@@ -13,9 +13,13 @@ env:
     - SYMFONY_VERSION=origin/master
 
 before_script:
-    - composer --dev install
+  - composer --dev install
+  - pip install codecov
 
 script: phpunit
+
+after_success:
+  - codecov
 
 notifications:
     irc: "irc.freenode.org#noiselabs"
