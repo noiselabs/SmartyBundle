@@ -16,8 +16,9 @@ env:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-dist --dev
-  - pip install requests[security] codecov
+  - travis_retry composer install --no-interaction --prefer-dist
+  - pip install --upgrade pip
+  - pip install --user requests[security] codecov
 
 script:
 - vendor/bin/phpunit --coverage-clover=coverage.xml
