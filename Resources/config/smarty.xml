@@ -45,7 +45,7 @@
 
         <service id="smarty.extension.assets" class="%smarty.extension.assets.class%" public="false">
             <tag name="smarty.extension" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="assets.packages" on-invalid="null" />
         </service>
 
         <service id="smarty.extension.routing" class="%smarty.extension.routing.class%" public="false">

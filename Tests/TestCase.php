@@ -28,22 +28,38 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\Storage\StringStorage;
 use Symfony\Component\Templating\TemplateNameParser;
-use Symfony\Component\Templating\TemplateReferenceInterface;
 use Symfony\Component\Templating\TemplateReference;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
  * @author Vítor Brandão <vitor@noiselabs.org>
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Smarty
+     */
+    protected $smarty;
+
+    /**
+     * @var Loader
+     */
+    protected $loader;
+
+    /**
+     * @var ProjectTemplateEngine
+     */
+    protected $engine;
+
     protected function setUp()
     {
         if (!class_exists('Smarty')) {

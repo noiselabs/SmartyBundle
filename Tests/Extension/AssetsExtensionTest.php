@@ -28,6 +28,12 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
+use Symfony\Component\Asset\Context\ContextInterface;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\Asset\UrlPackage;
+use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
 /**
@@ -70,13 +76,21 @@ class AssetsExtensionTest extends TestCase
 
     protected function createAssetsExtension($basePath = null, $baseUrls = array(), $version = null, $format = null, $namedPackages = array())
     {
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $helper = new AssetsHelper($basePath, $baseUrls, $version, $format, $namedPackages);
+        $context = $this->getMock(ContextInterface::class);
 
-        $container->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($helper));
+        $versionStrategy = new EmptyVersionStrategy();
+        if (null !== $version) {
+            $versionStrategy = new StaticVersionStrategy($version);
+        }
 
-        return new AssetsExtension($container);
+        if ($baseUrls) {
+            $package = new UrlPackage($baseUrls, $versionStrategy, $context);
+        }
+        else {
+            $package = new Package($versionStrategy, $context);
+        }
+        $packages = new Packages($package, $namedPackages);
+
+        return new AssetsExtension($packages);
     }
 }

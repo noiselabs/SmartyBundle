@@ -30,6 +30,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
@@ -51,27 +52,17 @@ use Symfony\Component\Templating\Helper\AssetsHelper;
  */
 class AssetsExtension extends AbstractExtension
 {
-    protected $helper;
-    protected $container;
+    /**
+     * @var Packages
+     */
+    protected $packages;
 
     /**
      * Constructor.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Packages $packages)
     {
-        $this->helper = null;
-        $this->container = $container;
-    }
-
-    public function getHelper()
-    {
-        return null === $this->helper ?
-            $this->container->get('templating.helper.assets') : $this->helper;
-    }
-
-    public function setHelper(AssetsHelper $helper)
-    {
-        $this->helper = $helper;
+        $this->packages = $packages;
     }
 
     /**
@@ -98,7 +89,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function getAssetUrl($path, $packageName = null)
     {
-        return $this->getHelper()->getUrl($path, $packageName);
+        return $this->packages->getUrl($path, $packageName);
     }
 
     /**
@@ -118,7 +109,7 @@ class AssetsExtension extends AbstractExtension
                 'package'   => null,
             ), $parameters);
 
-            return $this->getHelper()->getUrl($path, $parameters['package']);
+            return $this->packages->getUrl($path, $parameters['package']);
         }
     }
 
@@ -134,7 +125,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function getAssetUrl_modifier($path, $package = null)
     {
-        return $this->getHelper()->getUrl($path, $package);
+        return $this->packages->getUrl($path, $package);
     }
 
     /**
@@ -148,7 +139,7 @@ class AssetsExtension extends AbstractExtension
             'package'   => null,
         ), $parameters);
 
-        return $this->getHelper()->getVersion($parameters['package']);
+        return $this->packages->getVersion(null, $parameters['package']);
     }
 
     /**
