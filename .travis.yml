@@ -1,6 +1,9 @@
+language: php
+
 sudo: false
 
-language: php
+git:
+    depth: 1
 
 php:
     - 5.3
@@ -17,14 +20,9 @@ env:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist
-  - pip install --upgrade pip
-  - pip install --user requests[security] codecov
 
 script:
-- vendor/bin/phpunit --coverage-clover=coverage.xml
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- vendor/bin/phpunit
 
 notifications:
     irc: "irc.freenode.org#noiselabs"
