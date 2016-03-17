@@ -3,19 +3,17 @@
 <phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
+    bootstrap="vendor/autoload.php"
     colors="true"
+    columns="max"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
     syntaxCheck="true"
-    bootstrap="autoload.php.dist"
+    verbose="true"
 >
-    <php>
-        <!-- <server name="SMARTYBUNDLE_TEST_VENDOR_DIR" value="/path/to/vendors" /> -->
-    </php>
-
     <testsuites>
         <testsuite name="NoiseLabs SmartyBundle Test Suite">
             <directory suffix="Test.php">./Tests</directory>
