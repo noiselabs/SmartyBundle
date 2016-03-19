@@ -191,4 +191,58 @@ class SmartyEngineTest extends TestCase
 
         return $container;
     }
+
+    /**
+     * test if plugins can be registered between two renders
+     */
+    public function testAddPlugin()
+    {
+        $engine = $this->getSmartyEngine();
+
+        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
+        $plugin->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('mockPluginA'));
+        $plugin->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('modifier'));
+        $plugin->expects($this->any())
+            ->method('doModify')
+            ->will($this->returnArgument(0));
+        $plugin->expects($this->any())
+            ->method('getCallback')
+            ->will($this->returnValue(array($plugin,'doModify')));
+
+        // register first plugin
+        $engine->addPlugin($plugin);
+
+        $engine->setTemplate('plugin_test_1.tpl', '{$var|mockPluginA}');
+        $engine->addGlobal('var', 'foo');
+
+        $this->assertEquals('foo', $engine->render('plugin_test_1.tpl'));
+
+
+        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
+        $plugin->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('mockPluginB'));
+        $plugin->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('modifier'));
+        $plugin->expects($this->any())
+            ->method('doModify')
+            ->will($this->returnArgument(0));
+        $plugin->expects($this->any())
+            ->method('getCallback')
+            ->will($this->returnValue(array($plugin,'doModify')));
+
+        // register second plugin
+        $engine->addPlugin($plugin);
+
+        $engine->setTemplate('plugin_test_2.tpl', '{$foo|mockPluginA} {$bar|mockPluginB}');
+        $engine->addGlobal('foo', 'foo');
+        $engine->addGlobal('bar', 'bar');
+
+        $this->assertEquals('foo bar', $engine->render('plugin_test_2.tpl'));
+    }
 }
