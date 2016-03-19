@@ -35,4 +35,14 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 interface PluginInterface
 {
     public function getType();
+
+    /**
+     * Get the plugin name.
+     */
+    public function getName();
+
+    /**
+     * Return the plugin callback.
+     */
+    public function getCallback();
 }
