@@ -58,7 +58,6 @@ class SmartyEngine implements EngineInterface
     protected $loader;
     protected $parser;
     protected $plugins;
-    protected $registeredPlugins = array();
     protected $smarty;
 
     /**
@@ -582,7 +581,7 @@ class SmartyEngine implements EngineInterface
     protected function registerPlugin(PluginInterface $plugin)
     {
         // verify that plugin isn't registered yet. That would cause a SmartyException.
-        if (!in_array($plugin->getType() . '_' . $plugin->getName(), $this->registeredPlugins)) {
+        if (!isset($this->smarty->registered_plugins[$plugin->getType()][$plugin->getName()])) {
             $this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
             $this->registeredPlugins[] = $plugin->getType() . '_' . $plugin->getName();
         }
