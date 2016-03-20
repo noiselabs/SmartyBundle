@@ -1,6 +1,8 @@
 SmartyBundle
 ============
 
+[![Join the chat at https://gitter.im/noiselabs/SmartyBundle](https://badges.gitter.im/noiselabs/SmartyBundle.svg)](https://gitter.im/noiselabs/SmartyBundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [@documentation]:   https://smartybundle.readthedocs.org/   "SmartyBundle Documentation"
 [@php]:             http://php.net/                         "PHP: Hypertext Preprocessor"
 [@smarty]:          http://www.smarty.net/                  "The compiling PHP template engine"
