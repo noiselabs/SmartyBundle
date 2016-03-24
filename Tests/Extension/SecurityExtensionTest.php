@@ -30,6 +30,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Test suite for the security extension.
@@ -83,6 +84,21 @@ class SecurityExtensionTest extends TestCase
         );
     }
 
+    public function testCsrfToken()
+    {
+        $tokenId = 'foo';
+        $tokenValue = 'xsrf';
+        $content = "{'$tokenId'|csrf_token}";
+        $template = 'csrf_token_test.html.tpl';
+
+        $this->engine->setTemplate($template, $content);
+        $context = $this->createSecurityContext();
+        $csrfTokenManager = $this->createCsrfTokenManager($tokenId, $tokenValue);
+        $this->engine->addExtension(new SecurityExtension($context, $csrfTokenManager));
+
+        $this->assertEquals($tokenValue, $this->engine->render($template));
+    }
+
     protected function createSecurityContext($granted = false)
     {
         $authManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
@@ -98,5 +114,17 @@ class SecurityExtensionTest extends TestCase
         ;
 
         return $context;
+    }
+
+    protected function createCsrfTokenManager($tokenId, $value)
+    {
+        $csrfToken = $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfToken')
+            ->setConstructorArgs(array($tokenId, $value))
+            ->getMock();
+        $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
+        $csrfTokenManager = $this->getMock('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+        $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));
+
+        return $csrfTokenManager;
     }
 }

@@ -28,8 +28,10 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * SecurityExtension exposes security context features.
@@ -39,15 +41,17 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 class SecurityExtension extends AbstractExtension
 {
     protected $context;
+    protected $csrfTokenManager;
 
     /**
      * Constructor.
      *
      * @param SecurityContextInterface $context A SecurityContext instance
      */
-    public function __construct(SecurityContextInterface $context = null)
+    public function __construct(SecurityContextInterface $context = null, CsrfTokenManagerInterface $csrfTokenManager = null)
     {
         $this->context = $context;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     /**
@@ -57,6 +61,7 @@ class SecurityExtension extends AbstractExtension
     {
         return array(
             new ModifierPlugin('is_granted', $this, 'isGranted'),
+            new ModifierPlugin('csrf_token', $this, 'getCsrfToken'),
         );
     }
 
@@ -71,6 +76,15 @@ class SecurityExtension extends AbstractExtension
         }
 
         return $this->context->isGranted($role, $object);
+    }
+
+    public function getCsrfToken($tokenId)
+    {
+        if (null === $this->csrfTokenManager) {
+            throw new RuntimeException('CSRF tokens can only be generated if a CsrfTokenManagerInterface is injected in SecurityExtension::__construct().');
+        }
+
+        return $this->csrfTokenManager->getToken($tokenId)->getValue();
     }
 
     /**

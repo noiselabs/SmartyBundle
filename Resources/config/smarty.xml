@@ -61,6 +61,7 @@
         <service id="smarty.extension.security" class="%smarty.extension.security.class%" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="security.context" on-invalid="ignore" />
+            <argument type="service" id="security.csrf.token_manager" on-invalid="ignore" />
         </service>
 
         <service id="smarty.extension.expression" class="%smarty.extension.expression.class%" public="false">
