@@ -3,9 +3,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-
-## [2.0.0]
+## [2.0.0] Unreleased
 
 ### Added
 - Compatibility with Symfony 3.0
@@ -17,3 +15,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - Drop Support for Symfony < 2.8
 - Drop Support for PHP < 5.5
+
+## [1.3.0] - 2016-03-24
+
+### Added
+- Compatibility with Symfony 2.8
+
+### Removed
+- [#50](https://github.com/noiselabs/SmartyBundle/pull/50) Removed support for unsupported versions of Symfony
+
+### Fixed
+- [#51](https://github.com/noiselabs/SmartyBundle/pull/51) fix problem with "plugin tag are already registered" debug messages
+
