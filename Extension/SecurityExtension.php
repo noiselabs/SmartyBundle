@@ -32,6 +32,7 @@ use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 
 /**
  * SecurityExtension exposes security context features.
@@ -47,8 +48,9 @@ class SecurityExtension extends AbstractExtension
      * Constructor.
      *
      * @param SecurityContextInterface $context A SecurityContext instance
+     * @param CsrfTokenManagerInterface
      */
-    public function __construct(SecurityContextInterface $context = null, CsrfTokenManagerInterface $csrfTokenManager = null)
+    public function __construct(SecurityContextInterface $context = null, $csrfTokenManager = null)
     {
         $this->context = $context;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -80,11 +82,20 @@ class SecurityExtension extends AbstractExtension
 
     public function getCsrfToken($tokenId)
     {
-        if (null === $this->csrfTokenManager) {
-            throw new RuntimeException('CSRF tokens can only be generated if a CsrfTokenManagerInterface is injected in SecurityExtension::__construct().');
+        if ($this->csrfTokenManager instanceof CsrfProviderInterface) {
+            $tokenValue = $this->csrfTokenManager->generateCsrfToken($tokenId);
+        }
+        elseif ($this->csrfTokenManager instanceof CsrfTokenManagerInterface) {
+            $tokenValue = $this->csrfTokenManager->getToken($tokenId)->getValue();
+        } else {
+            $this->csrfTokenManager = null;
         }
 
-        return $this->csrfTokenManager->getToken($tokenId)->getValue();
+        if (null === $this->csrfTokenManager) {
+            throw new RuntimeException('CSRF tokens can only be generated if a CsrfProviderInterface or CsrfTokenManagerInterface is injected in SecurityExtension::__construct().');
+        }
+
+        return $tokenValue;
     }
 
     /**
