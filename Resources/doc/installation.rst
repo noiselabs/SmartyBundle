@@ -7,13 +7,13 @@ Installation
 Download SmartyBundle
 =====================
 
-Tell composer to add the bundle to your ``composer.json``' by running the command:
+Tell composer to add the bundle to your :file:`composer.json` by running the command:
 
 .. code-block:: bash
 
-    $ php composer.phar require noiselabs/smarty-bundle
+    $ php composer.phar require noiselabs/smarty-bundle ~2.0
 
-Composer will install the bundle to your project's `vendor/noiselabs` directory.
+Composer will install the bundle to your project's :file:`vendor/noiselabs` directory.
 
 Enable the bundle
 =================
@@ -35,12 +35,11 @@ Enable the bundle in the kernel:
 Enable the Smarty template engine in the config
 ===============================================
 
-.. configuration-block::
+.. code-block:: yaml
 
-    .. code-block:: yaml
-
-        # app/config/config.yml
-        # ...
-        framework:
-            templating:      { engines: ['twig', 'smarty'] }
+    # app/config/config.yml
+    # ...
+    framework:
+        templating:
+            engines: ['twig', 'smarty']
 
