@@ -31,12 +31,12 @@ use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\Loader\LoaderInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**

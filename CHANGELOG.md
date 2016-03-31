@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 - Drop Support for Symfony < 2.8
+  - `Symfony\Component\HttpKernel\Log\LoggerInterface` as been replaced by `Psr\Log\LoggerInterface`
 - Drop Support for PHP < 5.5
 
 ## [1.3.0] - 2016-03-24
