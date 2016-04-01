@@ -188,15 +188,9 @@ class AsseticExtensionTest extends TestCase
         $xml = $this->renderXml('variables.smarty');
         $this->assertEquals(2, $xml->url->count());
 
-        /**
-         * @todo The following tests are skipped because phpunit runs differently on Travis and I have not a clue why.
-         *
-         * <code>$this->assertEquals("js/7d0828c_foo_1.a.b.js", (string) $xml->url[0]);</code>
-         * Expected string when running PHPUnit on Travis: 'js/7d0828c.a.b_foo_1.js'
-         *
-         * <code>$this->assertEquals("js/7d0828c_variable_input.a_2.a.b.js", (string) $xml->url[1]);</code>
-         * Expected string when running PhpUnit on Travis: 'js/7d0828c.a.b_variable_input.a_2.js'
-         */
+        // formatting of the asset url changed with kriswallsmith/assetic 1.1.3
+        $this->assertEquals('js/7d0828c.a.b_foo_1.js', (string) $xml->url[0]);
+        $this->assertEquals('js/7d0828c.a.b_variable_input._2.js', (string) $xml->url[1]);
     }
 }
 

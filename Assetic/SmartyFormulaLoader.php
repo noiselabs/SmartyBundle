@@ -26,6 +26,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Assetic;
 
+use Assetic\Factory\AssetFactory;
 use Assetic\Factory\Loader\FormulaLoaderInterface;
 use Assetic\Factory\Resource\ResourceInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
@@ -38,9 +39,24 @@ use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
  */
 class SmartyFormulaLoader implements FormulaLoaderInterface
 {
+    /**
+     * @var SmartyEngine
+     */
     protected $engine;
+
+    /**
+     * @var AsseticExtension
+     */
     protected $extension;
+
+    /**
+     * @var AssetFactory
+     */
     protected $factory;
+
+    /**
+     * @var array
+     */
     protected $tags = array();
 
     public function __construct(SmartyEngine $engine)
