@@ -31,10 +31,10 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Form\SmartyRendererInterface;
+use Symfony\Component\Form\Exception\ExceptionInterface;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Exception\FormException;
 use Symfony\Component\Form\Util\FormUtil;
-use Symfony\Component\Templating\EngineInterface;
 
 /**
  * SmartyBundle extension to render Symfony forms.
@@ -232,7 +232,7 @@ class FormExtension extends AbstractExtension
      *
      * @return string The html markup
      *
-     * @throws FormException if no template block exists to render the given section of the view
+     * @throws ExceptionInterface if no template block exists to render the given section of the view
      */
     protected function render(FormView $view, \Smarty_Internal_Template $template, $section, array $variables = array())
     {
@@ -301,7 +301,7 @@ class FormExtension extends AbstractExtension
     protected function extractFunctionParameters(array $parameters)
     {
         if (!isset($parameters['form'])) {
-            throw new FormException('"form" parameter missing in Smarty template function.');
+            throw new InvalidArgumentException('"form" parameter missing in Smarty template function.');
         }
 
         if (!$parameters['form'] instanceof FormView) {

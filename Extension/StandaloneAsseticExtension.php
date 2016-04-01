@@ -26,12 +26,15 @@
 
  namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
-use Assetic\AssetManager;
-use Assetic\FilterManager;
-use Assetic\Filter;
-use Assetic\AssetWriter;
 use Assetic\Asset\AssetCache;
+use Assetic\AssetManager;
+use Assetic\AssetWriter;
 use Assetic\Cache\FilesystemCache;
+use Assetic\Factory\AssetFactory;
+use Assetic\Filter;
+use Assetic\FilterManager;
+use InvalidArgumentException;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 
 if (isset($_SERVER['LESSPHP'])) {
     require_once $_SERVER['LESSPHP'];

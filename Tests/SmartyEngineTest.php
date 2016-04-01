@@ -29,12 +29,8 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
-use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
-use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\TemplateNameParser;
 
 /**

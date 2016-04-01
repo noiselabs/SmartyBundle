@@ -51,12 +51,6 @@ class CompileCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'A bundle name'
             )
-            ->addOption(
-                'force',
-                null,
-                InputOption::VALUE_NONE,
-                'Force the compilation of all templates even if they weren\'t modified'
-            )
             ->setHelp(<<<EOF
 The following command finds all known Smarty templates and compiles them:
 
@@ -75,10 +69,8 @@ EOF
     {
         $finder = $this->getContainer()->get('smarty.templating.finder');
         $engine = $this->getContainer()->get('templating.engine.smarty');
-        $smarty = $engine->getSmarty();
 
         $bundleName = $input->getArgument('bundle');
-        $force = (boolean) $input->getOption('force');
         $verbose = $input->getOption('verbose');
 
         if ($bundleName && (0 === strpos($bundleName, '@'))) {

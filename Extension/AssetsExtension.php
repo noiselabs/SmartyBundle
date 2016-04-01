@@ -31,22 +31,10 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Templating\Helper\AssetsHelper;
 
 /**
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
- *
- * If you need to use this class without the Symfony Container use this:
- * <code>
- * class MyAssetsExtension extends AssetsExtension
- * {
- *   public function __construct(\Symfony\Component\Templating\Helper\AssetsHelper $helper) {
- *      $this->helper = $helper;
- *   }
- * }
- * </code>
  *
  * @author Vítor Brandão <vitor@noiselabs.org>
  */
@@ -131,7 +119,7 @@ class AssetsExtension extends AbstractExtension
     /**
      * Returns the version of the assets in a package
      *
-     * @return int
+     * @return string
      */
     public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
     {

@@ -545,9 +545,10 @@ class SmartyEngine implements EngineInterface
      * Gets the collection of plugins, optionally filtered by an extension
      * name.
      *
-     * @return PluginInterface[] An array of plugins
+     * @param string $extensionName
+     * @return Extension\Plugin\PluginInterface[] An array of plugins
      */
-    public function getPlugins($extensionName = false)
+    public function getPlugins($extensionName = '')
     {
         if (null === $this->plugins) {
             $this->plugins = array();
@@ -558,7 +559,6 @@ class SmartyEngine implements EngineInterface
 
         // filter plugins that belong to $extension
         if ($extensionName) {
-
             $plugins = array();
             foreach (array_keys($this->plugins) as $k) {
                 if ($extensionName == $this->plugins[$k]->getExtension()->getName()) {
