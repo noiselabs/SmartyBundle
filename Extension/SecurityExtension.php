@@ -28,8 +28,11 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 
 /**
  * SecurityExtension exposes security context features.
@@ -39,15 +42,18 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 class SecurityExtension extends AbstractExtension
 {
     protected $context;
+    protected $csrfTokenManager;
 
     /**
      * Constructor.
      *
      * @param SecurityContextInterface $context A SecurityContext instance
+     * @param CsrfTokenManagerInterface
      */
-    public function __construct(SecurityContextInterface $context = null)
+    public function __construct(SecurityContextInterface $context = null, $csrfTokenManager = null)
     {
         $this->context = $context;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     /**
@@ -57,6 +63,7 @@ class SecurityExtension extends AbstractExtension
     {
         return array(
             new ModifierPlugin('is_granted', $this, 'isGranted'),
+            new ModifierPlugin('csrf_token', $this, 'getCsrfToken'),
         );
     }
 
@@ -71,6 +78,24 @@ class SecurityExtension extends AbstractExtension
         }
 
         return $this->context->isGranted($role, $object);
+    }
+
+    public function getCsrfToken($tokenId)
+    {
+        if ($this->csrfTokenManager instanceof CsrfProviderInterface) {
+            $tokenValue = $this->csrfTokenManager->generateCsrfToken($tokenId);
+        }
+        elseif ($this->csrfTokenManager instanceof CsrfTokenManagerInterface) {
+            $tokenValue = $this->csrfTokenManager->getToken($tokenId)->getValue();
+        } else {
+            $this->csrfTokenManager = null;
+        }
+
+        if (null === $this->csrfTokenManager) {
+            throw new RuntimeException('CSRF tokens can only be generated if a CsrfProviderInterface or CsrfTokenManagerInterface is injected in SecurityExtension::__construct().');
+        }
+
+        return $tokenValue;
     }
 
     /**
