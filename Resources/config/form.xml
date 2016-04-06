@@ -4,23 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="smarty.extension.form.class">NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension</parameter>
-        <parameter key="smarty.form.engine.class">NoiseLabs\Bundle\SmartyBundle\Form\SmartyRendererEngine</parameter>
-        <parameter key="smarty.form.renderer.class">NoiseLabs\Bundle\SmartyBundle\Form\SmartyRenderer</parameter>
-    </parameters>
-
    <services>
-        <service id="smarty.extension.form" class="%smarty.extension.form.class%" public="false">
+        <service id="smarty.extension.form" class="NoiseLabs\Bundle\SmartyBundle\Extension\FormExtension" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="smarty.form.renderer" />
         </service>
 
-        <service id="smarty.form.engine" class="%smarty.form.engine.class%" public="false">
+        <service id="smarty.form.engine" class="NoiseLabs\Bundle\SmartyBundle\Form\SmartyRendererEngine" public="false">
             <argument>%smarty.form.resources%</argument>
         </service>
 
-        <service id="smarty.form.renderer" class="%smarty.form.renderer.class%" public="false">
+        <service id="smarty.form.renderer" class="NoiseLabs\Bundle\SmartyBundle\Form\SmartyRenderer" public="false">
             <argument type="service" id="smarty.form.engine" />
             <argument type="service" id="form.csrf_provider" on-invalid="null" />
         </service>

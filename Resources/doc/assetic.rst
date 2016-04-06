@@ -13,6 +13,24 @@ Assetic
 
 Assetic combines two major ideas: assets and filters. The assets are files such as CSS, JavaScript and image files. The filters are things that can be applied to these files before they are served to the browser. This allows a separation between the asset files stored in the application and the files actually presented to the user.
 
+Installation
+------------
+
+See the Symfony Manual for `Installation Instructions <https://symfony.com/doc/current/cookbook/assetic/asset_management.html#installing-and-enabling-assetic>`_.
+
+When installing symfony/assetic-bundle you need to enable the twig template engine. Otherwise you will get a ``ServiceNotFoundException``.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    # ...
+    framework:
+        templating:
+            engines: ['twig', 'smarty']
+
+Usage
+-----
+
 Using Assetic provides many advantages over directly serving the files. The files do not need to be stored where they are served from and can be drawn from various sources such as from within a bundle:
 
 .. code-block:: html+smarty

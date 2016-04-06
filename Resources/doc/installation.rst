@@ -41,5 +41,8 @@ Enable the Smarty template engine in the config
     # ...
     framework:
         templating:
-            engines: ['twig', 'smarty']
+            engines: ['twig', 'php', 'smarty']
 
+.. warning::
+
+    You need to enable the ``php`` engine as well. Otherwise some services will not work as expected. See `https://github.com/symfony/symfony/issues/14719`_

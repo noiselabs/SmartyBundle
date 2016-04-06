@@ -4,12 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="smarty.extension.menu.class">NoiseLabs\Bundle\SmartyBundle\Menu\Extension\MenuExtension</parameter>
-    </parameters>
-
     <services>
-        <service id="smarty.extension.menu" class="%smarty.extension.menu.class%" public="false">
+        <service id="smarty.extension.menu" class="NoiseLabs\Bundle\SmartyBundle\Menu\Extension\MenuExtension" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="knp_menu.helper" />
         </service>

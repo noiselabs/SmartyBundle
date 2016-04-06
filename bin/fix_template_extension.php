@@ -37,8 +37,7 @@ use Symfony\Component\Process\Process;
 if (!is_dir($rootDir.'/vendor/symfony')) {
     printf('Fatal Error:'.PHP_EOL.
     '  The Symfony library is required to run this script and could not'.PHP_EOL.
-    '  be found in "vendor/symfony". Please run bin/vendors.php or manually'.PHP_EOL.
-    '  place a copy of the Symfony git repo in "vendor/".'.PHP_EOL,
+    '  be found in "vendor/symfony". Please run composer install.'.PHP_EOL,
         $rootDir
     );
 }
