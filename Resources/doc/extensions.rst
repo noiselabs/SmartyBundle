@@ -191,6 +191,15 @@ that method is invented for this example).
 
 For more details on expressions and security, see the section `Complex Access Controls with Expressions <http://symfony.com/doc/current/book/security.html#book-security-expressions>`_ in the Symfony book.
 
+Using CSRF Protection in the Login Form
+---------------------------------------
+
+The security extension also adds a modifer to support CSRF Protection in login forms. Please read `Using CSRF Protection in the Login Form <http://symfony.com/doc/current/cookbook/security/csrf_in_login_form.html>`_ from the Symfony Documentation for general CSRF Protection setup. The template for rendering should look like this:
+
+.. code-block:: html+smarty
+
+    <input type="hidden" name="_csrf_token" value="{'authenticate'|csrf_token}">
+
 Enabling custom Extensions
 ==========================
 
