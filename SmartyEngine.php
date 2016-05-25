@@ -31,6 +31,7 @@ use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -69,12 +70,17 @@ class SmartyEngine implements EngineInterface
      * @param LoaderInterface             $loader    A LoaderInterface instance
      * @param array                       $options   An array of \Smarty properties
      * @param GlobalVariables|null        $globals   A GlobalVariables instance or null
-     * @param LoggerInterface|null        $logger    A LoggerInterface instance or null
+     * @param LoggerInterface|Logger|null $logger    A LoggerInterface instance, Logger instance or null
      */
     public function __construct(\Smarty $smarty, ContainerInterface $container,
     TemplateNameParserInterface $parser, LoaderInterface $loader, array $options,
-    GlobalVariables $globals = null, LoggerInterface $logger = null)
+    GlobalVariables $globals = null, $logger = null)
     {
+        // Check logger type
+        if (!$logger instanceof LoggerInterface && !$logger instanceof Logger) {
+            throw new \Exception('Logger must be instance of LoggerInterface or Logger, instance of ' . get_class($logger) . ' given');
+        }
+
         $this->smarty = $smarty;
         $this->parser = $parser;
         $this->loader = $loader;
