@@ -27,11 +27,11 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\CacheWarmer;
 
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * Finds all the templates.

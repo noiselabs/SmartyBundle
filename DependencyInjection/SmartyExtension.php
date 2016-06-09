@@ -81,7 +81,7 @@ class SmartyExtension extends Extension
             $loader->load('assetic.xml');
 
             // choose dynamic or static
-            if ($useController = $container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
+            if ($container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
                 $container->getDefinition('smarty.extension.assetic.dynamic')->addTag('smarty.extension', array('alias' => 'assetic'));
                 $container->removeDefinition('smarty.extension.assetic.static');
             } else {

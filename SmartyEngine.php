@@ -53,10 +53,29 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  */
 class SmartyEngine implements EngineInterface
 {
+    /**
+     * @var ExtensionInterface[]
+     */
     protected $extensions;
+
+    /**
+     * @var FilterInterface[]
+     */
     protected $filters;
+
+    /**
+     * @var array
+     */
     protected $globals;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $loader;
+
+    /**
+     * @var TemplateNameParserInterface
+     */
     protected $parser;
 
     /**
@@ -68,6 +87,11 @@ class SmartyEngine implements EngineInterface
      * @var Smarty
      */
     protected $smarty;
+
+    /**
+     * @var null|LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Constructor.
@@ -236,7 +260,7 @@ class SmartyEngine implements EngineInterface
      * @param mixed   $name A template name
      * @param boolean $load If we should load template content right away. Default: true
      *
-     * @return Smarty_Internal_Template
+     * @return \Smarty_Internal_Template
      */
     public function createTemplate($name, $load = true)
     {
@@ -259,7 +283,7 @@ class SmartyEngine implements EngineInterface
      *
      * @param mixed $name A template name
      *
-     * @return Smarty_Internal_Template
+     * @return \Smarty_Internal_Template
      */
     public function compileTemplate($name, $forceCompile = false)
     {
@@ -308,7 +332,7 @@ class SmartyEngine implements EngineInterface
     }
 
     /**
-     * @param Smarty_Internal_Template|string $template   A template object or resource path
+     * @param \Smarty_Internal_Template|string $template   A template object or resource path
      * @param string                          $name       Function name
      * @param array                           $attributes Attributes to pass to the template function
      *
@@ -459,7 +483,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Registers an array of extensions.
      *
-     * @param array $extensions An array of extensions
+     * @param ExtensionInterface[] $extensions An array of extensions
      */
     public function setExtensions(array $extensions)
     {
@@ -473,7 +497,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Returns all registered extensions.
      *
-     * @return array An array of extensions
+     * @return ExtensionInterface[] An array of extensions
      */
     public function getExtensions()
     {
@@ -497,7 +521,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Gets the collection of filters.
      *
-     * @return array An array of Filters
+     * @return FilterInterface[] An array of Filters
      */
     public function getFilters()
     {

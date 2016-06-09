@@ -29,12 +29,15 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
+use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
+
 interface ExtensionInterface
 {
     /**
     * Returns a list of Plugins to add to the existing list.
     *
-    * @return array An array of Plugins
+    * @return PluginInterface[] An array of Plugins
     *
     * @since  0.1.0
     * @author Vítor Brandão <vitor@noiselabs.org>
@@ -44,7 +47,7 @@ interface ExtensionInterface
     /**
      * Returns a list of Filters to add to the existing list.
      *
-     * @return array An array of Filters
+     * @return FilterInterface[] An array of Filters
      *
      * @since  0.1.0
      * @author Vítor Brandão <vitor@noiselabs.org>

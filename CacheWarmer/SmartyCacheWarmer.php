@@ -28,9 +28,9 @@
 namespace NoiseLabs\Bundle\SmartyBundle\CacheWarmer;
 
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 /**
  * Generates the Smarty cache for all templates.
@@ -40,8 +40,15 @@ use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
  */
 class SmartyCacheWarmer implements CacheWarmerInterface
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
-    protected $warmer;
+
+    /**
+     * @var TemplateFinderInterface
+     */
+    protected $finder;
 
     /**
      * Constructor.
@@ -67,7 +74,6 @@ class SmartyCacheWarmer implements CacheWarmerInterface
     public function warmUp($cacheDir)
     {
         $engine = $this->container->get('templating.engine.smarty');
-        $smarty = $engine->getSmarty();
         $logger = $this->container->has('logger') ? $this->container->get('logger') : null;
 
         foreach ($this->finder->findAllTemplates() as $template) {
