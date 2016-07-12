@@ -40,7 +40,6 @@ use Symfony\Component\ExpressionLanguage\Expression;
  */
 class ExpressionExtension extends AbstractExtension
 {
-
     /**
      * {@inheritdoc}
      */

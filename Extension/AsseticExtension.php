@@ -284,7 +284,8 @@ abstract class AsseticExtension extends AbstractExtension
                 'debug'             => $this->factory->isDebug(),
                 'use_controller'    => $this->useController,
                 'vars'              => $this->getVarValues(),
-            ));
+            )
+        );
     }
 
     /**

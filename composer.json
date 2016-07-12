@@ -31,8 +31,10 @@
         "mopa/bootstrap-bundle": "~3.0",
         "phpunit/phpunit": "~4.0",
         "symfony/assetic-bundle": "~2.0",
+        "symfony/expression-language": "~2.8|~3.0",
         "symfony/phpunit-bridge": "^3.0",
         "symfony/security": "~2.8|~3.0",
+        "symfony/security-acl": "~2.8|~3.0",
         "symfony/yaml": "~2.8|~3.0"
     },
     "suggest": {
