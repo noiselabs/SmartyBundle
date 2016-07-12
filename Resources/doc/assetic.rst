@@ -28,6 +28,15 @@ When installing symfony/assetic-bundle you need to enable the twig template engi
         templating:
             engines: ['twig', 'smarty']
 
+Also make sure you disable assetic controllers.
+
+.. code-block: yaml
+
+    # app/config/config.yml
+    # ...
+    assetic:
+        use_controller: false
+
 Usage
 -----
 
