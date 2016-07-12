@@ -31,7 +31,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Form;
 
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Renders a Symfony2 form in a Smarty template.
@@ -47,10 +47,10 @@ class SmartyRenderer extends FormRenderer implements SmartyRendererInterface
     private $engine;
 
     /**
-     * @param \NoiseLabs\Bundle\SmartyBundle\Form\SmartyRendererEngineInterface $engine
-     * @param \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface|null $csrfProvider
+     * @param SmartyRendererEngineInterface $engine
+     * @param CsrfTokenManagerInterface $csrfProvider
      */
-    public function __construct(SmartyRendererEngineInterface $engine, CsrfProviderInterface $csrfProvider = null)
+    public function __construct(SmartyRendererEngineInterface $engine, CsrfTokenManagerInterface $csrfProvider = null)
     {
         parent::__construct($engine, $csrfProvider);
 
