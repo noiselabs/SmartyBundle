@@ -29,6 +29,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\ExpressionLanguage\Expression;
+
 /**
  * SmartyBundle extension for Symfony actions helper.
  *

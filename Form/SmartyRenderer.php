@@ -67,5 +67,4 @@ class SmartyRenderer extends FormRenderer implements SmartyRendererInterface
         var_dump($blockNameSuffix);
         die('not found');
     }
-
 }

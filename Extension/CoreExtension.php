@@ -26,6 +26,7 @@
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
+
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 
 /**

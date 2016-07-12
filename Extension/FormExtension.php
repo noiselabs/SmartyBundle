@@ -250,7 +250,9 @@ class FormExtension extends AbstractExtension
             $typeIndex = $this->varStack[$rendering]['typeIndex'] - 1;
             $types = $this->varStack[$rendering]['types'];
             $this->varStack[$rendering]['variables'] = array_replace_recursive(
-                $this->varStack[$rendering]['variables'], $variables);
+                $this->varStack[$rendering]['variables'],
+                $variables
+            );
         } else {
             $types = $view->get('types');
             $types[] = $custom;
@@ -266,16 +268,17 @@ class FormExtension extends AbstractExtension
             $template = $this->lookupTemplateFunction($function);
 
             if ($template) {
-
                 $this->varStack[$rendering]['typeIndex'] = $typeIndex;
 
                 ob_start();
-                $functionExists = $this->engine->renderTemplateFunction($template,
-                    $function, $this->varStack[$rendering]['variables']);
+                $functionExists = $this->engine->renderTemplateFunction(
+                    $template,
+                    $function,
+                    $this->varStack[$rendering]['variables']
+                );
                 $html = ob_get_clean();
 
                 if ($functionExists) {
-
                     unset($this->varStack[$rendering]);
 
                     if ($mainTemplate) {

@@ -85,8 +85,7 @@ class AssetsExtensionTest extends TestCase
 
         if ($baseUrls) {
             $package = new UrlPackage($baseUrls, $versionStrategy, $context);
-        }
-        else {
+        } else {
             $package = new Package($versionStrategy, $context);
         }
         $packages = new Packages($package, $namedPackages);

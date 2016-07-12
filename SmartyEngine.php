@@ -104,10 +104,15 @@ class SmartyEngine implements EngineInterface
      * @param GlobalVariables|null        $globals   A GlobalVariables instance or null
      * @param LoggerInterface|null        $logger    A LoggerInterface instance or null
      */
-    public function __construct(Smarty $smarty, ContainerInterface $container,
-                                TemplateNameParserInterface $parser, LoaderInterface $loader, array $options,
-                                GlobalVariables $globals = null, LoggerInterface $logger = null)
-    {
+    public function __construct(
+        Smarty $smarty,
+        ContainerInterface $container,
+        TemplateNameParserInterface $parser,
+        LoaderInterface $loader,
+        array $options,
+        GlobalVariables $globals = null,
+        LoggerInterface $logger = null
+    ) {
         $this->smarty = $smarty;
         $this->parser = $parser;
         $this->loader = $loader;
@@ -245,7 +250,7 @@ class SmartyEngine implements EngineInterface
          * Too learn more see {@link http://www.smarty.net/docs/en/api.fetch.tpl}
          */
 
-         try {
+        try {
             return $this->smarty->fetch($template);
         } catch (\SmartyException $e) {
             throw RuntimeException::createFromPrevious($e, $template);
@@ -321,7 +326,7 @@ class SmartyEngine implements EngineInterface
         }
 
         if ($template->caching) {
-            \Smarty_Internal_Function_Call_Handler::call ($name, $template, $attributes, $template->properties['nocache_hash'], false);
+            \Smarty_Internal_Function_Call_Handler::call($name, $template, $attributes, $template->properties['nocache_hash'], false);
         } else {
             if (is_callable($function = 'smarty_template_function_'.$name)) {
                 $function($template, $attributes);

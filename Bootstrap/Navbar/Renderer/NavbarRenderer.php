@@ -64,8 +64,11 @@ class NavbarRenderer extends BaseNavbarRenderer
             $template = $options['template'];
         }
 
-        $html = $this->getSmartyEngine()->fetchTemplateFunction($template, $function,
-            array('navbar' => $navbar));
+        $html = $this->getSmartyEngine()->fetchTemplateFunction(
+            $template,
+            $function,
+            array('navbar' => $navbar)
+        );
 
         return $html;
     }

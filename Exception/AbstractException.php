@@ -51,9 +51,13 @@ class AbstractException extends \Exception
      * @param Smarty_Internal_Template $template Smarty template
      * @param Exception                $previous The previous exception
      */
-    public function __construct($message, $lineno = -1, $filename = null,
-        \Smarty_Internal_Template $template = null, \Exception $previous = null)
-    {
+    public function __construct(
+        $message,
+        $lineno = -1,
+        $filename = null,
+        \Smarty_Internal_Template $template = null,
+        \Exception $previous = null
+    ) {
         if (version_compare(PHP_VERSION, '5.3.0', '<')) {
             $this->previous = $previous;
             parent::__construct('');
@@ -69,8 +73,11 @@ class AbstractException extends \Exception
             $this->guessTemplateInfo();
         }
 
-        $this->rawMessage = str_replace(array('&quot;', '&gt;', '&lt;'),
-            array('"', '>', '<'), html_entity_decode($message));
+        $this->rawMessage = str_replace(
+            array('&quot;', '&gt;', '&lt;'),
+            array('"', '>', '<'),
+            html_entity_decode($message)
+        );
 
         $this->updateRepr();
     }
@@ -233,7 +240,8 @@ class AbstractException extends \Exception
          *
          * @return array
          */
-        function objectToArray($var) {
+        function objectToArray($var)
+        {
             $result = array();
             $references = array();
 

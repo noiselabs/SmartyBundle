@@ -130,7 +130,7 @@ abstract class AsseticExtension extends AbstractExtension
      */
     public function buildAttributes(array $params = array())
     {
-        $explode = function($value) {
+        $explode = function ($value) {
             return array_map('trim', explode(',', $value));
         };
 
@@ -284,7 +284,7 @@ abstract class AsseticExtension extends AbstractExtension
                 'debug'             => $this->factory->isDebug(),
                 'use_controller'    => $this->useController,
                 'vars'              => $this->getVarValues(),
-        ));
+            ));
     }
 
     /**

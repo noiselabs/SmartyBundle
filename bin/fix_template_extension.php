@@ -35,9 +35,10 @@ use Symfony\Component\Process\Process;
 
 // check for Symfony existance
 if (!is_dir($rootDir.'/vendor/symfony')) {
-    printf('Fatal Error:'.PHP_EOL.
-    '  The Symfony library is required to run this script and could not'.PHP_EOL.
-    '  be found in "vendor/symfony". Please run composer install.'.PHP_EOL,
+    printf(
+        'Fatal Error:'.PHP_EOL.
+        '  The Symfony library is required to run this script and could not'.PHP_EOL.
+        '  be found in "vendor/symfony". Please run composer install.'.PHP_EOL,
         $rootDir
     );
 }
@@ -122,13 +123,15 @@ if ($git) {
 }
 
 if ($fix) {
-    printf('%s FIXING *.php and *.%s files in "%s"...',
+    printf(
+        '%s FIXING *.php and *.%s files in "%s"...',
         $bullet,
         $oldExtension,
         $srcDir
     );
 } else {
-    printf('%s Analyzing *.php and *.%s files in "%s"...',
+    printf(
+        '%s Analyzing *.php and *.%s files in "%s"...',
         $bullet,
         $oldExtension,
         $srcDir
@@ -171,7 +174,8 @@ foreach ($finder as $file) {
 
         if ($fix) {
             if ($git) {
-                $process = new Process(sprintf('%s mv %s %s',
+                $process = new Process(sprintf(
+                    '%s mv %s %s',
                     $gitBin,
                     $oldFilename,
                     $newFilename
@@ -182,7 +186,7 @@ foreach ($finder as $file) {
                     exit(-1);
                 }
             } else {
-            rename($oldFilename, $newFilename);
+                rename($oldFilename, $newFilename);
             }
         }
     }
@@ -195,13 +199,15 @@ foreach ($finder as $file) {
 }
 
 if (!$fix) {
-    printf(PHP_EOL."%s No changes were made to the filesystem. Let's try again with --fix to actually fix something?".PHP_EOL,
+    printf(
+        PHP_EOL."%s No changes were made to the filesystem. Let's try again with --fix to actually fix something?".PHP_EOL,
         $bullet
     );
 }
 
 if (!$git) {
-    printf(PHP_EOL."%s Do you know a --git option is available? When enabled, files are renamed using 'git mv'.".PHP_EOL,
+    printf(
+        PHP_EOL."%s Do you know a --git option is available? When enabled, files are renamed using 'git mv'.".PHP_EOL,
         $bullet
     );
 }

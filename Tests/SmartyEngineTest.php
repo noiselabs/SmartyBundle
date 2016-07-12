@@ -168,8 +168,13 @@ class SmartyEngineTest extends TestCase
     public function testGetLoader()
     {
         $container = $this->createContainer();
-        $engine = new ProjectTemplateEngine($this->smarty, $container,
-        new TemplateNameParser(), $this->loader, array());
+        $engine = new ProjectTemplateEngine(
+            $this->smarty,
+            $container,
+            new TemplateNameParser(),
+            $this->loader,
+            array()
+        );
 
         $this->assertSame($this->loader, $engine->getLoader());
     }

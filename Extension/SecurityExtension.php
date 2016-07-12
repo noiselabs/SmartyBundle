@@ -88,8 +88,7 @@ class SecurityExtension extends AbstractExtension
     {
         if ($this->csrfTokenManager instanceof CsrfProviderInterface) {
             $tokenValue = $this->csrfTokenManager->generateCsrfToken($tokenId);
-        }
-        elseif ($this->csrfTokenManager instanceof CsrfTokenManagerInterface) {
+        } elseif ($this->csrfTokenManager instanceof CsrfTokenManagerInterface) {
             $tokenValue = $this->csrfTokenManager->getToken($tokenId)->getValue();
         } else {
             $this->csrfTokenManager = null;
