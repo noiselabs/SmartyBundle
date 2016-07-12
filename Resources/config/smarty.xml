@@ -51,7 +51,7 @@
         <service id="smarty.extension.security" class="NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension" public="false">
             <tag name="smarty.extension" />
             <argument type="service" id="security.authorization_checker" on-invalid="null" />
-            <argument type="service" id="form.csrf_provider" on-invalid="null" />
+            <argument type="service" id="security.csrf.token_manager" on-invalid="null" />
         </service>
 
         <service id="smarty.extension.expression" class="NoiseLabs\Bundle\SmartyBundle\Extension\ExpressionExtension" public="false">
