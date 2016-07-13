@@ -33,6 +33,7 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Psr\Log\LoggerInterface;
 use Smarty;
+use Smarty_Internal_Template;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -386,7 +387,7 @@ class SmartyEngine implements EngineInterface
         $template = $this->parser->parse($name);
 
         // Keep 'tpl' for backwards compatibility.
-        return in_array($template->get('engine'), array('smarty', 'tpl'));
+        return in_array($template->get('engine'), array('smarty', 'tpl'), true);
     }
 
     /**
@@ -446,7 +447,7 @@ class SmartyEngine implements EngineInterface
      */
     public function hasExtension($name)
     {
-        return isset($this->extensions[$name]);
+        return array_key_exists($name, $this->extensions);
     }
 
     /**
@@ -458,7 +459,7 @@ class SmartyEngine implements EngineInterface
      */
     public function getExtension($name)
     {
-        if (!isset($this->extensions[$name])) {
+        if (false === $this->hasExtension($name)) {
             throw new \InvalidArgumentException(sprintf('The "%s" extension is not enabled.', $name));
         }
 
@@ -550,7 +551,7 @@ class SmartyEngine implements EngineInterface
                 $this->smarty->registerFilter($filter->getType(), $filter->getCallback());
             } catch (\SmartyException $e) {
                 if (null !== $this->logger) {
-                    $this->logger->warn(sprintf("SmartyException caught: %s.", $e->getMessage()));
+                    $this->logger->warning(sprintf("SmartyException caught: %s.", $e->getMessage()));
                 }
             }
         }
@@ -660,7 +661,7 @@ class SmartyEngine implements EngineInterface
      */
     public function smartyDefaultTemplateHandler($type, $name, &$content, &$modified, Smarty $smarty)
     {
-        return ($type == 'file') ? (string) $this->load($name) : false;
+        return ($type === 'file') ? (string) $this->load($name) : false;
     }
 
     /**
@@ -671,6 +672,7 @@ class SmartyEngine implements EngineInterface
      *
      * @param string $property
      * @param string $prefix
+     * @return string
      */
     protected function smartyPropertyToSetter($property, $prefix = 'set')
     {
