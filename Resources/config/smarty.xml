@@ -35,7 +35,7 @@
 
         <service id="smarty.extension.assets" class="NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension" public="false">
             <tag name="smarty.extension" />
-            <argument type="service" id="assets.packages" on-invalid="null" />
+            <argument type="service" id="assets.packages" on-invalid="ignore" />
         </service>
 
         <service id="smarty.extension.routing" class="NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension" public="false">
