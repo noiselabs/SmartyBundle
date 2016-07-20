@@ -4,13 +4,11 @@
 Forms
 *****
 
-Symfony2 integrates a Form component that makes dealing with forms easy. In this chapter, you'll see how to render Symfony2 forms in Smarty templates. Oh yeah!
+Symfony integrates a Form component that makes dealing with forms easy. In this chapter, you'll see how to render Symfony forms in Smarty templates. Oh yeah!
 
 .. warning::
 
     Form support in SmartyBundle is currently **under development** and it is expected to be broken here and there. Please be patient and don't be shy to share your experiences with this extension. It will help us improve it. Thanks!
-
-    Also, only Form components released in **Symfony 2.1.0 or higher** are supported.
 
 Rendering a Form
 ----------------
@@ -41,7 +39,7 @@ First you need to create a form instance as described in `Creating a Simple Form
                 ->add('dueDate', 'date')
                 ->getForm();
 
-            return $this->render('AcmeTaskBundle:Default:new.html.twig', array(
+            return $this->render('AcmeTaskBundle:Default:new.html.smarty', array(
                 'form' => $form->createView(),
             ));
         }

@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.2.0
@@ -31,7 +31,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Form;
 
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Renders a Symfony2 form in a Smarty template.
@@ -47,10 +47,10 @@ class SmartyRenderer extends FormRenderer implements SmartyRendererInterface
     private $engine;
 
     /**
-     * @param \NoiseLabs\Bundle\SmartyBundle\Form\SmartyRendererEngineInterface $engine
-     * @param \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface|null $csrfProvider
+     * @param SmartyRendererEngineInterface $engine
+     * @param CsrfTokenManagerInterface $csrfProvider
      */
-    public function __construct(SmartyRendererEngineInterface $engine, CsrfProviderInterface $csrfProvider = null)
+    public function __construct(SmartyRendererEngineInterface $engine, CsrfTokenManagerInterface $csrfProvider = null)
     {
         parent::__construct($engine, $csrfProvider);
 
@@ -67,5 +67,4 @@ class SmartyRenderer extends FormRenderer implements SmartyRendererInterface
         var_dump($blockNameSuffix);
         die('not found');
     }
-
 }

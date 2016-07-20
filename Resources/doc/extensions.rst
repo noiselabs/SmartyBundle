@@ -4,7 +4,7 @@
 Extensions
 **********
 
-Smarty[Bundle] extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.smarty>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
+SmartyBundle extensions are packages that add new features to Smarty. The extension architecture implemented in the SmartyBundle is an object-oriented approach to the `plugin system <http://www.smarty.net/docs/en/plugins.smarty>`_ available in Smarty. The implemented architecture was inspired by `Twig Extensions <http://twig.sensiolabs.org/doc/extensions.html>`_.
 
 Each extension object share a common interest (translation, routing, etc.) and provide methods that will be registered as a Smarty plugin before rendering a template. To learn about the plugin ecosystem in Smarty take a look at the `Smarty documentation page <http://www.smarty.net/docs/en/plugins.smarty>`_ on that subject.
 
@@ -14,7 +14,7 @@ The SmartyBundle comes with a few extensions to help you right away. These are d
 Actions Extension
 =================
 
-This extension tries to provide the same funcionality described in `Symfony2 - Templating - Embedding Controllers <http://symfony.com/doc/current/book/templating.html#embedding-controllers>`_.
+This extension tries to provide the same funcionality described in `Symfony - Templating - Embedding Controllers <http://symfony.com/doc/current/book/templating.html#embedding-controllers>`_.
 
 Following the example presented in the link above, the Smarty equivalents are:
 
@@ -60,11 +60,10 @@ Usage in template context:
 
     {assets_version}
 
-
 Form Extension
 ==============
 
-Form extension provides support for `Symfony2 Forms <http://symfony.com/doc/current/book/forms.html>`_ and it is described in its own chapter. :ref:`Go there now <ch_forms>`.
+Form extension provides support for `Symfony Forms <http://symfony.com/doc/current/book/forms.html>`_ and it is described in its own chapter. :ref:`Go there now <ch_forms>`.
 
 Routing Extension
 =================
@@ -85,7 +84,7 @@ Absolute URLs can also be generated.
         Read this blog post.
     </a>
 
-Please see the `Symfony2 - Routing <http://symfony.com/doc/current/book/routing.html>`_ for full information about routing features and options in Symfony2.
+Please see the `Symfony - Routing <http://symfony.com/doc/current/book/routing.html>`_ for full information about routing features and options in Symfony.
 
 Translation Extension
 =====================
@@ -93,10 +92,19 @@ Translation Extension
 To help with message translation of static blocks of text in template context, the SmartyBundle, provides a translation extension. This extension is implemented in the class `TranslationExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/TranslationExtension.php>`_.
 
 You may translate a message, in a template, using a block or modifier. Both methods support the following arguments:
-    - **count**: In pluralization context, used to determine which translation to use and also to populate the %count% placeholder *(only available in transchoice)*;
-    - **vars**: `Message placeholders <http://symfony.com/doc/current/book/translation.html#message-placeholders>`_;
-    - **domain**: Message domain, an optional way to organize messages into groups;
-    - **locale**: The locale that the translations are for (e.g. en_GB, en, etc);
+
+
+count
+    In pluralization context, used to determine which translation to use and also to populate the %count% placeholder *(only available in transchoice)*;
+
+vars
+    `Message placeholders <http://symfony.com/doc/current/book/translation.html#message-placeholders>`_;
+
+domain
+    Message domain, an optional way to organize messages into groups;
+
+locale
+    The locale that the translations are for (e.g. en_GB, en, etc);
 
 ``trans`` block:
 
@@ -146,7 +154,7 @@ The transchoice block/modifier automatically gets the %count% variable from the 
 Security Extension
 ==================
 
-This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony2 security system <http://symfony.com/doc/current/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/current/book/security.html>`_.
+This extension provides access control inside a Smarty template. This part of the security process is called authorization, and it means that the system is checking to see if you have privileges to perform a certain action. For full details about the `Symfony security system <http://symfony.com/doc/current/book/security.html>`_ check it's `documentation page <http://symfony.com/doc/current/book/security.html>`_.
 
 If you want to check if the current user has a role inside a template, use the built-in ``is_granted`` modifier.
 

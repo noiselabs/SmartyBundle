@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -51,12 +51,6 @@ class CompileCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'A bundle name'
             )
-            ->addOption(
-                'force',
-                null,
-                InputOption::VALUE_NONE,
-                'Force the compilation of all templates even if they weren\'t modified'
-            )
             ->setHelp(<<<EOF
 The following command finds all known Smarty templates and compiles them:
 
@@ -75,10 +69,8 @@ EOF
     {
         $finder = $this->getContainer()->get('smarty.templating.finder');
         $engine = $this->getContainer()->get('templating.engine.smarty');
-        $smarty = $engine->getSmarty();
 
         $bundleName = $input->getArgument('bundle');
-        $force = (boolean) $input->getOption('force');
         $verbose = $input->getOption('verbose');
 
         if ($bundleName && (0 === strpos($bundleName, '@'))) {

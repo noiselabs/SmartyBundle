@@ -7,9 +7,38 @@
 Assetic
 *******
 
+.. hint::
+
     `Assetic <https://github.com/kriswallsmith/assetic>`_ is an asset management framework for PHP. This extensions provides support for it's usage in Symfony2 when using Smarty templates.
 
 Assetic combines two major ideas: assets and filters. The assets are files such as CSS, JavaScript and image files. The filters are things that can be applied to these files before they are served to the browser. This allows a separation between the asset files stored in the application and the files actually presented to the user.
+
+Installation
+------------
+
+See the Symfony Manual for `Installation Instructions <https://symfony.com/doc/current/cookbook/assetic/asset_management.html#installing-and-enabling-assetic>`_.
+
+When installing symfony/assetic-bundle you need to enable the twig template engine. Otherwise you will get a ``ServiceNotFoundException``.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    # ...
+    framework:
+        templating:
+            engines: ['twig', 'smarty']
+
+Also make sure you disable assetic controllers.
+
+.. code-block: yaml
+
+    # app/config/config.yml
+    # ...
+    assetic:
+        use_controller: false
+
+Usage
+-----
 
 Using Assetic provides many advantages over directly serving the files. The files do not need to be stored where they are served from and can be drawn from various sources such as from within a bundle:
 
@@ -60,9 +89,13 @@ Here is a list of the possible attributes to define in the block function.
 * ``output``: Defines the URLs that Assetic produces
 * ``var_name``: The variable name that will be used to pass the asset URL to the <link> tag
 * ``as``: An alias to ``var_name``. Example: ``as='js_url'``
-* ``vars``: Array of asset variables. For a description of this recently added feature please check out the `Johannes Schmitt blog post <http://jmsyst.com/blog/asset-variables-in-assetic>`_ about Asset Variables in Assetic.
+* ``vars``: Array of asset variables. For a description of this recently added feature please check out the `Johannes Schmitt blog post <asset-variables-in-assetic_>`_ about Asset Variables in Assetic.
 
-    **Note:** Unlike the examples given in the `Asset Variables in Assetic <http://jmsyst.com/blog/asset-variables-in-assetic>`_, which uses curly brackets for the ``vars`` placeholder we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``js/messages.{locale}.js`` becomes ``js/messages.[locale].js``.
+.. warning::
+
+    Unlike the examples given in the `Asset Variables in Assetic <asset-variables-in-assetic_>`_, which uses curly brackets for the ``vars`` placeholder we are using **square brackets** due to Smarty usage of curly brackets as syntax delimiters. So ``js/messages.{locale}.js`` becomes ``js/messages.[locale].js``.
+
+.. _asset-variables-in-assetic: http://web.archive.org/web/20140625062020/http://jmsyst.com/blog/asset-variables-in-assetic
 
 Full example
 ------------

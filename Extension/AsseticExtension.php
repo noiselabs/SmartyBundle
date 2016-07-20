@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
@@ -130,7 +130,7 @@ abstract class AsseticExtension extends AbstractExtension
      */
     public function buildAttributes(array $params = array())
     {
-        $explode = function($value) {
+        $explode = function ($value) {
             return array_map('trim', explode(',', $value));
         };
 
@@ -284,7 +284,8 @@ abstract class AsseticExtension extends AbstractExtension
                 'debug'             => $this->factory->isDebug(),
                 'use_controller'    => $this->useController,
                 'vars'              => $this->getVarValues(),
-        ));
+            )
+        );
     }
 
     /**
