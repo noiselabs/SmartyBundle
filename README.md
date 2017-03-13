@@ -66,3 +66,7 @@ Submitting bugs and feature requests
 ------------------------------------
 
 Bugs and feature requests are tracked on [GitHub](https://github.com/noiselabs/SmartyBundle/issues).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/noiselabs/smartybundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
