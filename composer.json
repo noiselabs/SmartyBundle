@@ -50,7 +50,6 @@
     "autoload": {
         "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
     },
-    "target-dir": "NoiseLabs/Bundle/SmartyBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
