@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -29,12 +29,8 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
-use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
-use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\TemplateNameParser;
 
 /**
@@ -172,8 +168,13 @@ class SmartyEngineTest extends TestCase
     public function testGetLoader()
     {
         $container = $this->createContainer();
-        $engine = new ProjectTemplateEngine($this->smarty, $container,
-        new TemplateNameParser(), $this->loader, array());
+        $engine = new ProjectTemplateEngine(
+            $this->smarty,
+            $container,
+            new TemplateNameParser(),
+            $this->loader,
+            array()
+        );
 
         $this->assertSame($this->loader, $engine->getLoader());
     }

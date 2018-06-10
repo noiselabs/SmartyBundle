@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -29,7 +29,12 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Test suite for the security extension.
@@ -40,20 +45,20 @@ class SecurityExtensionTest extends TestCase
 {
     public function testExtensionName()
     {
-        $context = $this->createSecurityContext();
-        $extension = new SecurityExtension($context);
+        $authorizationChecker = $this->createAuthorizationChecker();
+        $extension = new SecurityExtension($authorizationChecker);
 
         $this->assertEquals('security', $extension->getName());
     }
 
     public function testGetExtensionFromSmartyEngine()
     {
-        $context = $this->createSecurityContext();
-        $extension = new SecurityExtension($context);
+        $authorizationChecker = $this->createAuthorizationChecker();
+        $extension = new SecurityExtension($authorizationChecker);
 
         $this->engine->addExtension($extension);
 
-        $this->assertInstanceOf('NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension', $this->engine->getExtension('security'));
+        $this->assertInstanceOf(SecurityExtension::class, $this->engine->getExtension('security'));
     }
 
     /**
@@ -65,8 +70,8 @@ class SecurityExtensionTest extends TestCase
         $template = 'translation_test_'.$test++.'.html.tpl';
 
         $this->engine->setTemplate($template, $content);
-        $context = $this->createSecurityContext($granted);
-        $this->engine->addExtension(new SecurityExtension($context));
+        $authorizationChecker = $this->createAuthorizationChecker($granted);
+        $this->engine->addExtension(new SecurityExtension($authorizationChecker));
 
         $this->assertEquals($expected, $this->engine->render($template));
     }
@@ -83,20 +88,56 @@ class SecurityExtensionTest extends TestCase
         );
     }
 
-    protected function createSecurityContext($granted = false)
+    public function testCsrfTokenWithCsrfTokenManager()
     {
-        $authManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
-        $decisionManager = $this->getMock('Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface');
-        $decisionManager->expects($this->any())->method('decide')->will($this->returnValue($granted));
+        $tokenId = 'foo';
+        $tokenValue = 'xsrf';
+        $content = "{'$tokenId'|csrf_token}";
+        $template = 'csrf_token_manager_test.html.tpl';
 
-        $context = new SecurityContext($authManager, $decisionManager, false);
-        $context->setToken($token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface'));
+        // symfony 2.3+
+        $this->engine->setTemplate($template, $content);
+        $authorizationChecker = $this->createAuthorizationChecker();
+        $csrfTokenManager = $this->createCsrfTokenManager($tokenValue);
+        $this->engine->addExtension(new SecurityExtension($authorizationChecker, $csrfTokenManager));
+
+        $this->assertEquals($tokenValue, $this->engine->render($template));
+    }
+
+    protected function createSecurityTokenStorage()
+    {
+        $tokenStorage = new TokenStorage();
+
+        $tokenStorage->setToken($token = $this->getMock(TokenInterface::class));
         $token
             ->expects($this->any())
             ->method('isAuthenticated')
             ->will($this->returnValue(true))
         ;
 
-        return $context;
+        return $tokenStorage;
+    }
+
+    protected function createAuthorizationChecker($granted = false)
+    {
+        $authManager = $this->getMock(AuthenticationManagerInterface::class);
+        $decisionManager = $this->getMock(AccessDecisionManagerInterface::class);
+        $decisionManager->expects($this->any())->method('decide')->will($this->returnValue($granted));
+
+        return new AuthorizationChecker(
+            $this->createSecurityTokenStorage(),
+            $authManager,
+            $decisionManager
+        );
+    }
+
+    protected function createCsrfTokenManager($value)
+    {
+        $csrfToken = $this->getMock('stdClass', array('getValue'));
+        $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
+        $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken', 'refreshToken', 'removeToken', 'isTokenValid'));
+        $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));
+
+        return $csrfTokenManager;
     }
 }

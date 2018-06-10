@@ -16,18 +16,21 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Assetic;
 
-use Assetic\Factory\AssetFactory;
 use Assetic\Asset\AssetInterface;
+use Assetic\AssetManager;
+use Assetic\Factory\AssetFactory;
+use Assetic\Factory\Resource\ResourceInterface;
+use Assetic\FilterManager;
 use NoiseLabs\Bundle\SmartyBundle\Assetic\SmartyFormulaLoader;
 use NoiseLabs\Bundle\SmartyBundle\Extension\AsseticExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
@@ -41,8 +44,8 @@ class SmartyFormulaLoaderTest extends TestCase
     {
         parent::setUp();
 
-        $this->am = $this->getMock('Assetic\\AssetManager');
-        $this->fm = $this->getMock('Assetic\\FilterManager');
+        $this->am = $this->getMock(AssetManager::class);
+        $this->fm = $this->getMock(FilterManager::class);
 
         $factory = new AssetFactory(__DIR__.'/templates');
         $factory->setAssetManager($this->am);
@@ -55,7 +58,7 @@ class SmartyFormulaLoaderTest extends TestCase
 
     public function testMixture()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMock(AssetInterface::class);
 
         $expected = array(
             'mixture' => array(
@@ -72,7 +75,7 @@ class SmartyFormulaLoaderTest extends TestCase
             ),
         );
 
-        $resource = $this->getMock('Assetic\\Factory\\Resource\\ResourceInterface');
+        $resource = $this->getMock(ResourceInterface::class);
         $resource->expects($this->once())
             ->method('getContent')
             ->will($this->returnValue(file_get_contents(__DIR__.'/templates/mixture.smarty')));

@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -29,6 +29,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Component\ExpressionLanguage\Expression;
+
 /**
  * SmartyBundle extension for Symfony actions helper.
  *
@@ -39,7 +40,6 @@ use Symfony\Component\ExpressionLanguage\Expression;
  */
 class ExpressionExtension extends AbstractExtension
 {
-
     /**
      * {@inheritdoc}
      */

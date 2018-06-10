@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
@@ -28,6 +28,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
+use PHPUnit_Framework_Constraint_IsAnything;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Test suite for the routing extension.
@@ -60,18 +62,28 @@ class RoutingExtensionTest extends TestCase
 
     public function testGetUrl()
     {
-        $extension = $this->createRoutingExtension(true);
+        $extension = $this->createRoutingExtension(UrlGeneratorInterface::ABSOLUTE_URL);
         $this->engine->addExtension($extension);
         $xml = $this->renderXml('url.smarty');
         $this->assertEquals('http://www.example.com/blog/my-blog-post', (string) $xml->url[0]);
     }
 
-    public function createRoutingExtension($absolute = false)
+    public function createRoutingExtension($referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $url = $absolute ? 'http://www.example.com/blog/my-blog-post' : '/blog/my-blog-post';
+
+        $url = '/blog/my-blog-post';
+        if (UrlGeneratorInterface::ABSOLUTE_URL === $referenceType) {
+            $url = 'http://www.example.com/blog/my-blog-post';
+        }
+
         $generator->expects($this->any())
             ->method('generate')
+            ->with(
+                new PHPUnit_Framework_Constraint_IsAnything(),
+                new PHPUnit_Framework_Constraint_IsAnything(),
+                $referenceType
+            )
             ->will($this->returnValue($url));
 
         return new RoutingExtension($generator);

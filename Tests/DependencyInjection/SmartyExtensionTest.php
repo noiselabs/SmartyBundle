@@ -16,12 +16,12 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
  * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  * @since       0.1.0
@@ -52,8 +52,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $container->loadFromExtension('smarty', array());
         $this->compileContainer($container);
 
-        $this->assertEquals('Smarty', $container->getParameter('smarty.class'), '->load() loads the smarty.xml file');
-
         // Smarty options
         $options = $container->getParameter('smarty.options');
         $this->assertEquals(__DIR__.'/smarty/cache', $options['cache_dir'], '->load() sets default value for cache_dir option');
@@ -76,8 +74,6 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $container->registerExtension(new SmartyExtension());
         $this->loadFromFile($container, 'full', $format);
         $this->compileContainer($container);
-
-        $this->assertEquals('Smarty', $container->getParameter('smarty.class'), '->load() loads the smarty.xml file');
 
         // Globals
         $calls = $container->getDefinition('templating.engine.smarty')->getMethodCalls();

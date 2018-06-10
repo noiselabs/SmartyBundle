@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -71,7 +71,7 @@ class RoutingExtension extends AbstractExtension
      */
     public function getPath($name, $parameters = array())
     {
-        return $this->generator->generate($name, $parameters, false);
+        return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     /**
@@ -84,33 +84,33 @@ class RoutingExtension extends AbstractExtension
      */
     public function getUrl($name, $parameters = array())
     {
-        return $this->generator->generate($name, $parameters, true);
+        return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat) {
-            return $this->generator->generate($name, $parameters, false);
+            return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
         }
     }
 
     public function getPath_modifier($name, array $parameters = array())
     {
-        return $this->generator->generate($name, $parameters, false);
+        return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat) {
-            return $this->generator->generate($name, $parameters, true);
+            return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
         }
     }
 
     public function getUrl_modifier($name, array $parameters = array())
     {
-        return $this->generator->generate($name, $parameters, true);
+        return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**

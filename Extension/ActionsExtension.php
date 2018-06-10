@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2015 Vítor Brandão
+ * Copyright (C) 2011-2016 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  * @link        http://www.noiselabs.org
  */
@@ -30,8 +30,6 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Kernel as Symfony;
 
 /**
  * SmartyBundle extension for Symfony actions helper.
@@ -45,19 +43,18 @@ use Symfony\Component\HttpKernel\Kernel as Symfony;
 class ActionsExtension extends AbstractExtension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ActionsHelper
      */
-    protected $container;
+    protected $actionsHelper;
 
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param ActionsHelper $actionsHelper
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ActionsHelper $actionsHelper)
     {
-        $this->container = $container;
-
+        $this->actionsHelper = $actionsHelper;
     }
 
     /**
@@ -88,9 +85,7 @@ class ActionsExtension extends AbstractExtension
                 'options'       => array()
             ), $parameters);
 
-            return ('1' == Symfony::MINOR_VERSION) ?
-                $this->getActionsHelper()->render($controller, $parameters['attributes'], $parameters['options']) :
-                $this->render($controller, $parameters['attributes'], $parameters['options']);
+            return $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
     }
 
@@ -104,9 +99,7 @@ class ActionsExtension extends AbstractExtension
      */
     public function renderModifierAction($controller, array $attributes = array(), array $options = array())
     {
-        return ('1' == Symfony::MINOR_VERSION) ?
-            $this->getActionsHelper()->render($controller, $attributes, $options) :
-            $this->render($controller, $attributes, $options);
+        return $this->render($controller, $attributes, $options);
     }
 
     /**
@@ -121,17 +114,17 @@ class ActionsExtension extends AbstractExtension
     {
         $renderOptions = array();
         if (isset($options['standalone']) && true === $options['standalone']) {
-		if(isset($options['strategy'])){
-			$renderOptions['strategy'] = $options['strategy'];
-			unset($options['strategy']);
-		}else{
-			$renderOptions['strategy'] = 'esi';
-		}
+            if (isset($options['strategy'])) {
+                $renderOptions['strategy'] = $options['strategy'];
+                unset($options['strategy']);
+            } else {
+                $renderOptions['strategy'] = 'esi';
+            }
             unset($options['standalone']);
         }
 
-	$isControllerReference = strpos($controller, ":") !== false;
-		
+        $isControllerReference = strpos($controller, ':') !== false;
+
         return $this->getActionsHelper()->render(
             $isControllerReference ? $this->getActionsHelper()->controller($controller, $attributes, $options) : $controller,
             $isControllerReference ? $renderOptions : array_merge($renderOptions, $attributes)
@@ -143,7 +136,7 @@ class ActionsExtension extends AbstractExtension
      */
     protected function getActionsHelper()
     {
-        return $this->container->get('templating.helper.actions');
+        return $this->actionsHelper;
     }
 
     /**

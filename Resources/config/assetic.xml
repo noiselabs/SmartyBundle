@@ -4,14 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="smarty.extension.assetic.dynamic.class">NoiseLabs\Bundle\SmartyBundle\Extension\DynamicAsseticExtension</parameter>
-        <parameter key="smarty.extension.assetic.static.class">NoiseLabs\Bundle\SmartyBundle\Extension\StaticAsseticExtension</parameter>
-        <parameter key="smarty.assetic.formula_loader.class">NoiseLabs\Bundle\SmartyBundle\Assetic\SmartyFormulaLoader</parameter>
-    </parameters>
-
     <services>
-        <service id="smarty.extension.assetic.dynamic" class="%smarty.extension.assetic.dynamic.class%">
+        <service id="smarty.extension.assetic.dynamic" class="NoiseLabs\Bundle\SmartyBundle\Extension\DynamicAsseticExtension">
             <tag name="assetic.templating.smarty" />
             <argument type="service" id="smarty.extension.routing" />
             <argument type="service" id="assetic.asset_factory" />
@@ -19,7 +13,7 @@
             <argument type="service" id="assetic.value_supplier" on-invalid="null" />
         </service>
 
-        <service id="smarty.extension.assetic.static" class="%smarty.extension.assetic.static.class%">
+        <service id="smarty.extension.assetic.static" class="NoiseLabs\Bundle\SmartyBundle\Extension\StaticAsseticExtension">
             <tag name="assetic.templating.smarty" />
             <argument type="service" id="smarty.extension.assets" />
             <argument type="service" id="assetic.asset_factory" />
@@ -35,7 +29,7 @@
             <argument>%kernel.debug%</argument>
         </service>
 
-        <service id="smarty.assetic.formula_loader.real" class="%smarty.assetic.formula_loader.class%" public="false">
+        <service id="smarty.assetic.formula_loader.real" class="NoiseLabs\Bundle\SmartyBundle\Assetic\SmartyFormulaLoader" public="false">
             <tag name="assetic.templating.smarty" />
             <argument type="service" id="templating.engine.smarty" />
         </service>
