@@ -70,17 +70,37 @@ Routing Extension
 
 To generate URLs from a Smarty template you may use two block functions (``path`` and ``url``) provided by the `RoutingExtension <https://github.com/noiselabs/SmartyBundle/tree/master/Extension/RoutingExtension.php>`_.
 
+``path`` block:
+
 .. code-block:: html+smarty
 
     <a href="{path slug='my-blog-post'}blog_show{/path}">
         Read this blog post.
     </a>
 
+``path`` modifier:
+
+.. code-block:: html+smarty
+
+    <a href="{'blog_show|path:['slug' => 'my-blog-post']}">
+        Read this blog post.
+    </a>
+
 Absolute URLs can also be generated.
+
+``url`` block:
 
 .. code-block:: html+smarty
 
     <a href="{url slug='my-blog-post'}blog_show{/url}">
+        Read this blog post.
+    </a>
+
+``url`` modifier:
+
+.. code-block:: html+smarty
+
+    <a href="{'blog_show'|url ['slug' => 'my-blog-post']}">
         Read this blog post.
     </a>
 
