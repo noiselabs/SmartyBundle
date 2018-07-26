@@ -48,7 +48,7 @@ class AssetsExtension extends AbstractExtension
     /**
      * Constructor.
      */
-    public function __construct(Packages $packages)
+    public function __construct(Packages $packages = null)
     {
         $this->packages = $packages;
     }
