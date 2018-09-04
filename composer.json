@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "Vítor Brandão",
-            "email": "vitor@noiselabs.org",
+            "email": "vitor@noiselabs.io",
             "homepage": "https://noiselabs.io"
         },
         {
@@ -17,44 +17,55 @@
         }
     ],
     "support": {
+        "docs": "https://smartybundle.readthedocs.io/en/latest/",
+        "forum": "https://gitter.im/noiselabs/SmartyBundle",
         "irc": "irc://irc.freenode.org/noiselabs",
         "issues": "https://github.com/noiselabs/SmartyBundle/issues"
     },
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.5.9",
         "ext-intl": "*",
-        "symfony/framework-bundle": "~2.8|~3.0|~4.0",
-        "symfony/templating": "~2.8|~3.0|~4.0",
-        "symfony/form": "~2.8|~3.0|~4.0",
-        "smarty/smarty": "3.1.*"
+        "symfony/form": "^2.8|^3.0|^4.0",
+        "symfony/framework-bundle": "^2.8|^3.0|^4.0",
+        "symfony/templating": "^2.8|^3.0|^4.0",
+        "smarty/smarty": "^3.1"
     },
     "require-dev": {
         "mopa/bootstrap-bundle": "~3.0",
-        "phpunit/phpunit": "~4.0",
-        "symfony/assetic-bundle": "~2.0",
-        "symfony/expression-language": "~2.8|~3.0",
-        "symfony/phpunit-bridge": "^3.0",
-        "symfony/security": "~2.8|~3.0",
-        "symfony/security-acl": "~2.8|~3.0",
-        "symfony/yaml": "~2.8|~3.0"
+        "phpunit/phpunit": ">=4.0",
+        "symfony/asset": "^2.8|^3.0|^4.0",
+        "symfony/expression-language": "^2.8|^3.0|^4.0",
+        "symfony/phpunit-bridge": "~3.0|~4.0",
+        "symfony/security": "^2.8|^3.0|^4.0",
+        "symfony/security-acl": "^2.8|^3.0|^4.0",
+        "symfony/translation": "^2.8|^3.0|^4.0",
+        "symfony/yaml": "^2.8|^3.0|^4.0"
     },
     "suggest": {
-        "symfony/assetic-bundle": "Assetic support in Smarty templates",
         "mopa/bootstrap-bundle": "Integration of Twitter Bootstrap into Symfony2",
         "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
         "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)",
         "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
     },
-    "conflict": {
-        "kriswallsmith/assetic": "<1.1.3"
-    },
     "autoload": {
-        "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
+        "psr-4": {
+            "NoiseLabs\\Bundle\\SmartyBundle\\": ""
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "autoload/phpunit-class-aliases.php"
+        ]
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "3.0.x-dev"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --coverage-text"
     }
 }
-

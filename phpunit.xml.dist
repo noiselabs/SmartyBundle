@@ -3,7 +3,7 @@
 <phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
-    bootstrap="vendor/autoload.php"
+    bootstrap="Tests/bootstrap.php"
     colors="true"
     columns="max"
     convertErrorsToExceptions="true"
@@ -11,7 +11,6 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    syntaxCheck="true"
     verbose="true"
 >
     <testsuites>

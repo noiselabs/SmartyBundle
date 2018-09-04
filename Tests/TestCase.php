@@ -1,33 +1,26 @@
 <?php
-/**
+/*
  * This file is part of NoiseLabs-SmartyBundle
  *
- * NoiseLabs-SmartyBundle is free software; you can redistribute it
- * and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * Copyright 2011-2017 Vítor Brandão <vitor@noiselabs.io>
  *
- * NoiseLabs-SmartyBundle is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * NoiseLabs-SmartyBundle is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with NoiseLabs-SmartyBundle; if not, see
- * <http://www.gnu.org/licenses/>.
+ * NoiseLabs-SmartyBundle is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ * for more details.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * You should have received a copy of the GNU Lesser General Public License along with NoiseLabs-SmartyBundle; if not,
+ * see <http://www.gnu.org/licenses/>.
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit_Framework_TestCase;
 use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -43,7 +36,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 /**
  * @author Vítor Brandão <vitor@noiselabs.org>
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Smarty
@@ -59,6 +52,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @var ProjectTemplateEngine
      */
     protected $engine;
+
+    /**
+     * @var string
+     */
+    protected $tmpDir;
 
     protected function setUp()
     {
@@ -90,7 +88,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function getSmarty()
     {
-        return new \Smarty();
+        return new Smarty();
     }
 
     public function getSmartyOptions()
@@ -148,6 +146,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'kernel.name'             => 'kernel',
             'kernel.root_dir'         => __DIR__,
         ), $data)));
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMock($fqcn)
+    {
+        return $this->getMockBuilder($fqcn)->disableOriginalConstructor()->getMock();
     }
 }
 

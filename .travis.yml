@@ -9,6 +9,8 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
+  - 7.2
   - hhvm
 
 matrix:
@@ -17,13 +19,17 @@ matrix:
     - php: 5.5
       env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
     - php: 5.6
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_VERSION=2.8.*
     - php: 5.6
-      env: SYMFONY_VERSION=3.1.*
+      env: SYMFONY_VERSION=3.3.*
     - php: 7.0
       env: SYMFONY_VERSION=3.0.*
     - php: 7.0
-      env: SYMFONY_VERSION=3.1.*
+      env: SYMFONY_VERSION=3.3.*
+    - php: 7.1
+      env: SYMFONY_VERSION=4.0.*
+    - php: 7.1
+      env: SYMFONY_VERSION=4.1.*
   allow_failures:
     - php: hhvm
 
@@ -39,7 +45,7 @@ install:
   - travis_retry composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
 
 script:
-  - vendor/bin/phpunit --coverage-text
+  - composer test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
