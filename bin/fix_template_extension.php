@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * This file is part of NoiseLabs-SmartyBundle
+ * This file is part of NoiseLabs-SmartyBundle.
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -20,16 +20,15 @@
  * Copyright (C) 2011-2015 Vítor Brandão
  *
  * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.org>
+ *
+ * @copyright   (C) 2011-2014 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
-
 $rootDir = __DIR__.'/..';
-require_once $rootDir.'/autoload.php.dist';
+
+require_once $rootDir.'/vendor/autoload.php';
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -73,7 +72,7 @@ $longopts = [
     'help',
     'git',
     'to::',
-    'src:'
+    'src:',
 ];
 
 $options = getopt($shortopts, $longopts);
@@ -90,8 +89,8 @@ if (!isset($options['src'])) {
 }
 
 // set defaults
-$oldExtension = isset($options['from']) ? $options['from'] : 'tpl';
-$newExtension = isset($options['to']) ? $options['to'] : 'smarty';
+$oldExtension = $options['from'] ?? 'tpl';
+$newExtension = $options['to'] ?? 'smarty';
 $fix = isset($options['fix']);
 $git = isset($options['git']);
 
@@ -143,7 +142,7 @@ echo PHP_EOL.PHP_EOL;
 sleep(1);
 
 foreach ($finder as $file) {
-    /* @var $file Symfony\Component\Finder\SplFileInfo */
+    // @var $file Symfony\Component\Finder\SplFileInfo
 
     $oldFilename = $file->getRealpath();
     $old = file_get_contents($oldFilename);
@@ -152,14 +151,14 @@ foreach ($finder as $file) {
     $rename = ($file->getExtension() == $oldExtension);
 
     // start regex!
-    $new = preg_replace_callback('/(\'|")([^\.]+\.\w+\.)('.$oldExtension.')\1/', function ($matches) use ($new, $oldExtension, $newExtension) {
+    $new = preg_replace_callback('/(\'|")([^\.]+\.\w+\.)('.$oldExtension.')\1/', function ($matches) use ($newExtension) {
         return $matches[1].$matches[2].$newExtension.$matches[1];
     }, $new);
 
     $changed = ($new != $old);
 
     if ($changed || $rename) {
-        $count++;
+        ++$count;
     }
 
     if ($changed && $fix) {
@@ -183,6 +182,7 @@ foreach ($finder as $file) {
                 $process->run();
                 if (!$process->isSuccessful()) {
                     printf(PHP_EOL.'FATAL ERROR: git mv: %s', $process->getErrorOutput());
+
                     exit(-1);
                 }
             } else {

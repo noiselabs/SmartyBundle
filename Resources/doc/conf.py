@@ -31,7 +31,7 @@ lexers['php-annotations'] = PhpLexer(startinline=True)
 primary_domain = 'php'
 
 # set url for API links
-api_url = 'http://www.noiselabs.org/projects/smarty-bundle/api/%s'
+api_url = 'https://noiselabs.io/projects/smarty-bundle/api/%s'
 
 # -- General configuration -----------------------------------------------------
 

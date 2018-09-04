@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2021 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 
@@ -35,19 +30,40 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
  *
  * See {@link http://www.smarty.net/docs/en/plugins.tpl}.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 abstract class AbstractPlugin implements PluginInterface
 {
     /**
      * Available plugin types.
+     *
      * @var array
      */
-    protected static $types = ['function', 'modifier', 'block',
-    'compiler', 'prefilter', 'postfilter', 'outputfilter', 'resource',
-    'insert'];
+    protected static $types = [
+        PluginInterface::TYPE_BLOCK,
+        PluginInterface::TYPE_COMPILER,
+        PluginInterface::TYPE_FUNCTION,
+        PluginInterface::TYPE_INSERT,
+        PluginInterface::TYPE_MODIFIER,
+        PluginInterface::TYPE_OUTPUTFILTER,
+        PluginInterface::TYPE_POSTFILTER,
+        PluginInterface::TYPE_PREFILTER,
+        PluginInterface::TYPE_RESOURCE,
+    ];
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var ExtensionInterface
+     */
     protected $extension;
+
+    /**
+     * @var string
+     */
     protected $method;
 
     /**
@@ -74,6 +90,8 @@ abstract class AbstractPlugin implements PluginInterface
 
     /**
      * Set the plugin name.
+     *
+     * @param mixed $name
      */
     public function setName($name)
     {

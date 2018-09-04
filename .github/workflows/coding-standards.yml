@@ -6,7 +6,7 @@ on:
 
 jobs:
   coding-standards:
-    name: Check Coding Standards
+    name: PHP-CS-Fixer
     runs-on: ubuntu-latest
 
     steps:

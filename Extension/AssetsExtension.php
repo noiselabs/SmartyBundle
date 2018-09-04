@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2021 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
@@ -36,7 +31,7 @@ use Symfony\Component\Asset\Packages;
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class AssetsExtension extends AbstractExtension
 {
@@ -61,7 +56,7 @@ class AssetsExtension extends AbstractExtension
         return [
             new BlockPlugin('asset', $this, 'getAssetUrl_block'),
             new ModifierPlugin('asset', $this, 'getAssetUrl_modifier'),
-            new FunctionPlugin('assets_version', $this, 'getAssetsVersion')
+            new FunctionPlugin('assets_version', $this, 'getAssetsVersion'),
         ];
     }
 
@@ -81,11 +76,13 @@ class AssetsExtension extends AbstractExtension
     }
 
     /**
-     * Returns the public path of an asset
+     * Returns the public path of an asset.
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *
-     * @param string $path A public path
+     * @param string     $path     A public path
+     * @param null|mixed $template
+     * @param null|mixed $repeat
      *
      * @return string A public path which takes into account the base path and URL path
      */
@@ -94,7 +91,7 @@ class AssetsExtension extends AbstractExtension
         // only output on the closing tag
         if (!$repeat) {
             $parameters = array_merge([
-                'package'   => null,
+                'package' => null,
             ], $parameters);
 
             return $this->packages->getUrl($path, $parameters['package']);
@@ -102,14 +99,15 @@ class AssetsExtension extends AbstractExtension
     }
 
     /**
-     * Returns the public path of an asset
+     * Returns the public path of an asset.
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *
-     * @param string $path A public path
+     * @param string     $path    A public path
+     * @param null|mixed $package
      *
      * @return string A public path which takes into account the base path
-     * and URL path
+     *                and URL path
      */
     public function getAssetUrl_modifier($path, $package = null)
     {
@@ -117,14 +115,14 @@ class AssetsExtension extends AbstractExtension
     }
 
     /**
-     * Returns the version of the assets in a package
+     * Returns the version of the assets in a package.
      *
      * @return string
      */
     public function getAssetsVersion(array $parameters = [], \Smarty_Internal_Template $template)
     {
         $parameters = array_merge([
-            'package'   => null,
+            'package' => null,
         ], $parameters);
 
         return $this->packages->getVersion(null, $parameters['package']);

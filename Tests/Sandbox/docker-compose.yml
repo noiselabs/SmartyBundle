@@ -1,0 +1,47 @@
+version: "3.4"
+
+services:
+  php:
+    image: noiselabs/smartybundle-sandbox-php:php${PHP_VERSION}-sf${SYMFONY_VERSION}
+    build:
+      context: .
+      target: symfony_php
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        SYMFONY_VERSION: ${SYMFONY_VERSION}
+        SKELETON: ${SKELETON:-symfony/skeleton}
+        STABILITY: ${STABILITY:-stable}
+    restart: unless-stopped
+    volumes:
+      - php_socket:/var/run/php
+    healthcheck:
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    environment:
+      # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
+      DATABASE_URL: postgresql://${POSTGRES_USER:-symfony}:${POSTGRES_PASSWORD:-ChangeMe}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-13}
+      
+  nginx:
+    image: noiselabs/smartybundle-sandbox-nginx:php${PHP_VERSION}-sf${SYMFONY_VERSION}
+    build:
+      context: .
+      target: symfony_nginx
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        SYMFONY_VERSION: ${SYMFONY_VERSION}
+        SKELETON: ${SKELETON:-symfony/skeleton}
+        STABILITY: ${STABILITY:-stable}
+    environment:
+      FASTCGI_SERVER_HOSTNAME: php
+      FASTCGI_SERVER_PORT: 9000
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+    depends_on:
+      - php
+
+volumes:
+  php_socket:
