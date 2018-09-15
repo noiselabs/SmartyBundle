@@ -34,7 +34,7 @@ use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -160,7 +160,7 @@ class TestCase extends PHPUnit_Framework_TestCase
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class KernelForTest extends Kernel
 {
@@ -188,7 +188,7 @@ class KernelForTest extends Kernel
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class ProjectTemplateEngine extends SmartyEngine
 {
@@ -204,7 +204,7 @@ class ProjectTemplateEngine extends SmartyEngine
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class ProjectTemplateLoader extends Loader
 {

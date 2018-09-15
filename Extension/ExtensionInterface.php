@@ -16,14 +16,14 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@noiselabs.io>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * @link        https://www.noiselabs.io
  * @since       0.1.0
  */
 
@@ -40,7 +40,7 @@ interface ExtensionInterface
     * @return PluginInterface[] An array of Plugins
     *
     * @since  0.1.0
-    * @author Vítor Brandão <vitor@noiselabs.org>
+    * @author Vítor Brandão <vitor@noiselabs.io>
     */
     public function getPlugins();
 
@@ -50,7 +50,7 @@ interface ExtensionInterface
      * @return FilterInterface[] An array of Filters
      *
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function getFilters();
 
@@ -60,7 +60,7 @@ interface ExtensionInterface
      * @return array An array of Globals
      *
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function getGlobals();
 
