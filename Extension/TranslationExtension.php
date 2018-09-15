@@ -16,33 +16,31 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * @link        https://www.noiselabs.io
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use Smarty_Internal_Template;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Provides integration of the Translation component with Smarty[Bundle].
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class TranslationExtension extends AbstractExtension
 {
     protected $translator;
 
-    /**
-     * Constructor.
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
@@ -74,10 +72,12 @@ class TranslationExtension extends AbstractExtension
      *
      * @see TranslatorInterface::trans()
      *
-     * @param array  $params  Parameters to pass to the translator
+     * @param array $params Parameters to pass to the translator
      * @param string $message Message to translate
+     *
+     * @return string
      */
-    public function transBlock(array $params = array(), $message = null, \Smarty_Internal_Template $template, &$repeat)
+    public function transBlock(array $params = array(), $message = null, Smarty_Internal_Template $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat && isset($message)) {
@@ -111,7 +111,7 @@ class TranslationExtension extends AbstractExtension
      *
      * @param string $message Message to translate
      */
-    public function transchoiceBlock(array $params = array(), $message = null, \Smarty_Internal_Template $template, &$repeat)
+    public function transchoiceBlock(array $params = array(), $message = null, Smarty_Internal_Template $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat && isset($message)) {

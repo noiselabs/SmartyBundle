@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
@@ -39,7 +39,7 @@ use Symfony\Component\Templating\Helper\AssetsHelper;
 /**
  * Test suite for the assets extension.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class AssetsExtensionTest extends TestCase
 {

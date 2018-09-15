@@ -16,32 +16,33 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@noiselabs.io>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * @link        https://www.noiselabs.io
  * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\TemplateNameParser;
 
 /**
  * @since  0.1.0
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class SmartyEngineTest extends TestCase
 {
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testEvaluateAddsAppGlobal()
     {
@@ -56,7 +57,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testEvaluateWithoutAvailableRequest()
     {
@@ -72,7 +73,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGlobalVariables()
     {
@@ -86,7 +87,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGlobalsGetPassedToTemplate()
     {
@@ -101,11 +102,11 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetUnsetExtension()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         $name = 'non-existent-extension';
 
@@ -115,7 +116,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetSetRemoveExtension()
     {
@@ -129,14 +130,14 @@ class SmartyEngineTest extends TestCase
 
         $this->assertEquals($engine->getExtension('mock'), $extension);
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $engine->removeExtension('mock');
         $engine->getExtension('mock');
     }
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetSetExtensionsArray()
     {
@@ -163,7 +164,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetLoader()
     {
@@ -181,7 +182,7 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.2.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     protected function createContainer(array $data = array())
     {

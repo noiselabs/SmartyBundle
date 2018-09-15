@@ -16,11 +16,11 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Test suite for the routing extension.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class RoutingExtensionTest extends TestCase
 {

@@ -20,10 +20,10 @@
  *
  * @category    NoiseLabs
  * @package     SmartyBundle
- * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011 Vítor Brandão <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@noiselabs.io>
+ * @copyright   (C) 2011 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * @link        https://www.noiselabs.io
  * @since       0.1.0
  */
 
@@ -33,7 +33,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
  * Base Extension class.
  *
  * @since  0.1.0
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 abstract class AbstractExtension implements ExtensionInterface
 {
@@ -43,7 +43,7 @@ abstract class AbstractExtension implements ExtensionInterface
      * @return array An array of Plugins
      *
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function getPlugins()
     {
@@ -56,7 +56,7 @@ abstract class AbstractExtension implements ExtensionInterface
      * @return array An array of Filters
      *
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function getFilters()
     {
@@ -69,7 +69,7 @@ abstract class AbstractExtension implements ExtensionInterface
      * @return array An array of globals
      *
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function getGlobals()
     {
