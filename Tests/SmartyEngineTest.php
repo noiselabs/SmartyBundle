@@ -123,10 +123,8 @@ class SmartyEngineTest extends TestCase
      */
     public function testGetSetRemoveExtension()
     {
-        $extension = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
-        $extension->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mock'));
+        $extension = $this->createMock(ExtensionInterface::class);
+        $extension->expects($this->any())->method('getName')->will($this->returnValue('mock'));
 
         $engine = $this->getSmartyEngine();
         $engine->addExtension($extension);
@@ -147,10 +145,8 @@ class SmartyEngineTest extends TestCase
         $extensions = [];
 
         foreach (['mock0', 'mock1', 'mock2', 'mock3'] as $name) {
-            $extensions[$name] = $this->getMock(ExtensionInterface::class);
-            $extensions[$name]->expects($this->any())
-                ->method('getName')
-                ->will($this->returnValue($name));
+            $extensions[$name] = $this->createMock(ExtensionInterface::class);
+            $extensions[$name]->expects($this->any())->method('getName')->will($this->returnValue($name));
         }
 
         $engine = $this->getSmartyEngine();

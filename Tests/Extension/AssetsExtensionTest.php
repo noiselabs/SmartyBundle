@@ -76,7 +76,7 @@ class AssetsExtensionTest extends TestCase
 
     protected function createAssetsExtension($basePath = null, $baseUrls = array(), $version = null, $format = null, $namedPackages = array())
     {
-        $context = $this->getMock(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $versionStrategy = new EmptyVersionStrategy();
         if (null !== $version) {

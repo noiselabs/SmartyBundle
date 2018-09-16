@@ -70,7 +70,7 @@ class RoutingExtensionTest extends TestCase
 
     public function createRoutingExtension($referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generator = $this->createMock(UrlGeneratorInterface::class);
 
         $url = '/blog/my-blog-post';
         if (UrlGeneratorInterface::ABSOLUTE_URL === $referenceType) {
