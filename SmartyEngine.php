@@ -34,6 +34,7 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Psr\Log\LoggerInterface;
 use Smarty;
 use Smarty_Internal_Template;
+use SmartyException;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -253,7 +254,7 @@ class SmartyEngine implements EngineInterface
 
         try {
             return $this->smarty->fetch($template);
-        } catch (\SmartyException $e) {
+        } catch (SmartyException $e) {
             throw RuntimeException::createFromPrevious($e, $template);
         } catch (\ErrorException $e) {
             throw RuntimeException::createFromPrevious($e, $template);
@@ -549,7 +550,7 @@ class SmartyEngine implements EngineInterface
         foreach ($this->getFilters() as $filter) {
             try {
                 $this->smarty->registerFilter($filter->getType(), $filter->getCallback());
-            } catch (\SmartyException $e) {
+            } catch (SmartyException $e) {
                 if (null !== $this->logger) {
                     $this->logger->warning(sprintf("SmartyException caught: %s.", $e->getMessage()));
                 }

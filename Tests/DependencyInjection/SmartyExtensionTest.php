@@ -30,6 +30,7 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\DependencyInjection;
 
 use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\SmartyExtension;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -43,7 +44,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  *
  * @author Vítor Brandão <vitor@noiselabs.io>
  */
-class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
+class SmartyExtensionTest extends PHPUnit_Framework_TestCase
 {
     public function testLoadEmptyConfiguration()
     {
@@ -54,13 +55,13 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
         // Smarty options
         $options = $container->getParameter('smarty.options');
-        $this->assertEquals(__DIR__.'/smarty/cache', $options['cache_dir'], '->load() sets default value for cache_dir option');
-        $this->assertEquals(__DIR__.'/smarty/templates_c', $options['compile_dir'], '->load() sets default value for compile_dir option');
-        $this->assertEquals(__DIR__.'/config/smarty', $options['config_dir'], '->load() sets default value for config_dir option');
-        $this->assertEquals('file', $options['default_resource_type'], '->load() sets default value for default_resource_type option');
-        $this->assertEquals(__DIR__.'/Resources/views', $options['template_dir'], '->load() sets default value for template_dir option');
-        $this->assertFalse($options['use_include_path'], '->load() sets default value for use_include_path option');
-        $this->assertTrue($options['use_sub_dirs'], '->load() sets default value for use_sub_dirs option');
+        self::assertEquals(__DIR__.'/smarty/cache', $options['cache_dir'], '->load() sets default value for cache_dir option');
+        self::assertEquals(__DIR__.'/smarty/templates_c', $options['compile_dir'], '->load() sets default value for compile_dir option');
+        self::assertEquals(__DIR__.'/config/smarty', $options['config_dir'], '->load() sets default value for config_dir option');
+        self::assertEquals('file', $options['default_resource_type'], '->load() sets default value for default_resource_type option');
+        self::assertEquals(__DIR__.'/Resources/views', $options['template_dir'], '->load() sets default value for template_dir option');
+        self::assertFalse($options['use_include_path'], '->load() sets default value for use_include_path option');
+        self::assertTrue($options['use_sub_dirs'], '->load() sets default value for use_sub_dirs option');
     }
 
     /**
@@ -77,51 +78,24 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
         // Globals
         $calls = $container->getDefinition('templating.engine.smarty')->getMethodCalls();
-        $this->assertEquals('foo', $calls[0][1][0], '->load() registers services as Smarty globals');
-        $this->assertEquals(new Reference('bar'), $calls[0][1][1], '->load() registers services as Smarty globals');
-        $this->assertEquals('pi', $calls[1][1][0], '->load() registers variables as Smarty globals');
-        $this->assertEquals(3.14, $calls[1][1][1], '->load() registers variables as Smarty globals');
+        self::assertEquals('foo', $calls[0][1][0], '->load() registers services as Smarty globals');
+        self::assertEquals(new Reference('bar'), $calls[0][1][1], '->load() registers services as Smarty globals');
+        self::assertEquals('pi', $calls[1][1][0], '->load() registers variables as Smarty globals');
+        self::assertEquals(3.14, $calls[1][1][1], '->load() registers variables as Smarty globals');
 
         // Smarty options
         $options = $container->getParameter('smarty.options');
-        $this->assertEquals($appDir.'/cache/smarty/cache', $options['cache_dir'], '->load() sets the cache_dir option');
-        $this->assertEquals($appDir.'/cache/smarty/templates_c', $options['compile_dir'], '->load() sets the compile_dir option');
-        $this->assertEquals($appDir.'/config/smarty', $options['config_dir'], '->load() sets the config_dir option');
-        $this->assertEquals('string', $options['default_resource_type'], '->load() sets the default_resource_type option');
-        $this->assertEquals(array(
+        self::assertEquals($appDir.'/cache/smarty/cache', $options['cache_dir'], '->load() sets the cache_dir option');
+        self::assertEquals($appDir.'/cache/smarty/templates_c', $options['compile_dir'], '->load() sets the compile_dir option');
+        self::assertEquals($appDir.'/config/smarty', $options['config_dir'], '->load() sets the config_dir option');
+        self::assertEquals('string', $options['default_resource_type'], '->load() sets the default_resource_type option');
+        self::assertEquals(array(
             '/tmp/noiselabs-smarty-bundle-test/app/Resources/plugins',
             '/tmp/noiselabs-smarty-bundle-test/app/Resources/smarty/plugins'
         ), $options['plugins_dir'], '->load() adds directories to the default list of directories where plugins are stored');
-        $this->assertEquals($appDir.'/Resources/views', $options['template_dir'], '->load() sets the template_dir option');
-        $this->assertTrue($options['use_include_path'], '->load() sets the use_include_path option');
-        $this->assertFalse($options['use_sub_dirs'], '->load() sets the use_sub_dirs option');
-    }
-
-    public function testGlobalsWithDifferentTypesAndValues()
-    {
-        $globals = array(
-            'array'   => array(),
-            'false'   => false,
-            'float'   => 2.0,
-            'integer' => 3,
-            'null'    => null,
-            'object'  => new \stdClass(),
-            'string'  => 'foo',
-            'true'    => true,
-        );
-
-        $container = $this->createContainer();
-        $container->registerExtension(new SmartyExtension());
-        $container->loadFromExtension('smarty', array('globals' => $globals));
-        $this->compileContainer($container);
-
-        $calls = $container->getDefinition('smarty')->getMethodCalls();
-
-        foreach ($calls as $call) {
-            list($name, $value) = each($globals);
-            $this->assertEquals($name, $call[1][0]);
-            $this->assertSame($value, $call[1][1]);
-        }
+        self::assertEquals($appDir.'/Resources/views', $options['template_dir'], '->load() sets the template_dir option');
+        self::assertTrue($options['use_include_path'], '->load() sets the use_include_path option');
+        self::assertFalse($options['use_sub_dirs'], '->load() sets the use_sub_dirs option');
     }
 
     public function getFormats()
@@ -135,29 +109,30 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
     private function createContainer()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        $container = new ContainerBuilder(new ParameterBag([
             'kernel.cache_dir'  => __DIR__,
             'kernel.charset'    => 'UTF-8',
             'kernel.debug'      => false,
             'kernel.root_dir'   => __DIR__,
-            'kernel.bundles'    => array()
-        )));
+            'kernel.bundles'    => []
+        ]));
 
         return $container;
     }
 
     private function compileContainer(ContainerBuilder $container)
     {
-        $container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
+        $container->getCompilerPassConfig()->setOptimizationPasses([]);
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
         $container->compile();
     }
 
     /**
-     * @param  ContainerBuilder          $container
+     * @param  ContainerBuilder $container
      * @param $file
      * @param $format
-     * @throws \InvalidArgumentException
+     *
+     * @throws \Exception
      */
     private function loadFromFile(ContainerBuilder $container, $file, $format)
     {

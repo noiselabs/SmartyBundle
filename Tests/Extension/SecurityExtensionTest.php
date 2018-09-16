@@ -34,6 +34,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -58,7 +59,7 @@ class SecurityExtensionTest extends TestCase
 
         $this->engine->addExtension($extension);
 
-        $this->assertInstanceOf(SecurityExtension::class, $this->engine->getExtension('security'));
+        self::assertInstanceOf(SecurityExtension::class, $this->engine->getExtension('security'));
     }
 
     /**
@@ -104,7 +105,7 @@ class SecurityExtensionTest extends TestCase
         $this->assertEquals($tokenValue, $this->engine->render($template));
     }
 
-    protected function createSecurityTokenStorage()
+    private function createSecurityTokenStorage()
     {
         $tokenStorage = new TokenStorage();
 
@@ -118,7 +119,7 @@ class SecurityExtensionTest extends TestCase
         return $tokenStorage;
     }
 
-    protected function createAuthorizationChecker($granted = false)
+    private function createAuthorizationChecker($granted = false)
     {
         $authManager = $this->getMock(AuthenticationManagerInterface::class);
         $decisionManager = $this->getMock(AccessDecisionManagerInterface::class);
@@ -131,9 +132,9 @@ class SecurityExtensionTest extends TestCase
         );
     }
 
-    protected function createCsrfTokenManager($value)
+    private function createCsrfTokenManager($value)
     {
-        $csrfToken = $this->getMock('stdClass', array('getValue'));
+        $csrfToken = $this->getMock(CsrfToken::class, ['getValue']);
         $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
         $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken', 'refreshToken', 'removeToken', 'isTokenValid'));
         $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));
