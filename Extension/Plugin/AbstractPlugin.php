@@ -41,13 +41,34 @@ abstract class AbstractPlugin implements PluginInterface
 {
     /**
      * Available plugin types.
+     *
      * @var array
      */
-    protected static $types = array('function', 'modifier', 'block',
-    'compiler', 'prefilter', 'postfilter', 'outputfilter', 'resource',
-    'insert');
+    protected static $types = [
+        PluginInterface::TYPE_BLOCK,
+        PluginInterface::TYPE_COMPILER,
+        PluginInterface::TYPE_FUNCTION,
+        PluginInterface::TYPE_INSERT,
+        PluginInterface::TYPE_MODIFIER,
+        PluginInterface::TYPE_OUTPUTFILTER,
+        PluginInterface::TYPE_POSTFILTER,
+        PluginInterface::TYPE_PREFILTER,
+        PluginInterface::TYPE_RESOURCE,
+    ];
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var ExtensionInterface
+     */
     protected $extension;
+
+    /**
+     * @var string
+     */
     protected $method;
 
     /**

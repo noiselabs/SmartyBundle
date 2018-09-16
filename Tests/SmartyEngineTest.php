@@ -30,6 +30,9 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use InvalidArgumentException;
+use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\AbstractPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -141,10 +144,10 @@ class SmartyEngineTest extends TestCase
      */
     public function testGetSetExtensionsArray()
     {
-        $extensions = array();
+        $extensions = [];
 
-        foreach (array('mock0', 'mock1', 'mock2', 'mock3') as $name) {
-            $extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
+        foreach (['mock0', 'mock1', 'mock2', 'mock3'] as $name) {
+            $extensions[$name] = $this->getMock(ExtensionInterface::class);
             $extensions[$name]->expects($this->any())
                 ->method('getName')
                 ->will($this->returnValue($name));
@@ -201,50 +204,49 @@ class SmartyEngineTest extends TestCase
     {
         $engine = $this->getSmartyEngine();
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
-        $plugin->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mockPluginA'));
-        $plugin->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue('modifier'));
-        $plugin->expects($this->any())
-            ->method('doModify')
-            ->will($this->returnArgument(0));
-        $plugin->expects($this->any())
-            ->method('getCallback')
-            ->will($this->returnValue(array($plugin,'doModify')));
+        $plugin1 = $this->createMock(PluginInterface::class);
+        $plugin1->expects($this->any())->method('getName')->will($this->returnValue('plugin1'));
+        $plugin1->expects($this->any())->method('getType')->will($this->returnValue(PluginInterface::TYPE_MODIFIER));
+        $plugin1->expects($this->any())->method('getCallback')->will($this->returnValue([$this, 'render']));
 
-        // register first plugin
-        $engine->addPlugin($plugin);
+        // Register first plugin
+        $engine->addPlugin($plugin1);
 
-        $engine->setTemplate('plugin_test_1.tpl', '{$var|mockPluginA}');
+        $engine->setTemplate('plugin_test_1.tpl', '{$var|plugin1}');
         $engine->addGlobal('var', 'foo');
 
         $this->assertEquals('foo', $engine->render('plugin_test_1.tpl'));
 
+        $plugin2 = $this->createMock(PluginInterface::class);
+        $plugin2->expects($this->any())->method('getName')->will($this->returnValue('plugin2'));
+        $plugin2->expects($this->any())->method('getType')->will($this->returnValue(PluginInterface::TYPE_MODIFIER));
+        $plugin2->expects($this->any())->method('getCallback')->will($this->returnValue([$this, 'render']));
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
-        $plugin->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mockPluginB'));
-        $plugin->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue('modifier'));
-        $plugin->expects($this->any())
-            ->method('doModify')
-            ->will($this->returnArgument(0));
-        $plugin->expects($this->any())
-            ->method('getCallback')
-            ->will($this->returnValue(array($plugin,'doModify')));
+        // Register second plugin
+        $engine->addPlugin($plugin2);
 
-        // register second plugin
-        $engine->addPlugin($plugin);
-
-        $engine->setTemplate('plugin_test_2.tpl', '{$foo|mockPluginA} {$bar|mockPluginB}');
+        $engine->setTemplate('plugin_test_2.tpl', '{$foo|plugin1} {$bar|plugin2}');
         $engine->addGlobal('foo', 'foo');
         $engine->addGlobal('bar', 'bar');
 
         $this->assertEquals('foo bar', $engine->render('plugin_test_2.tpl'));
+    }
+
+    /**
+     * @param string $var
+     *
+     * @return string
+     */
+    public function render($var)
+    {
+        return $var;
+    }
+}
+
+class TestPlugin extends AbstractPlugin
+{
+    public function getType()
+    {
+        return 'test';
     }
 }

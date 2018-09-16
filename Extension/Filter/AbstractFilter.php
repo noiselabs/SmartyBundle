@@ -28,10 +28,10 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
+use RuntimeException;
 
 /**
-* The Plugin base class represents a OO approach to the Smarty plugin
-* architecture.
+* The Plugin base class represents an OO approach to the Smarty plugin architecture.
 *
 * See {@link http://www.smarty.net/docs/en/api.register.filter.tpl}.
 *
@@ -43,9 +43,21 @@ abstract class AbstractFilter implements FilterInterface
      * Available filter types.
      * @var array
      */
-    protected static $types = array('pre', 'post', 'output', 'variable');
+    protected static $types = ['pre', 'post', 'output', 'variable'];
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var ExtensionInterface
+     */
     protected $extension;
+
+    /**
+     * @var string
+     */
     protected $method;
 
     /**
@@ -62,18 +74,15 @@ abstract class AbstractFilter implements FilterInterface
         $this->method = $method;
     }
 
-    /**
-     * Return the filter callback.
-     */
     public function getCallback()
     {
-        return array($this->extension, $this->method);
+        return [$this->extension, $this->method];
     }
 
     public function validateType()
     {
         if (!in_array($this->getType(), static::$types)) {
-            throw new \RuntimeException("Filter type: '".$this->getType()."' is not allowed.");
+            throw new RuntimeException("Filter type: '".$this->getType()."' is not allowed.");
         }
     }
 }

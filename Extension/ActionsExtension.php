@@ -62,10 +62,10 @@ class ActionsExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new BlockPlugin('render', $this, 'renderBlockAction'),
             new ModifierPlugin('render', $this, 'renderModifierAction')
-        );
+        ];
     }
 
     /**
@@ -75,6 +75,8 @@ class ActionsExtension extends AbstractExtension
      *
      * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     *
+     * @return mixed
      */
     public function renderBlockAction(array $parameters = array(), $controller, $template, &$repeat)
     {

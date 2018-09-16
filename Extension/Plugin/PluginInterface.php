@@ -34,6 +34,16 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
  */
 interface PluginInterface
 {
+    const TYPE_BLOCK = 'block';
+    const TYPE_COMPILER = 'compiler';
+    const TYPE_FUNCTION = 'function';
+    const TYPE_INSERT = 'insert';
+    const TYPE_MODIFIER = 'modifier';
+    const TYPE_OUTPUTFILTER = 'outputfilter';
+    const TYPE_POSTFILTER = 'postfilter';
+    const TYPE_PREFILTER = 'prefilter';
+    const TYPE_RESOURCE = 'resource';
+
     public function getType();
 
     /**

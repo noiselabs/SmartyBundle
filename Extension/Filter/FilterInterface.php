@@ -35,4 +35,11 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Filter;
 interface FilterInterface
 {
     public function getType();
+
+    /**
+     * Return the filter callback.
+     *
+     * @return array
+     */
+    public function getCallback();
 }
