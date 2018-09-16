@@ -109,7 +109,7 @@ class SecurityExtensionTest extends TestCase
     {
         $tokenStorage = new TokenStorage();
 
-        $tokenStorage->setToken($token = $this->getMock(TokenInterface::class));
+        $tokenStorage->setToken($token = $this->createMock(TokenInterface::class));
         $token
             ->expects($this->any())
             ->method('isAuthenticated')
@@ -121,8 +121,8 @@ class SecurityExtensionTest extends TestCase
 
     private function createAuthorizationChecker($granted = false)
     {
-        $authManager = $this->getMock(AuthenticationManagerInterface::class);
-        $decisionManager = $this->getMock(AccessDecisionManagerInterface::class);
+        $authManager = $this->createMock(AuthenticationManagerInterface::class);
+        $decisionManager = $this->createMock(AccessDecisionManagerInterface::class);
         $decisionManager->expects($this->any())->method('decide')->will($this->returnValue($granted));
 
         return new AuthorizationChecker(
@@ -134,7 +134,7 @@ class SecurityExtensionTest extends TestCase
 
     private function createCsrfTokenManager($value)
     {
-        $csrfToken = $this->getMock(CsrfToken::class, ['getValue']);
+        $csrfToken = $this->createMock(CsrfToken::class);
         $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
         $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken', 'refreshToken', 'removeToken', 'isTokenValid'));
         $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));

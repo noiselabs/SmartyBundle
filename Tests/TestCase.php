@@ -147,16 +147,6 @@ class TestCase extends PHPUnit_Framework_TestCase
             'kernel.root_dir'         => __DIR__,
         ), $data)));
     }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMock($fqcn)
-    {
-        return $this->getMockBuilder($fqcn)->disableOriginalConstructor()->getMock();
-    }
 }
 
 /**
