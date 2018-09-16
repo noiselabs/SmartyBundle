@@ -5,44 +5,32 @@ sudo: false
 git:
   depth: 1
 
-php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
-  - hhvm
+cache:
+  directories:
+    - .phpunit
+    - $HOME/.composer/cache/files
 
 matrix:
   fast_finish: true
   include:
-    - php: 5.5
+    - php: 5.6
       env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
-    - php: 5.6
-      env: SYMFONY_VERSION=2.8.*
-    - php: 5.6
-      env: SYMFONY_VERSION=3.3.*
+    # Symfony 2 LTS
     - php: 7.0
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_LTS='^2'
+    # Symfony 3 LTS
     - php: 7.0
-      env: SYMFONY_VERSION=3.3.*
+      env: SYMFONY_LTS='^3'
+    # Symfony 4
     - php: 7.1
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.1
-      env: SYMFONY_VERSION=4.1.*
-  allow_failures:
-    - php: hhvm
-
-cache:
-  directories:
-    - $HOME/.composer/cache
+    - php: 7.2
 
 before_script:
   - travis_retry composer self-update
-  - if [ "$SYMFONY_VERSION" != "" ]; then COMPOSER_MEMORY_LIMIT=-1 composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+  - if [ "$SYMFONY_LTS" != "" ]; then composer require --dev --no-update symfony/lts=$SYMFONY_LTS; fi
 
 install:
-  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  COMPOSER_MEMORY_LIMIT=-1 travis_retry composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
 
 script:
   - composer test
@@ -53,4 +41,4 @@ after_success:
 notifications:
   irc: "irc.freenode.org#noiselabs"
   email:
-    - vitor@noiselabs.org
+    - vitor@noiselabs.io

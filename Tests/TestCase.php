@@ -19,7 +19,6 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
-use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;

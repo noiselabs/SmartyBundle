@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "mopa/bootstrap-bundle": "~3.0",
-        "phpunit/phpunit": ">=4.0",
+        "phpunit/phpunit": ">=5.4",
         "symfony/asset": "^2.8|^3.0|^4.0",
         "symfony/expression-language": "^2.8|^3.0|^4.0",
         "symfony/phpunit-bridge": "~3.0|~4.0",
