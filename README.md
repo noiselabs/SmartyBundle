@@ -8,7 +8,7 @@ SmartyBundle
 [@smarty]:          http://www.smarty.net/                  "The compiling PHP template engine"
 [@symfony]:         http://www.symfony.com/                 "High Performance PHP Framework for Web Development"
 
-This [Symfony2](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
+This [Symfony2+](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
 [![Total Downloads](https://poser.pugx.org/noiselabs/smarty-bundle/downloads.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Stable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/stable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
@@ -20,7 +20,9 @@ See this compatibility chart to find out which version of the SmartyBundle you n
 
 | Symfony | SmartyBundle |
 |---|---|
-| <code>~2.8&#124;~3.0</code> | `~2.0` |
+| `^4.0` | `^3.0` |
+| `^3.0` | `^3.0` |
+| `^2.8` | `^2.0` |
 | `^2.1.0` | `~1.3` |
 | `2.0.*` | `~1.0.0` |
 
@@ -61,6 +63,13 @@ Authors
 Vítor Brandão - <vitor@noiselabs.org> ~ [twitter.com/noiselabs](http://twitter.com/noiselabs) ~ [blog.noiselabs.org](http://blog.noiselabs.org)
 
 See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
+
+Credits
+-------
+
+Kudos to [https://www.jetbrains.com/](JetBrains) for kindly supporting SmartyBundle through its [PhpStorm](https://www.jetbrains.com/phpstorm/) OpenSource licence.
+
+[![phpstorm logo](Resources/assets/phpstorm-text.png)](Resources/assets/phpstorm-text.png)
 
 Submitting bugs and feature requests
 ------------------------------------
