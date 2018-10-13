@@ -25,27 +25,23 @@
  * @link        https://www.noiselabs.io
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\MopaBootstrapPass;
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Config\FileLocator;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-/**
- * Smarty Bundle.
- *
- * @author Vítor Brandão <vitor@noiselabs.io>
- */
-class SmartyBundle extends Bundle
+class FileLocatorFactory
 {
-    const VERSION = '3.0.0';
-
-    public function build(ContainerBuilder $container)
+    /**
+     * @param KernelInterface $kernel A KernelInterface instance
+     * @param string|null $path The path the global resource directory
+     * @param array $paths An array of paths where to look for resources
+     * @param string|array $extraTemplatePaths
+     *
+     * @return FileLocator
+     */
+    public static function createFileLocator(KernelInterface $kernel, $path, array $paths, $extraTemplatePaths)
     {
-        parent::build($container);
-
-        $container->addCompilerPass(new MopaBootstrapPass());
-        $container->addCompilerPass(new RegisterExtensionsPass());
+        return new FileLocator($kernel, $path, array_merge($paths, (array) $extraTemplatePaths));
     }
 }

@@ -28,10 +28,11 @@
 namespace NoiseLabs\Bundle\SmartyBundle\Command;
 
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder;
+use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -39,8 +40,26 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Vítor Brandão <vitor@noiselabs.io>
  */
-class CompileCommand extends ContainerAwareCommand
+class CompileCommand extends Command
 {
+    /**
+     * @var SmartyEngine
+     */
+    private $engine;
+
+    /**
+     * @var TemplateFinder
+     */
+    private $finder;
+
+    public function __construct(SmartyEngine $engine, TemplateFinder $finder)
+    {
+        parent::__construct();
+
+        $this->engine = $engine;
+        $this->finder = $finder;
+    }
+
     protected function configure()
     {
         $this
@@ -67,17 +86,14 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $finder = $this->getContainer()->get('smarty.templating.finder');
-        $engine = $this->getContainer()->get('templating.engine.smarty');
-
         $bundleName = $input->getArgument('bundle');
         $verbose = $input->getOption('verbose');
 
         if ($bundleName && (0 === strpos($bundleName, '@'))) {
-            $bundle = $finder->getBundle(trim($bundleName, '@'));
-            $templates = $finder->findTemplatesInBundle($bundle);
+            $bundle = $this->finder->getBundle(trim($bundleName, '@'));
+            $templates = $this->finder->findTemplatesInBundle($bundle);
         } else {
-            $templates = $finder->findAllTemplates();
+            $templates = $this->finder->findAllTemplates();
         }
 
         $totalCtime = 0;
@@ -85,7 +101,7 @@ EOF
         foreach ($templates as $template) {
             try {
                 $startTime = microtime(true);
-                $tpl = $engine->compileTemplate($template, false);
+                $tpl = $this->engine->compileTemplate($template, false);
                 if ($tpl instanceof \Smarty_Internal_Template) {
                     $ctime = microtime(true) - $startTime;
                     $totalCtime += $ctime;

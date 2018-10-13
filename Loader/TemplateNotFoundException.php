@@ -25,27 +25,19 @@
  * @link        https://www.noiselabs.io
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle;
+namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\MopaBootstrapPass;
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 
-/**
- * Smarty Bundle.
- *
- * @author Vítor Brandão <vitor@noiselabs.io>
- */
-class SmartyBundle extends Bundle
+class TemplateNotFoundException extends RuntimeException
 {
-    const VERSION = '3.0.0';
-
-    public function build(ContainerBuilder $container)
+    /**
+     * @param string $templateName
+     *
+     * @return TemplateNotFoundException
+     */
+    public static function couldNotLocate($templateName)
     {
-        parent::build($container);
-
-        $container->addCompilerPass(new MopaBootstrapPass());
-        $container->addCompilerPass(new RegisterExtensionsPass());
+        return new static(sprintf('Could not locate template "%s"', $templateName));
     }
 }

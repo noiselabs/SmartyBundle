@@ -162,24 +162,6 @@ class SmartyEngineTest extends TestCase
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.io>
-     */
-    public function testGetLoader()
-    {
-        $container = $this->createContainer();
-        $engine = new ProjectTemplateEngine(
-            $this->smarty,
-            $container,
-            new TemplateNameParser(),
-            $this->loader,
-            array()
-        );
-
-        $this->assertSame($this->loader, $engine->getLoader());
-    }
-
-    /**
      * @since  0.2.0
      * @author Vítor Brandão <vitor@noiselabs.io>
      */

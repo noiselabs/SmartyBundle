@@ -26,6 +26,9 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Exception;
 
+use Exception;
+use Smarty_Internal_Template;
+
 /**
  * SmartyBundle base exception.
  *
@@ -34,7 +37,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Exception;
  *
  * @author  Vítor Brandão <vitor@noiselabs.com>
  */
-class AbstractException extends \Exception
+class AbstractException extends Exception
 {
     protected $lineno;
     protected $filename;
@@ -55,8 +58,8 @@ class AbstractException extends \Exception
         $message,
         $lineno = -1,
         $filename = null,
-        \Smarty_Internal_Template $template = null,
-        \Exception $previous = null
+        Smarty_Internal_Template $template = null,
+        Exception $previous = null
     ) {
         if (version_compare(PHP_VERSION, '5.3.0', '<')) {
             $this->previous = $previous;
@@ -88,7 +91,7 @@ class AbstractException extends \Exception
      *
      * @return Exception A SmartyBundle Exception
      */
-    public static function createFromPrevious(\Exception $e, $resource = null)
+    public static function createFromPrevious(Exception $e, $resource = null)
     {
         $filename = null != $resource ? $resource : null;
 
@@ -178,7 +181,7 @@ class AbstractException extends \Exception
         }
 
         if (null !== $this->filename) {
-            if ($this->filename instanceof \Smarty_Internal_Template) {
+            if ($this->filename instanceof Smarty_Internal_Template) {
                 $this->filename = ($this->filename->source instanceof \Smarty_Template_Source) ?
                     $this->filename->source->filepath : $this->filename->template_resource;
             }
@@ -199,7 +202,7 @@ class AbstractException extends \Exception
         $template = null;
 
         foreach (debug_backtrace() as $trace) {
-            if (!isset($trace['args'][2]) || !$trace['args'][2] instanceof \Smarty_Internal_Template) {
+            if (!isset($trace['args'][2]) || !$trace['args'][2] instanceof Smarty_Internal_Template) {
                 continue;
             }
 

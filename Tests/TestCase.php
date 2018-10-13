@@ -18,6 +18,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
+use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use PHPUnit_Framework_TestCase;
 use Smarty;
@@ -118,15 +119,21 @@ class TestCase extends PHPUnit_Framework_TestCase
             $options
         );
 
-        return new ProjectTemplateEngine(
+        $templateParser = new TemplateNameParser();
+        $templateLoader = new TemplateLoader($templateParser, $this->loader);
+
+        $engine = new ProjectTemplateEngine(
             $this->smarty,
+            $templateLoader,
             $container,
-            new TemplateNameParser(),
-            $this->loader,
             $options,
             $global,
             $logger
         );
+
+        $engine->setLoader($this->loader);
+
+        return $engine;
     }
 
     public function getKernel()
@@ -181,6 +188,16 @@ class KernelForTest extends Kernel
  */
 class ProjectTemplateEngine extends SmartyEngine
 {
+    /**
+     * @var ProjectTemplateLoader
+     */
+    private $loader;
+
+    public function setLoader(ProjectTemplateLoader $loader)
+    {
+        $this->loader = $loader;
+    }
+
     public function setTemplate($name, $content)
     {
         $this->loader->setTemplate($name, $content);

@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\DependencyInjection;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -47,8 +48,10 @@ class SmartyExtension extends Extension
     /**
      * Responds to the smarty configuration parameter.
      *
-     * @param array            $configs
+     * @param array $configs
      * @param ContainerBuilder $container
+     *
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -70,6 +73,14 @@ class SmartyExtension extends Extension
         }
 
         $container->setParameter('smarty.options', $config['options']);
+        foreach ($config['options'] as $k => $v) {
+            $container->setParameter('smarty.options.' . $k, $v);
+        }
+
+        // Console commands
+        if (class_exists(Application::class)) {
+            $loader->load('console.xml');
+        }
 
          // Enable AsseticExtension if undefined (legacy support)
         if (!isset($config['assetic'])) {
