@@ -28,6 +28,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Exception;
 
 use Exception;
 use Smarty_Internal_Template;
+use Smarty_Template_Source;
 
 /**
  * SmartyBundle base exception.
@@ -61,12 +62,7 @@ class AbstractException extends Exception
         Smarty_Internal_Template $template = null,
         Exception $previous = null
     ) {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $this->previous = $previous;
-            parent::__construct('');
-        } else {
-            parent::__construct('', 0, $previous);
-        }
+        parent::__construct('', 0, $previous);
 
         $this->lineno = $lineno;
         $this->filename = $filename;
@@ -89,14 +85,14 @@ class AbstractException extends Exception
      * @param Exception $previous The previous exception
      * @param string    $resource An optional template resource (type and path)
      *
-     * @return Exception A SmartyBundle Exception
+     * @return static A SmartyBundle Exception
      */
-    public static function createFromPrevious(Exception $e, $resource = null)
+    public static function createFromPrevious(Exception $previous, $resource = null)
     {
         $filename = null != $resource ? $resource : null;
 
         // An exception has been thrown during the rendering of a template
-        return new static(sprintf('"%s"', $e->getMessage()), -1, $resource, null, $e);
+        return new static($previous->getMessage(), -1, $resource, null, $previous);
     }
 
     /**
@@ -153,23 +149,6 @@ class AbstractException extends Exception
         $this->updateRepr();
     }
 
-    /**
-     * For PHP < 5.3.0, provides access to the getPrevious() method.
-     *
-     * @param string $method    The method name
-     * @param array  $arguments The parameters to be passed to the method
-     *
-     * @return Exception The previous exception or null
-     */
-    public function __call($method, $arguments)
-    {
-        if ('getprevious' == strtolower($method)) {
-            return $this->previous;
-        }
-
-        throw new \BadMethodCallException(sprintf('Method "%s::%s()" does not exist.', __CLASS__, $method));
-    }
-
     protected function updateRepr()
     {
         $this->message = $this->rawMessage;
@@ -182,7 +161,7 @@ class AbstractException extends Exception
 
         if (null !== $this->filename) {
             if ($this->filename instanceof Smarty_Internal_Template) {
-                $this->filename = ($this->filename->source instanceof \Smarty_Template_Source) ?
+                $this->filename = ($this->filename->source instanceof Smarty_Template_Source) ?
                     $this->filename->source->filepath : $this->filename->template_resource;
             }
             $this->message .= sprintf(' in %s', is_string($this->filename) ? '"'.$this->filename.'"' : json_encode($this->filename));
@@ -216,59 +195,8 @@ class AbstractException extends Exception
 
         // update template filename
         if (null !== $template && null === $this->filename) {
-            $this->filename = ($template->source instanceof \Smarty_Template_Source) ?
+            $this->filename = ($template->source instanceof Smarty_Template_Source) ?
                 $template->source->filepath : $template->template_resource;
         }
-    }
-
-    /**
-     * Because json_encode doesn't handle recursion.
-     * @see {@link http://blog.jezmckean.com/php-bug-json_encode-misleading-warning-on-object-with-private-properties/}
-     *
-     * This function returns a JSON representation of $param. It uses json_encode
-     * to accomplish this, but converts objects and arrays containing objects to
-     * associative arrays first. This way, objects that do not expose (all) their
-     * properties directly but only through an Iterator interface are also encoded
-     * correctly.
-     * @see {@link http://www.php.net/manual/en/function.json-encode.php#78688}
-     */
-    protected function jsonEncode($param)
-    {
-        /**
-         * Convert an object into an associative array
-         *
-         * This function converts an object into an associative array by iterating
-         * over its public properties. Because this function uses the foreach
-         * construct, Iterators are respected. It also works on arrays of objects.
-         *
-         * @return array
-         */
-        function objectToArray($var)
-        {
-            $result = array();
-            $references = array();
-
-            // loop over elements/properties
-            foreach ($var as $key => $value) {
-                // recursively convert objects
-                if (is_object($value) || is_array($value)) {
-                    // but prevent cycles
-                    if (!in_array($value, $references)) {
-                        $result[$key] = objectToArray($value);
-                        $references[] = $value;
-                    }
-                } else {
-                    // simple values are untouched
-                    $result[$key] = $value;
-                }
-            }
-            return $result;
-        }
-
-        if (is_object($param) || is_array($param)) {
-            $param = objectToArray($param);
-        }
-
-        return json_encode($param);
     }
 }

@@ -294,6 +294,7 @@ class SmartyEngine implements EngineInterface
     public function compileTemplate($name, $forceCompile = false)
     {
         $template = $this->load($name);
+        var_dump($template);
         $template = $this->smarty->createTemplate($template, $this->smarty);
 
         if ($forceCompile || $template->mustCompile()) {

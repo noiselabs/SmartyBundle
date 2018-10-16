@@ -27,7 +27,6 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
-use InvalidArgumentException;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParser;
 use Symfony\Component\Templating\TemplateNameParserInterface;
@@ -70,7 +69,7 @@ class TemplateLoader
     }
 
     /**
-     * @param string $name
+     * @param string|TemplateReferenceInterface $name
      *
      * @return string
      *
@@ -78,16 +77,13 @@ class TemplateLoader
      */
     public function load($name)
     {
-        if (!is_string($name)) {
-            throw new InvalidArgumentException(sprintf('Expected template $name to be of type "string" got "%s" instead',
-                gettype($name) == 'object' ? get_class($name) : gettype($name)));
-        }
+        $templateId = $name instanceof TemplateReferenceInterface ? $name->getLogicalName() : $name;
 
         if (isset($this->cache[$name])) {
             return $this->cache[$name];
         }
 
-        $template = $this->defaultTemplateParser->parse($name);
+        $template = $name instanceof TemplateReferenceInterface ? $name : $this->defaultTemplateParser->parse($name);
         if (!$template) {
             throw TemplateNotFoundException::couldNotLocate($name);
         }
@@ -106,7 +102,7 @@ class TemplateLoader
             throw TemplateNotFoundException::couldNotLocate($name);
         }
 
-        return $this->cache[$name] = (string)$file;
+        return $this->cache[$templateId] = (string) $file;
     }
 
     /**

@@ -30,6 +30,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Command;
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
 use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use Smarty_Internal_Template;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -102,7 +103,7 @@ EOF
             try {
                 $startTime = microtime(true);
                 $tpl = $this->engine->compileTemplate($template, false);
-                if ($tpl instanceof \Smarty_Internal_Template) {
+                if ($tpl instanceof Smarty_Internal_Template) {
                     $ctime = microtime(true) - $startTime;
                     $totalCtime += $ctime;
                     $source = $tpl->source;
