@@ -25,7 +25,7 @@
  * @link        https://www.noiselabs.io
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
@@ -42,7 +42,7 @@ class ActionsExtensionTest extends TestCase
     {
         parent::setUp();
 
-        $templatesDir = __DIR__.'/templates/actions';
+        $templatesDir = __DIR__ . '/templates/actions';
         $this->engine->setTemplateDir($templatesDir);
     }
 

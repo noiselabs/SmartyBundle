@@ -24,7 +24,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
@@ -47,7 +47,7 @@ class AssetsExtensionTest extends TestCase
     {
         parent::setUp();
 
-        $templatesDir = __DIR__.'/templates/assets';
+        $templatesDir = __DIR__ . '/templates/assets';
         $this->engine->setTemplateDir($templatesDir);
     }
 

@@ -24,7 +24,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
@@ -42,7 +42,7 @@ class RoutingExtensionTest extends TestCase
     {
         parent::setUp();
 
-        $templatesDir = __DIR__.'/templates/routing';
+        $templatesDir = __DIR__ . '/templates/routing';
         $this->engine->setTemplateDir($templatesDir);
     }
 

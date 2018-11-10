@@ -24,9 +24,10 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Exception;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Exception;
 
 use Exception;
+use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Smarty;
 use Smarty_Internal_Template;

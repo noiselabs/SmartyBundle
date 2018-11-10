@@ -25,7 +25,7 @@
  * @link        https://www.noiselabs.io
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\SecurityExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;

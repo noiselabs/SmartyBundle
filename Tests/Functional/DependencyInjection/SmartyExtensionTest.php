@@ -27,10 +27,10 @@
  * @since       0.1.0
  */
 
-namespace NoiseLabs\Bundle\SmartyBundle\Tests\DependencyInjection;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\DependencyInjection;
 
 use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\SmartyExtension;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -44,7 +44,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  *
  * @author Vítor Brandão <vitor@noiselabs.io>
  */
-class SmartyExtensionTest extends PHPUnit_Framework_TestCase
+class SmartyExtensionTest extends TestCase
 {
     public function testLoadEmptyConfiguration()
     {
@@ -136,7 +136,7 @@ class SmartyExtensionTest extends PHPUnit_Framework_TestCase
      */
     private function loadFromFile(ContainerBuilder $container, $file, $format)
     {
-        $locator = new FileLocator(__DIR__.'/Fixtures/'.$format);
+        $locator = new FileLocator(__DIR__ . '/Fixtures/' .$format);
 
         switch ($format) {
             case 'php':
