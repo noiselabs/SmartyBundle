@@ -102,21 +102,6 @@ class SmartyExtension extends Extension
         }
         $container->setParameter('smarty.assetic', $config['assetic']);
 
-        // Bootstrap Extensions
-        if (true === $config['bootstrap']) {
-            $loader->load('bootstrap.xml');
-            $config['menu'] = true; // "bootstrap" requires "menu" so enable it
-        }
-        $container->setParameter('smarty.bootstrap', $config['bootstrap']);
-
-         // Form Extension
-        $loader->load('form.xml');
-        $container->setParameter('smarty.form.resources', $config['form']['resources']);
-
-        // Menu Extension
-        if (true === $config['menu']) {
-            $loader->load('menu.xml');
-        }
         $container->setParameter('smarty.menu', $config['menu']);
 
         /**
