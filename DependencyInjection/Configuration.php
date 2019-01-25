@@ -61,8 +61,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('smarty');
+        $treeBuilder = new TreeBuilder('smarty');
+        $rootNode = $treeBuilder->getRootNode($treeBuilder, 'smarty');
 
         $rootNode
             ->treatNullLike(array('enabled' => true))
