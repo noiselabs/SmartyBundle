@@ -56,6 +56,19 @@ If you want to contribute to SmartyBundle please switch to the following branche
 * **Forms** - [form-extension](https://github.com/noiselabs/SmartyBundle/tree/form-extension)
 * **Security** - *completed, merged into master*
 
+Development
+-----------
+
+If you want to contribute to SmartyBundle please ensure all tests are passing for the supported PHP versions. SmartyBundle currently supports PHP 7.0 till 7.3.
+
+A `Makefile` is provided with some convenience commands.
+
+`make build` will build 4 Docker containers: php70, php71, php72 and php73.
+
+`make test` will run tests for each Docker container above.
+
+You can target individual PHP versions using `make build-php71` and `make test-php73` for example.
+
 License
 -------
 

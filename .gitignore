@@ -2,15 +2,8 @@
 *.kate-swp
 *.pyc
 .idea
-
-phpunit.xml
-composer.phar
-Resources/doc/phpunit*
-run-me-before-release.sh
-
 vendor
 tmp
 _build
-
+/.cache
 composer.lock
-.idea

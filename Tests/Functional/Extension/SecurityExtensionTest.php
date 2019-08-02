@@ -136,7 +136,9 @@ class SecurityExtensionTest extends TestCase
     {
         $csrfToken = $this->createMock(CsrfToken::class);
         $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
-        $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken', 'refreshToken', 'removeToken', 'isTokenValid'));
+        //$csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken',
+        // 'refreshToken', 'removeToken', 'isTokenValid'));
+        $csrfTokenManager = $this->createMock(CsrfTokenManagerInterface::class);
         $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));
 
         return $csrfTokenManager;
