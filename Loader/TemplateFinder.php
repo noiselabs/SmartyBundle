@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2019 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2018 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        https://www.noiselabs.io
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
@@ -59,16 +54,14 @@ class TemplateFinder implements TemplateFinderInterface
     private $rootDir;
 
     /**
-     * The default template directory.
-     *
-     * @var string
-     */
-    private $defaultTemplateDir;
-
-    /**
      * @var TemplateLoader
      */
     private $templateLoader;
+
+    /**
+     * @var array
+     */
+    private $templateDirs;
 
     /**
      * Constructor.
@@ -90,8 +83,14 @@ class TemplateFinder implements TemplateFinderInterface
         $this->templateLoader = $templateLoader;
         $this->parser = $parser;
         $this->rootDir = $rootDir;
-        $this->defaultTemplateDir = isset($smartyOptions['template_dir']) && is_string($smartyOptions['template_dir'])
-            ? $smartyOptions['template_dir'] : null;
+
+        $this->templateDirs = [];
+        if (isset($smartyOptions['template_dir'])) {
+            $this->templateDirs[] = $smartyOptions['template_dir'];
+        }
+        if (isset($smartyOptions['templates_dir']) && is_array($smartyOptions['templates_dir'])) {
+            $this->templateDirs = array_merge($this->templateDirs, $smartyOptions['templates_dir']);
+        }
     }
 
     /**
@@ -103,8 +102,9 @@ class TemplateFinder implements TemplateFinderInterface
     {
         $templates = [];
 
-        $templates += $this->findTemplatesInFolder($this->defaultTemplateDir);
-        $templates += $this->findTemplatesInFolder($this->rootDir . '/views');
+        foreach ($this->templateDirs as $templateDir) {
+            $templates += $this->findTemplatesInFolder($templateDir);
+        }
 
         foreach ($this->kernel->getBundles() as $name => $bundle) {
             $templates += $this->findTemplatesInBundle($bundle);

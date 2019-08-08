@@ -61,9 +61,9 @@ Development
 
 If you want to contribute to SmartyBundle please ensure all tests are passing for the supported PHP versions. SmartyBundle currently supports PHP 7.0 till 7.3.
 
-A `Makefile` is provided with some convenience commands.
+A `Makefile` is provided with some convenience commands. Use `make help` to list all available commands.
 
-`make build` will build 4 Docker containers: php70, php71, php72 and php73.
+`make build` and `make build-parallel` will build 4 Docker containers: php70, php71, php72 and php73.
 
 `make test` will run tests for each Docker container above.
 

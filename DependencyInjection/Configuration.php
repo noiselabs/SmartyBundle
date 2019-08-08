@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2019 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2018 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        https://www.noiselabs.io
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\DependencyInjection;
 
@@ -68,46 +63,10 @@ class Configuration implements ConfigurationInterface
             ->treatNullLike(array('enabled' => true))
         ->end();
 
-        $this->addFormSection($rootNode);
         $this->addGlobalsSection($rootNode);
         $this->addSmartyOptions($rootNode);
 
-        $rootNode
-            ->children()
-                ->booleanNode('assetic')->end()
-                ->booleanNode('bootstrap')->defaultValue(false)->end()
-                ->booleanNode('menu')->defaultValue(false)->end()
-            ->end()
-        ;
-
         return $treeBuilder;
-    }
-
-    /**
-     * Form configuration.
-     */
-    protected function addFormSection(ArrayNodeDefinition $rootNode)
-    {
-        $rootNode
-            ->children()
-                ->arrayNode('form')
-                    ->addDefaultsIfNotSet()
-                    ->fixXmlConfig('resource')
-                    ->children()
-                        ->arrayNode('resources')
-                            ->defaultValue(array('form_div_layout.html.tpl'))
-                            ->validate()
-                                ->ifTrue(function ($v) { return !in_array('form_div_layout.html.tpl', $v); })
-                                ->then(function ($v) {
-                                    return array_merge(array('form_div_layout.html.tpl'), $v);
-                                })
-                            ->end()
-                            ->prototype('scalar')->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
     }
 
     /**
@@ -243,9 +202,16 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('right_delimiter')->end()
                         ->scalarNode('smarty_debug_id')->end()
                         ->scalarNode('template_dir')
-                            ->defaultValue('%kernel.root_dir%/Resources/views')
+                            ->defaultValue('%kernel.root_dir%/templates')
                             ->cannotBeEmpty()
                             ->info('This is the name of the default template directory')
+                        ->end()
+                        ->arrayNode('templates_dir')
+                            ->info('Add directories to the list of directories where templates are stored')
+                            ->prototype('scalar')->end()
+                            ->defaultValue([
+                                '%kernel.root_dir%/Resources/views',
+                            ])
                         ->end()
                         ->scalarNode('trusted_dir')->end()
                         ->scalarNode('use_include_path')->defaultFalse()->end()

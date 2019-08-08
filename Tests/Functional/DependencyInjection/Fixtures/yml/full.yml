@@ -1,7 +1,6 @@
 smarty:
     options:
         allow_php_templates:
-        allow_php_templates:
         auto_literal:
         autoload_filters:
         cache_dir:             /tmp/noiselabs-smarty-bundle-test/app/cache/smarty/cache
@@ -41,6 +40,9 @@ smarty:
             - /tmp/noiselabs-smarty-bundle-test/app/Resources/smarty/plugins
         smarty_debug_id:
         template_dir:          /tmp/noiselabs-smarty-bundle-test/app/Resources/views
+        templates_dir:
+            - /tmp/noiselabs-smarty-bundle-test/app/templates_1
+            - /tmp/noiselabs-smarty-bundle-test/app/templates_2
         trusted_dir:
         use_include_path:              true
         use_sub_dirs:          false

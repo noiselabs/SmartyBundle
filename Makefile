@@ -21,13 +21,10 @@ build-php73: ## Build the PHP 7.3 container
 	docker build . -f docker/7.3/Dockerfile -t noiselabs/smarty-bundle:latest-php7.3
 
 build: ## Build Docker containers
-	echo "Building Docker containers in parallel..."; \
-	$(MAKE) build-php70 & \
-	$(MAKE) build-php71 & \
-	$(MAKE) build-php72 & \
-	$(MAKE) build-php73 & \
-	wait; \
-	echo "Done".
+	$(MAKE) build-php70 build-php71 build-php72 build-php73
+
+build-parallel: ## Build Docker containers in parallel
+	$(MAKE) -j4 build-php70 build-php71 build-php72 build-php73
 
 test-php70: ## Run unit and functional tests in the PHP 7.0 container
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 composer test
@@ -42,19 +39,31 @@ test-php73: ## Run unit and functional tests in the PHP 7.3 container
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 composer test
 
 test: ## Run unit and functional tests
-	$(MAKE) test-php70
-	$(MAKE) test-php71
-	$(MAKE) test-php72
-	$(MAKE) test-php73
+	$(MAKE) test-php70 test-php71 test-php72 test-php73
+
+test-parallel: ## Run unit and functional tests in parallel
+	$(MAKE) -j4 test-php70 test-php71 test-php72 test-php73
 
 sh-php70: ## Get a shell in the PHP 7.0 container
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
 
 sh-php71: ## Get a shell in the PHP 7.1 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.1 sh
 
 sh-php72: ## Get a shell in the PHP 7.2 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.2 sh
 
 sh-php73: ## Get a shell in the PHP 7.3 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 sh
+
+web-php70: ## Launches the built-in PHP web server in the PHP 7.0 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9080:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.0 php -S 0.0.0.0:8080 -t web
+
+web-php71: ## Launches the built-in PHP web server in the PHP 7.1 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9081:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.1 php -S 0.0.0.0:8080 -t web
+
+web-php72: ## Launches the built-in PHP web server in the PHP 7.2 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9082:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.2 php -S 0.0.0.0:8080 -t web
+
+web-php73: ## Launches the built-in PHP web server in the PHP 7.3 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9083:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.3 php -S 0.0.0.0:8080 -t web

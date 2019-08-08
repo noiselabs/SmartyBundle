@@ -35,7 +35,6 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\AbstractPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\TemplateNameParser;
 
 /**
  * @since  0.1.0

@@ -34,6 +34,10 @@ Following the example presented in the link above, the Smarty equivalents are:
 Assetic Extension
 =================
 
+.. warning::
+
+    Removed in SmartyBundle 3.0
+
 See chapter :ref:`ch_assetic` for complete documentation about Assetic support in SmartyBundle.
 
 Assets Extension
@@ -62,6 +66,11 @@ Usage in template context:
 
 Form Extension
 ==============
+
+.. warning::
+
+    Removed in SmartyBundle 3.0
+
 
 Form extension provides support for `Symfony Forms <http://symfony.com/doc/current/book/forms.html>`_ and it is described in its own chapter. :ref:`Go there now <ch_forms>`.
 

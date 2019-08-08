@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2019 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,18 +17,12 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2018 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        https://www.noiselabs.io
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle;
 
+use InvalidArgumentException;
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
@@ -91,6 +87,11 @@ class SmartyEngine implements EngineInterface
     private $templateLoader;
 
     /**
+     * @var array
+     */
+    private $registeredPlugins;
+
+    /**
      * Constructor.
      *
      * @param Smarty $smarty A \Smarty instance
@@ -124,6 +125,9 @@ class SmartyEngine implements EngineInterface
                 unset($options[$property]);
             }
         }
+
+        $extraTemplateDirs = $options['templates_dir'] ?? [];
+        unset($options['templates_dir']);
 
         // addSomeProperty()
         foreach (array('plugins_dir', 'template_dir') as $property) {
@@ -165,6 +169,9 @@ class SmartyEngine implements EngineInterface
             }
         }
         $this->smarty->addTemplateDir($bundlesTemplateDir);
+        foreach ($extraTemplateDirs as $templateDir) {
+            $this->smarty->addTemplateDir($templateDir);
+        }
 
         if (null !== $globals) {
             $this->addGlobal('app', $globals);
@@ -294,7 +301,6 @@ class SmartyEngine implements EngineInterface
     public function compileTemplate($name, $forceCompile = false)
     {
         $template = $this->load($name);
-        var_dump($template);
         $template = $this->smarty->createTemplate($template, $this->smarty);
 
         if ($forceCompile || $template->mustCompile()) {
@@ -379,7 +385,7 @@ class SmartyEngine implements EngineInterface
     {
         try {
             $this->load($name);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return false;
         }
 
@@ -467,7 +473,7 @@ class SmartyEngine implements EngineInterface
     public function getExtension($name)
     {
         if (false === $this->hasExtension($name)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" extension is not enabled.', $name));
+            throw new InvalidArgumentException(sprintf('The "%s" extension is not enabled.', $name));
         }
 
         return $this->extensions[$name];
@@ -650,11 +656,13 @@ class SmartyEngine implements EngineInterface
     /**
      * Gets the registered Globals.
      *
+     * @param bool $loadExtensions
+     *
      * @return array An array of Globals
      */
-    public function getGlobals($load_extensions = true)
+    public function getGlobals($loadExtensions = true)
     {
-        if (true === $load_extensions) {
+        if (true === $loadExtensions) {
             foreach ($this->getExtensions() as $extension) {
                 $this->globals = array_merge($this->globals, $extension->getGlobals());
             }

@@ -30,7 +30,7 @@
             <argument type="collection">
                 <argument>%kernel.root_dir%</argument>
             </argument>
-            <argument>%smarty.options.template_dir%</argument>
+            <argument>%smarty.options.templates_dir%</argument>
         </service>
 
         <service id="smarty.templating.locator" class="Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator">

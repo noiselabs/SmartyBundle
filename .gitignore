@@ -1,9 +1,7 @@
-*~
-*.kate-swp
 *.pyc
-.idea
-vendor
-tmp
-_build
-/.cache
-composer.lock
+/.idea
+/composer.lock
+/Resources/doc/_build/
+/Tests/Functional/App/cache
+/Tests/Functional/App/logs
+/vendor

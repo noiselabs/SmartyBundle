@@ -30,7 +30,6 @@
                 <directory>./bin</directory>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
-                <directory>./tmp</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
