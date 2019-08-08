@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2019 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,32 +17,45 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Command;
 
 use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException as SmartyBundleRuntimeException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder;
+use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use Smarty_Internal_Template;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Compile Smarty templates.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
-class CompileCommand extends ContainerAwareCommand
+class CompileCommand extends Command
 {
+    /**
+     * @var SmartyEngine
+     */
+    private $engine;
+
+    /**
+     * @var TemplateFinder
+     */
+    private $finder;
+
+    public function __construct(SmartyEngine $engine, TemplateFinder $finder)
+    {
+        parent::__construct();
+
+        $this->engine = $engine;
+        $this->finder = $finder;
+    }
+
     protected function configure()
     {
         $this
@@ -67,17 +82,14 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $finder = $this->getContainer()->get('smarty.templating.finder');
-        $engine = $this->getContainer()->get('templating.engine.smarty');
-
         $bundleName = $input->getArgument('bundle');
         $verbose = $input->getOption('verbose');
 
         if ($bundleName && (0 === strpos($bundleName, '@'))) {
-            $bundle = $finder->getBundle(trim($bundleName, '@'));
-            $templates = $finder->findTemplatesInBundle($bundle);
+            $bundle = $this->finder->getBundle(trim($bundleName, '@'));
+            $templates = $this->finder->findTemplatesInBundle($bundle);
         } else {
-            $templates = $finder->findAllTemplates();
+            $templates = $this->finder->findAllTemplates();
         }
 
         $totalCtime = 0;
@@ -85,8 +97,8 @@ EOF
         foreach ($templates as $template) {
             try {
                 $startTime = microtime(true);
-                $tpl = $engine->compileTemplate($template, false);
-                if ($tpl instanceof \Smarty_Internal_Template) {
+                $tpl = $this->engine->compileTemplate($template, false);
+                if ($tpl instanceof Smarty_Internal_Template) {
                     $ctime = microtime(true) - $startTime;
                     $totalCtime += $ctime;
                     $source = $tpl->source;

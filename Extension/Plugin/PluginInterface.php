@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2019 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,25 +17,28 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 
 /**
  * Plugin interface.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 interface PluginInterface
 {
+    const TYPE_BLOCK = 'block';
+    const TYPE_COMPILER = 'compiler';
+    const TYPE_FUNCTION = 'function';
+    const TYPE_INSERT = 'insert';
+    const TYPE_MODIFIER = 'modifier';
+    const TYPE_OUTPUTFILTER = 'outputfilter';
+    const TYPE_POSTFILTER = 'postfilter';
+    const TYPE_PREFILTER = 'prefilter';
+    const TYPE_RESOURCE = 'resource';
+
     public function getType();
 
     /**

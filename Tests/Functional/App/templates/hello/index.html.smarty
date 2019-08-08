@@ -1,0 +1,4 @@
+{extends 'file:base.html.smarty'}
+
+{block name=source}{literal}Hello, Smarty!{/literal}{/block}
+{block name=result}Hello, Smarty!{/block}

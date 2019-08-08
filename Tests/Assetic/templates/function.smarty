@@ -1,3 +1,0 @@
-<assets>
-    <asset url="{'path/to/asset'|some_func:['name'=>'my_asset']}" />
-</assets>

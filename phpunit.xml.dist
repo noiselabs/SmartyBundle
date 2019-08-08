@@ -3,7 +3,7 @@
 <phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
-    bootstrap="vendor/autoload.php"
+    bootstrap="Tests/bootstrap.php"
     colors="true"
     columns="max"
     convertErrorsToExceptions="true"
@@ -11,12 +11,14 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    syntaxCheck="true"
     verbose="true"
 >
     <testsuites>
-        <testsuite name="NoiseLabs SmartyBundle Test Suite">
-            <directory suffix="Test.php">./Tests</directory>
+        <testsuite name="unit">
+            <directory suffix="Test.php">./Tests/Unit</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory suffix="Test.php">./Tests/Functional</directory>
         </testsuite>
     </testsuites>
 
@@ -24,6 +26,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
+                <directory>./autoload</directory>
+                <directory>./bin</directory>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>

@@ -1,0 +1,4 @@
+{extends 'file:base.html.smarty'}
+
+{block name=source}{literal}{'routing'|path}{/literal}{/block}
+{block name=result}{'routing'|path}{/block}
