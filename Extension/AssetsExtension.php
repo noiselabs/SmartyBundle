@@ -89,7 +89,7 @@ class AssetsExtension extends AbstractExtension
      *
      * @return string A public path which takes into account the base path and URL path
      */
-    public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
+    public function getAssetUrl_block(array $parameters = array(), $path = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {

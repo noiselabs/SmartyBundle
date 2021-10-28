@@ -29,8 +29,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\TranslationExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
+use Symfony\Component\Translation\Formatter\MessageFormatter;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\MessageSelector;
 
 /**
  * Test suite for the translation extension.
@@ -43,7 +43,7 @@ class TranslationExtensionTest extends TestCase
     {
         $template = 'trans_escaping.html.tpl';
         $this->engine->setTemplate($template, '{trans vars=["%value%" => $value]}Percent: %value%% ({$msg}){/trans}');
-        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
+        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageFormatter())));
 
         $this->assertEquals('Percent: 12% (approx.)', $this->engine->render($template, array('value' => 12, 'msg' => 'approx.')));
     }
@@ -57,7 +57,7 @@ class TranslationExtensionTest extends TestCase
         $template = 'translation_test_'.$test++.'.html.tpl';
 
         $this->engine->setTemplate($template, $content);
-        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
+        $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageFormatter())));
 
         $this->assertEquals($expected, $this->engine->render($template, $variables));
     }

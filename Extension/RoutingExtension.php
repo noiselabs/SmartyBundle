@@ -87,7 +87,7 @@ class RoutingExtension extends AbstractExtension
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    public function getPath_block(array $parameters = array(), $name = null, $template, &$repeat)
+    public function getPath_block(array $parameters = array(), $name = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {
@@ -100,7 +100,7 @@ class RoutingExtension extends AbstractExtension
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
-    public function getUrl_block(array $parameters = array(), $name = null, $template, &$repeat)
+    public function getUrl_block(array $parameters = array(), $name = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {

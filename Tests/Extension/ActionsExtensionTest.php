@@ -38,7 +38,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
  */
 class ActionsExtensionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

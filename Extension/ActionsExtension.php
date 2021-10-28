@@ -76,7 +76,7 @@ class ActionsExtension extends AbstractExtension
      * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
-    public function renderBlockAction(array $parameters = array(), $controller, $template, &$repeat)
+    public function renderBlockAction(array $parameters = array(), $controller = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {

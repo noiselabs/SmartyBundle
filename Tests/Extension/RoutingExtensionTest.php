@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class RoutingExtensionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

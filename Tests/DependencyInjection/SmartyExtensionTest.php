@@ -99,6 +99,8 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGlobalsWithDifferentTypesAndValues()
     {
+        $this->markTestIncomplete();
+
         $globals = array(
             'array'   => array(),
             'false'   => false,

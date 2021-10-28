@@ -43,7 +43,7 @@ use Symfony\Component\Templating\Helper\AssetsHelper;
  */
 class AssetsExtensionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

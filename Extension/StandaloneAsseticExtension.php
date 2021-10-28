@@ -74,7 +74,7 @@ class StandaloneAsseticExtension extends AbstractExtension
      *
      * @return string A public path
      */
-    public function asseticBlock(array $params = array(), $content = null, $template, &$repeat)
+    public function asseticBlock(array $params = array(), $content = null, $template = null, &$repeat = null)
     {
         // In debug mode, we have to be able to loop a certain number of times, so we use a static counter
         static $count;
