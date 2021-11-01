@@ -35,7 +35,6 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony'   => array($vendorDir.'/symfony/src', $vendorDir.'/bundles'),
     'Monolog'   => $vendorDir.'/monolog/src',
-    'Assetic'   => $vendorDir.'/assetic/src',
 ));
 $loader->registerPrefixes(array(
     'Smarty_'           => $vendorDir.'/smarty/libs',

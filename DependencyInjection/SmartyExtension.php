@@ -71,42 +71,9 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
-         // Enable AsseticExtension if undefined (legacy support)
-        if (!isset($config['assetic'])) {
-            $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
-        }
-
-        // Assetic Extension
-        if (true === $config['assetic']) {
-            $loader->load('assetic.xml');
-
-            // choose dynamic or static
-            if ($container->getParameterBag()->resolveValue($container->getParameterBag()->get('assetic.use_controller'))) {
-                $container->getDefinition('smarty.extension.assetic.dynamic')->addTag('smarty.extension', array('alias' => 'assetic'));
-                $container->removeDefinition('smarty.extension.assetic.static');
-            } else {
-                $container->getDefinition('smarty.extension.assetic.static')->addTag('smarty.extension', array('alias' => 'assetic'));
-                $container->removeDefinition('smarty.extension.assetic.dynamic');
-            }
-        }
-        $container->setParameter('smarty.assetic', $config['assetic']);
-
-        // Bootstrap Extensions
-        if (true === $config['bootstrap']) {
-            $loader->load('bootstrap.xml');
-            $config['menu'] = true; // "bootstrap" requires "menu" so enable it
-        }
-        $container->setParameter('smarty.bootstrap', $config['bootstrap']);
-
          // Form Extension
         $loader->load('form.xml');
         $container->setParameter('smarty.form.resources', $config['form']['resources']);
-
-        // Menu Extension
-        if (true === $config['menu']) {
-            $loader->load('menu.xml');
-        }
-        $container->setParameter('smarty.menu', $config['menu']);
 
         /**
          * @note Caching of Smarty classes was causing issues because of the

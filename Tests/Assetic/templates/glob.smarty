@@ -1,3 +1,0 @@
-<assets>
-{stylesheets assets='css/src/*'}<asset url="{$asset_url}" />{/stylesheets}
-</assets>

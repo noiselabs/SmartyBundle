@@ -30,12 +30,6 @@ Following the example presented in the link above, the Smarty equivalents are:
 
     {'AcmeArticleBundle:Article:recentArticles'|render:['min'=>1,'max'=>3]}
 
-
-Assetic Extension
-=================
-
-See chapter :ref:`ch_assetic` for complete documentation about Assetic support in SmartyBundle.
-
 Assets Extension
 ================
 

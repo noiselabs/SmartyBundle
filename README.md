@@ -11,7 +11,6 @@ This [Symfony2+](http://symfony.com/) bundle provides integration for the [Smart
 [![Total Downloads](https://poser.pugx.org/noiselabs/smarty-bundle/downloads.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Stable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/stable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/unstable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
-[![Build Status](https://secure.travis-ci.org/noiselabs/SmartyBundle.png)](http://travis-ci.org/noiselabs/SmartyBundle)
 [![License](https://poser.pugx.org/noiselabs/smarty-bundle/license.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 
 See this compatibility chart to find out which version of the SmartyBundle you need depending on your version of Symfony.
@@ -24,16 +23,16 @@ See this compatibility chart to find out which version of the SmartyBundle you n
 | `^2.1.0` | `~1.3` |
 | `2.0.*` | `~1.0.0` |
 
-### Update: Symfony 4 support (October 2018)
+### Update: Symfony 4 support (October 2021)
 
 Symfony 4 support is being developed in the [3.0 branch](https://github.com/noiselabs/SmartyBundle/tree/3.0). Please checkout that branch if you wish to test it and/or contribute.
 
 Requirements
 ------------
 
-* [PHP][@php] 5.5.0 and up.
+* [PHP][@php] 7.1 and up.
 * [Smarty 3][@smarty]
-* [Symfony][@symfony] 2.8 and up.
+* [Symfony][@symfony] 3 and up.
 
 Installation
 ------------
@@ -49,8 +48,6 @@ Complete documentation is available on [Read the Docs][@documentation].
 
 If you want to contribute to SmartyBundle please switch to the following branches when contributing to one of these extensions.
 
-* **Assetic** - [assetic-extension](https://github.com/noiselabs/SmartyBundle/tree/assetic-extension)
-* **Twitter Bootstrap** - [twitter-bootstrap](https://github.com/noiselabs/SmartyBundle/tree/twitter-bootstrap)
 * **Forms** - [form-extension](https://github.com/noiselabs/SmartyBundle/tree/form-extension)
 * **Security** - *completed, merged into master*
 
