@@ -3,12 +3,12 @@
     "type": "symfony-bundle",
     "description": "This Symfony2 bundle provides integration for the Smarty3 template engine.",
     "keywords": ["templating", "smarty", "symfony", "noiselabs"],
-    "homepage": "http://smartybundle.noiselabs.org",
+    "homepage": "https://noiselabs.io",
     "license": "LGPL-3.0",
     "authors": [
         {
             "name": "Vítor Brandão",
-            "email": "vitor@noiselabs.org",
+            "email": "vitor@noiselabs.io",
             "homepage": "https://noiselabs.io"
         },
         {
@@ -20,17 +20,22 @@
         "irc": "irc://irc.freenode.org/noiselabs",
         "issues": "https://github.com/noiselabs/SmartyBundle/issues"
     },
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": ">=5.5.0",
+        "php": "^7.1|^8",
         "ext-intl": "*",
+        "smarty/smarty": "^3.1.28",
+        "symfony/asset": "~2.8|~3.0|~4.0",
+        "symfony/form": "~2.8|~3.0|~4.0",
         "symfony/framework-bundle": "~2.8|~3.0|~4.0",
         "symfony/templating": "~2.8|~3.0|~4.0",
-        "symfony/form": "~2.8|~3.0|~4.0",
-        "smarty/smarty": "3.1.*"
+        "symfony/translation": "~2.8|~3.0|~4.0"
     },
     "require-dev": {
         "mopa/bootstrap-bundle": "~3.0",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "^8|^9",
         "symfony/assetic-bundle": "~2.0",
         "symfony/expression-language": "~2.8|~3.0",
         "symfony/phpunit-bridge": "^3.0",
@@ -49,12 +54,23 @@
         "kriswallsmith/assetic": "<1.1.3"
     },
     "autoload": {
-        "psr-0": { "NoiseLabs\\Bundle\\SmartyBundle": "" }
+        "psr-4": { "NoiseLabs\\Bundle\\SmartyBundle\\": "" }
+    },
+    "autoload-dev": {
+        "files": [
+            "autoload/phpunit-class-aliases.php"
+        ]
     },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
         }
+    },
+    "scripts": {
+        "test": "php -v && php vendor/bin/phpunit --version && php vendor/bin/phpunit",
+        "test-with-coverage": "@test --coverage-text",
+        "test-unit": "@test --testsuite=unit",
+        "test-functional": "@test --testsuite=functional",
+        "server:start": "@php -v"
     }
 }
-

@@ -27,6 +27,7 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -40,10 +41,7 @@ use Symfony\Component\Templating\TemplateNameParser;
 use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
-/**
- * @author Vítor Brandão <vitor@noiselabs.org>
- */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PHPUnitTestCase
 {
     /**
      * @var Smarty
@@ -60,7 +58,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected $engine;
 
-    protected function setUp()
+    /**
+     * @var string
+     */
+    protected $tmpDir;
+
+    protected function setUp(): void
     {
         if (!class_exists('Smarty')) {
             $this->markTestSkipped('Smarty is not available.');
@@ -73,7 +76,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->engine = $this->getSmartyEngine();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteTmpDir();
     }
@@ -148,6 +151,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'kernel.name'             => 'kernel',
             'kernel.root_dir'         => __DIR__,
         ), $data)));
+    }
+
+    protected function getMock($originalClassName)
+    {
+        return $this->createMock($originalClassName);
     }
 }
 

@@ -100,21 +100,21 @@ abstract class AsseticExtension extends AbstractExtension
         );
     }
 
-    public function javascriptsBlock(array $params = array(), $content = null, $template, &$repeat)
+    public function javascriptsBlock(array $params = array(), $content = null, $template = null, &$repeat = null)
     {
         $params[self::OPTION_SMARTY_BLOCK_NAME] = 'javascripts';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
 
-    public function stylesheetsBlock(array $params = array(), $content = null, $template, &$repeat)
+    public function stylesheetsBlock(array $params = array(), $content = null, $template = null, &$repeat = null)
     {
         $params[self::OPTION_SMARTY_BLOCK_NAME] = 'stylesheets';
 
         return $this->asseticBlock($params, $content, $template, $repeat);
     }
 
-    public function imageBlock(array $params = array(), $content = null, $template, &$repeat)
+    public function imageBlock(array $params = array(), $content = null, $template = null, &$repeat = null)
     {
         $params[self::OPTION_SMARTY_BLOCK_NAME] = 'image';
         $params['single'] = true;
@@ -201,7 +201,7 @@ abstract class AsseticExtension extends AbstractExtension
      * Generic block function called be every other block function (javascripts,
      * stylesheets, image).
      */
-    protected function asseticBlock(array $params = array(), $content = null, $template, &$repeat)
+    protected function asseticBlock(array $params = array(), $content = null, $template = null, &$repeat = null)
     {
         /*
          * In debug mode, we have to be able to loop a certain number of times,

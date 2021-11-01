@@ -1,0 +1,50 @@
+name: Unit Tests
+
+on: [push]
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    env:
+      extensions: intl, xdebug
+
+    strategy:
+      matrix:
+        php: [ '7.2', '8.0' ]
+        symfony: [ '3.4', '4.4', '5.3' ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: xdebug
+          extensions: "${{ env.extensions }}"
+          ini-values: date.timezone=Europe/London,memory_limit=-1,error_reporting=-1,log_errors_max_len=0,zend.assertions=1,assert.exception=1,xdebug.show_exception_trace=0
+          php-version: "${{ matrix.php }}"
+          tools: composer, phpunit:8
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Composer require Symfony ${{ matrix.symfony }}
+        run: SYMFONY_REQUIRE=${{ matrix.symfony }} composer update --no-interaction --no-progress --prefer-dist --verbose
+
+      - name: Composer install
+        run: composer install --no-interaction --no-progress --prefer-dist --verbose
+
+      - name: PHPUnit tests
+        run: phpunit --coverage-text

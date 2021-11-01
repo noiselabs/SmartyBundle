@@ -1,8 +1,6 @@
 SmartyBundle
 ============
 
-[![Join the chat at https://gitter.im/noiselabs/SmartyBundle](https://badges.gitter.im/noiselabs/SmartyBundle.svg)](https://gitter.im/noiselabs/SmartyBundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [@documentation]:   http://smartybundle.readthedocs.io/   "SmartyBundle Documentation"
 [@php]:             http://php.net/                         "PHP: Hypertext Preprocessor"
 [@smarty]:          http://www.smarty.net/                  "The compiling PHP template engine"
@@ -64,16 +62,9 @@ This bundle is licensed under the LGPLv3 License. See the [LICENSE file](https:/
 Authors
 -------
 
-Vítor Brandão - <vitor@noiselabs.org> ~ [twitter.com/noiselabs](http://twitter.com/noiselabs) ~ [blog.noiselabs.org](http://blog.noiselabs.org)
+Vítor Brandão - <vitor@noiselabs.io> ~ [twitter.com/noiselabs](http://twitter.com/noiselabs) ~ [https://noiselabs.io](https://noiselabs.io)
 
 See also the list of [contributors](https://github.com/noiselabs/SmartyBundle/contributors) who participated in this project.
-
-Credits
--------
-
-Kudos to [https://www.jetbrains.com/](JetBrains) for kindly supporting SmartyBundle through its [PhpStorm](https://www.jetbrains.com/phpstorm/) OpenSource licence.
-
-[![phpstorm logo](Resources/assets/phpstorm-text.png)](Resources/assets/phpstorm-text.png)
 
 Submitting bugs and feature requests
 ------------------------------------
