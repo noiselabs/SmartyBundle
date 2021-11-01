@@ -34,7 +34,6 @@
         "symfony/translation": "~2.8|~3.0|~4.0"
     },
     "require-dev": {
-        "mopa/bootstrap-bundle": "~3.0",
         "phpunit/phpunit": "^8|^9",
         "symfony/assetic-bundle": "~2.0",
         "symfony/expression-language": "~2.8|~3.0",
@@ -45,8 +44,6 @@
     },
     "suggest": {
         "symfony/assetic-bundle": "Assetic support in Smarty templates",
-        "mopa/bootstrap-bundle": "Integration of Twitter Bootstrap into Symfony2",
-        "mopa/bootstrap-sandbox-bundle": "Integration of Twitter Bootstrap into Symfony2 (extra)",
         "liip/theme-bundle": "Integration of Twitter Bootstrap into Symfony2 (themes)",
         "knplabs/knp-menu-bundle": "Smarty3 integration with KnpMenu (object oriented menus)"
     },
