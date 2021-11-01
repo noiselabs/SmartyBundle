@@ -37,7 +37,7 @@ See the `Smarty3 Manual <http://www.smarty.net/docs/en/>`_ for other features an
 Requirements
 ============
 
-* `PHP <http://php.net>`_ 5.5.0 and up
+* `PHP <http://php.net>`_ 7.1 and up
 * `Symfony <http://www.symfony.com>`_ 2.8 and up
 * `Smarty 3 <http://www.smarty.net>`_
 
