@@ -31,9 +31,7 @@ SmartyBundle
     cookbook
     commands
     extensions
-    assetic
     forms
-    bootstrap
     reference
     contributing
 
@@ -72,16 +70,6 @@ SmartyBundle Extensions
     :maxdepth: 3
 
     extensions
-
-Major components: Assetic, Forms and Twitter-Bootstrap
-======================================================
-
-.. toctree::
-    :maxdepth: 3
-
-    assetic
-    forms
-    bootstrap
 
 Configuration Reference
 =======================
