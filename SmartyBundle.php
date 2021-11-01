@@ -27,7 +27,6 @@
 
 namespace NoiseLabs\Bundle\SmartyBundle;
 
-use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\MopaBootstrapPass;
 use NoiseLabs\Bundle\SmartyBundle\DependencyInjection\Compiler\RegisterExtensionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -45,7 +44,6 @@ class SmartyBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new MopaBootstrapPass());
         $container->addCompilerPass(new RegisterExtensionsPass());
     }
 }
