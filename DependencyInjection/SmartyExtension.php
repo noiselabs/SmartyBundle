@@ -71,10 +71,6 @@ class SmartyExtension extends Extension
 
         $container->setParameter('smarty.options', $config['options']);
 
-         // Form Extension
-        $loader->load('form.xml');
-        $container->setParameter('smarty.form.resources', $config['form']['resources']);
-
         /**
          * @note Caching of Smarty classes was causing issues because of the
          * include_once directives used in Smarty.class.php so this

@@ -68,38 +68,10 @@ class Configuration implements ConfigurationInterface
             ->treatNullLike(array('enabled' => true))
         ->end();
 
-        $this->addFormSection($rootNode);
         $this->addGlobalsSection($rootNode);
         $this->addSmartyOptions($rootNode);
 
         return $treeBuilder;
-    }
-
-    /**
-     * Form configuration.
-     */
-    protected function addFormSection(ArrayNodeDefinition $rootNode)
-    {
-        $rootNode
-            ->children()
-                ->arrayNode('form')
-                    ->addDefaultsIfNotSet()
-                    ->fixXmlConfig('resource')
-                    ->children()
-                        ->arrayNode('resources')
-                            ->defaultValue(array('form_div_layout.html.tpl'))
-                            ->validate()
-                                ->ifTrue(function ($v) { return !in_array('form_div_layout.html.tpl', $v); })
-                                ->then(function ($v) {
-                                    return array_merge(array('form_div_layout.html.tpl'), $v);
-                                })
-                            ->end()
-                            ->prototype('scalar')->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
     }
 
     /**

@@ -6,7 +6,7 @@ SmartyBundle
 [@smarty]:          http://www.smarty.net/                  "The compiling PHP template engine"
 [@symfony]:         http://www.symfony.com/                 "High Performance PHP Framework for Web Development"
 
-This [Symfony2+](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
+This [Symfony](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
 [![Total Downloads](https://poser.pugx.org/noiselabs/smarty-bundle/downloads.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Stable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/stable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
@@ -32,7 +32,7 @@ Requirements
 
 * [PHP][@php] 7.1 and up.
 * [Smarty 3][@smarty]
-* [Symfony][@symfony] 3 and up.
+* [Symfony][@symfony] 2.8 and up.
 
 Installation
 ------------
@@ -43,13 +43,6 @@ Documentation
 -------------
 
 Complete documentation is available on [Read the Docs][@documentation].
-
-### Extensions under development
-
-If you want to contribute to SmartyBundle please switch to the following branches when contributing to one of these extensions.
-
-* **Forms** - [form-extension](https://github.com/noiselabs/SmartyBundle/tree/form-extension)
-* **Security** - *completed, merged into master*
 
 License
 -------
