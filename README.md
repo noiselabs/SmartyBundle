@@ -17,8 +17,8 @@ See this compatibility chart to find out which version of the SmartyBundle you n
 
 | Symfony | SmartyBundle |
 |---|---|
-| `^4.0` | `^3.0` |
-| `^3.0` | `^3.0` |
+| `^4.0` | `4.0.x-dev` |
+| `^3.0` | `3.0.x-dev` |
 | `^2.8` | `^2.0` |
 | `^2.1.0` | `~1.3` |
 | `2.0.*` | `~1.0.0` |

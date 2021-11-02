@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of NoiseLabs-SmartyBundle
+ * This file is part of NoiseLabs-SmartyBundle.
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -16,32 +16,41 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
+ * Copyright (C) 2011-2018 Vítor Brandão
  *
  * @category    NoiseLabs
- * @package     SmartyBundle
- * @author      Vítor Brandão <vitor@noiselabs.org>
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
+ *
+ * @author      Vítor Brandão <vitor@noiselabs.io>
+ * @copyright   (C) 2011-2018 Vítor Brandão <vitor@noiselabs.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ *
+ * @see        https://www.noiselabs.io
  * @since       0.1.0
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
+use InvalidArgumentException;
+use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\AbstractPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\TemplateNameParser;
 
 /**
  * @since  0.1.0
- * @author Vítor Brandão <vitor@noiselabs.org>
+ *
+ * @author Vítor Brandão <vitor@noiselabs.io>
+ *
+ * @internal
+ * @coversNothing
  */
 class SmartyEngineTest extends TestCase
 {
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testEvaluateAddsAppGlobal()
     {
@@ -56,7 +65,8 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testEvaluateWithoutAvailableRequest()
     {
@@ -72,7 +82,8 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGlobalVariables()
     {
@@ -86,7 +97,8 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGlobalsGetPassedToTemplate()
     {
@@ -101,11 +113,12 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetUnsetExtension()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         $name = 'non-existent-extension';
 
@@ -115,38 +128,36 @@ class SmartyEngineTest extends TestCase
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetSetRemoveExtension()
     {
-        $extension = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
-        $extension->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mock'));
+        $extension = $this->createMock(ExtensionInterface::class);
+        $extension->expects($this->any())->method('getName')->will($this->returnValue('mock'));
 
         $engine = $this->getSmartyEngine();
         $engine->addExtension($extension);
 
         $this->assertEquals($engine->getExtension('mock'), $extension);
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $engine->removeExtension('mock');
         $engine->getExtension('mock');
     }
 
     /**
      * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     public function testGetSetExtensionsArray()
     {
         $extensions = [];
 
         foreach (['mock0', 'mock1', 'mock2', 'mock3'] as $name) {
-            $extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
-            $extensions[$name]->expects($this->any())
-                ->method('getName')
-                ->will($this->returnValue($name));
+            $extensions[$name] = $this->createMock(ExtensionInterface::class);
+            $extensions[$name]->expects($this->any())->method('getName')->will($this->returnValue($name));
         }
 
         $engine = $this->getSmartyEngine();
@@ -162,26 +173,9 @@ class SmartyEngineTest extends TestCase
     }
 
     /**
-     * @since  0.1.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
-     */
-    public function testGetLoader()
-    {
-        $container = $this->createContainer();
-        $engine = new ProjectTemplateEngine(
-            $this->smarty,
-            $container,
-            new TemplateNameParser(),
-            $this->loader,
-            []
-        );
-
-        $this->assertSame($this->loader, $engine->getLoader());
-    }
-
-    /**
      * @since  0.2.0
-     * @author Vítor Brandão <vitor@noiselabs.org>
+     *
+     * @author Vítor Brandão <vitor@noiselabs.io>
      */
     protected function createContainer(array $data = [])
     {
@@ -194,7 +188,7 @@ class SmartyEngineTest extends TestCase
     }
 
     /**
-     * test if plugins can be registered between two renders
+     * test if plugins can be registered between two renders.
      */
     public function testAddPlugin()
     {
@@ -202,50 +196,49 @@ class SmartyEngineTest extends TestCase
 
         $engine = $this->getSmartyEngine();
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', ['getName', 'getType', 'doModify', 'getCallback']);
-        $plugin->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mockPluginA'));
-        $plugin->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue('modifier'));
-        $plugin->expects($this->any())
-            ->method('doModify')
-            ->will($this->returnArgument(0));
-        $plugin->expects($this->any())
-            ->method('getCallback')
-            ->will($this->returnValue([$plugin,'doModify']));
+        $plugin1 = $this->createMock(PluginInterface::class);
+        $plugin1->expects($this->any())->method('getName')->will($this->returnValue('plugin1'));
+        $plugin1->expects($this->any())->method('getType')->will($this->returnValue(PluginInterface::TYPE_MODIFIER));
+        $plugin1->expects($this->any())->method('getCallback')->will($this->returnValue([$this, 'render']));
 
-        // register first plugin
-        $engine->addPlugin($plugin);
+        // Register first plugin
+        $engine->addPlugin($plugin1);
 
-        $engine->setTemplate('plugin_test_1.tpl', '{$var|mockPluginA}');
+        $engine->setTemplate('plugin_test_1.tpl', '{$var|plugin1}');
         $engine->addGlobal('var', 'foo');
 
         $this->assertEquals('foo', $engine->render('plugin_test_1.tpl'));
 
+        $plugin2 = $this->createMock(PluginInterface::class);
+        $plugin2->expects($this->any())->method('getName')->will($this->returnValue('plugin2'));
+        $plugin2->expects($this->any())->method('getType')->will($this->returnValue(PluginInterface::TYPE_MODIFIER));
+        $plugin2->expects($this->any())->method('getCallback')->will($this->returnValue([$this, 'render']));
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', ['getName', 'getType', 'doModify', 'getCallback']);
-        $plugin->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('mockPluginB'));
-        $plugin->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue('modifier'));
-        $plugin->expects($this->any())
-            ->method('doModify')
-            ->will($this->returnArgument(0));
-        $plugin->expects($this->any())
-            ->method('getCallback')
-            ->will($this->returnValue([$plugin,'doModify']));
+        // Register second plugin
+        $engine->addPlugin($plugin2);
 
-        // register second plugin
-        $engine->addPlugin($plugin);
-
-        $engine->setTemplate('plugin_test_2.tpl', '{$foo|mockPluginA} {$bar|mockPluginB}');
+        $engine->setTemplate('plugin_test_2.tpl', '{$foo|plugin1} {$bar|plugin2}');
         $engine->addGlobal('foo', 'foo');
         $engine->addGlobal('bar', 'bar');
 
         $this->assertEquals('foo bar', $engine->render('plugin_test_2.tpl'));
+    }
+
+    /**
+     * @param string $var
+     *
+     * @return string
+     */
+    public function render($var)
+    {
+        return $var;
+    }
+}
+
+class TestPlugin extends AbstractPlugin
+{
+    public function getType()
+    {
+        return 'test';
     }
 }

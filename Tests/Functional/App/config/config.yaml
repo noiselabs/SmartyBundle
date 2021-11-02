@@ -1,0 +1,4 @@
+framework:
+  secret: S0ME_SECRET
+  templating:
+    engines: ['smarty']

@@ -1,0 +1,15 @@
+version: "3.4"
+
+# Development environment override
+services:
+  php:
+    volumes:
+      # The "cached" option has no effect on Linux but improves performance on Mac
+      - ./app/sf-${SYMFONY_VERSION}/config/smartybundle.yaml:/srv/app/config/smartybundle.yaml:rw,cached
+      - ./app/sf-${SYMFONY_VERSION}/src/Controller:/srv/app/src/Controller:rw,cached
+      - ./docker/php/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.ini
+      # If you develop on Mac you can remove the var/ directory from the bind-mount
+      # for better performance by enabling the next line 
+      # - /srv/app/var
+    environment:
+      APP_ENV: dev

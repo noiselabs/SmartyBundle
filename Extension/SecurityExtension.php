@@ -1,6 +1,8 @@
 <?php
-/**
- * This file is part of NoiseLabs-SmartyBundle
+/*
+ * This file is part of the NoiseLabs-SmartyBundle package.
+ *
+ * Copyright (c) 2011-2021 Vítor Brandão <vitor@noiselabs.io>
  *
  * NoiseLabs-SmartyBundle is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
@@ -36,7 +31,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 /**
  * SecurityExtension exposes security context features.
  *
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class SecurityExtension extends AbstractExtension
 {
@@ -45,14 +40,11 @@ class SecurityExtension extends AbstractExtension
      */
     protected $authorizationChecker;
 
+    /**
+     * @var null|CsrfTokenManagerInterface
+     */
     protected $csrfTokenManager;
 
-    /**
-     * Constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param CsrfTokenManagerInterface $csrfTokenManager
-     */
     public function __construct(AuthorizationCheckerInterface $authorizationChecker = null, CsrfTokenManagerInterface $csrfTokenManager = null)
     {
         $this->authorizationChecker = $authorizationChecker;

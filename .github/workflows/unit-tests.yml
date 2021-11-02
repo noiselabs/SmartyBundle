@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         php: [ '7.2', '8.0' ]
-        symfony: [ '3.4', '4.4', '5.3' ]
+        symfony: [ '3.4', '4.4' ]
       fail-fast: false
 
     steps:

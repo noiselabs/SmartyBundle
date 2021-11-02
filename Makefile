@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 PWD = $(shell pwd)
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-DOCKER_COMPOSE = cd Tests/Functional/symfony-docker && COMPOSE_DOCKER_CLI_BUILD=0 COMPOSE_PROJECT_NAME=smartybundle docker-compose
+DOCKER_COMPOSE = cd Tests/Sandbox/Compose && COMPOSE_DOCKER_CLI_BUILD=0 COMPOSE_PROJECT_NAME=smartybundle docker-compose
 DOCKER_COMPOSE_PROD = $(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.prod.yml
 DC_BUILD_OPTS = --pull
 
@@ -12,7 +12,7 @@ help: ## The help text you're reading
 	@grep --no-filename -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
 
-### Docker-Compose & Docker targets ###
+### Sandbox/Compose Docker-Compose targets ###
 dc-build-all: ## Builds all the Docker images
 	$(MAKE) dc-build-php8-sf5
 	$(MAKE) dc-build-php8-sf4
@@ -56,28 +56,28 @@ dc-config: ## Dumps the default docker-compose config
 	@$(DOCKER_COMPOSE) config
 .PHONY: dc-config
 
-dc-up-php8-sf5: ## Start the php8-sf5 docker hub in detached mode (no logs)
+dc-up-php8-sf5: ## Start the php8-sf5 docker hub
 	export PHP_VERSION=8.0 && \
 	export SYMFONY_VERSION=5.3 && \
-	$(DOCKER_COMPOSE) up --detach
+	$(DOCKER_COMPOSE) up
 .PHONY: dc-up-php7-sf4
 
-dc-up-php8-sf4: ## Start the php8-sf4 docker hub in detached mode (no logs)
+dc-up-php8-sf4: ## Start the php8-sf4 docker hub
 	export PHP_VERSION=8.0 && \
 	export SYMFONY_VERSION=4.4 && \
-	$(DOCKER_COMPOSE) up --detach
+	$(DOCKER_COMPOSE) up
 .PHONY: dc-up-php7-sf4
 
-dc-up-php7-sf5: ## Start the php7-sf5 docker hub in detached mode (no logs)
+dc-up-php7-sf5: ## Start the php7-sf5 docker hub
 	export PHP_VERSION=7.4 && \
 	export SYMFONY_VERSION=5.3 && \
-	$(DOCKER_COMPOSE) up --detach
+	$(DOCKER_COMPOSE) up
 .PHONY: dc-up-php7-sf4
 
-dc-up-php7-sf4: ## Start the php7-sf3 docker hub in detached mode (no logs)
+dc-up-php7-sf4: ## Start the php7-sf3 docker hub
 	export PHP_VERSION=7.4 && \
 	export SYMFONY_VERSION=4.4 && \
-	$(DOCKER_COMPOSE_PROD) up --detach
+	$(DOCKER_COMPOSE_PROD) up
 .PHONY: dc-up-php7-sf4
 
 dc-up-php7-sf3: ## Start the php7-sf3 docker hub in detached mode (no logs)
@@ -86,82 +86,94 @@ dc-up-php7-sf3: ## Start the php7-sf3 docker hub in detached mode (no logs)
 	$(DOCKER_COMPOSE) up --detach
 .PHONY: dc-up-php7-sf3
 
-dc-logs: ## Show live logs
-	@$(DOCKER_COMPOSE) logs --tail=0 --follow
+dc-run-php8-sf5: ## Get a shell in a php8-sf5 container
+	export PHP_VERSION=8.0 && \
+	export SYMFONY_VERSION=5.3 && \
+	$(DOCKER_COMPOSE) run --rm php bash
+.PHONY: dc-run-php8-sf5
 
-dc-down: ## Stop the docker hub
-	@$(DOCKER_COMPOSE) down --remove-orphans
-.PHONY: dc-down
+dc-run-php8-sf4: ## Get a shell in a php8-sf4 container
+	export PHP_VERSION=8.0 && \
+	export SYMFONY_VERSION=4.4 && \
+	$(DOCKER_COMPOSE) run --rm php bash
+.PHONY: dc-run-php8-sf4
 
-dc-sh-php: ## Connect to the PHP FPM container
-	@$(DOCKER_COMPOSE) exec php sh
-.PHONY: dc-sh-php
+dc-run-php7-sf4: ## Get a shell in a php7-sf4 container
+	export PHP_VERSION=7.4 && \
+	export SYMFONY_VERSION=4.4 && \
+	$(DOCKER_COMPOSE) run --rm php bash
+.PHONY: dc-run-php7-sf4
 
-dc-run-php: ## Launch a new PHP FPM container
-	@$(DOCKER_COMPOSE_PROD) run --rm php sh
-.PHONY: dc-run-php
+dc-run-php7-sf3: ## Get a shell in a php7-sf3 container
+	export PHP_VERSION=7.4 && \
+	export SYMFONY_VERSION=3.4 && \
+	$(DOCKER_COMPOSE) run --rm php bash
+.PHONY: dc-run-php7-sf3
 
-### Docker targets ###
-build-php70: ## Build the PHP 7.0 container
-	docker build . -f docker/7.0/Dockerfile -t noiselabs/smarty-bundle:latest-php7.0
+### Sandbox/Simple Docker targets ###
+build-php7-sf3: ## Build the php7-sf3 test image
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=3.4 -t noiselabs/smarty-bundle-testing:php7-sf3
+.PHONY: build-php7-sf3
 
-build-php71: ## Build the PHP 7.1 container
-	docker build . -f docker/7.1/Dockerfile -t noiselabs/smarty-bundle:latest-php7.1
+build-php7-sf4: ## Build the php7-sf4 test image
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php7-sf4
+.PHONY: build-php7-sf4
 
-build-php72: ## Build the PHP 7.2 container
-	docker build . -f docker/7.2/Dockerfile -t noiselabs/smarty-bundle:latest-php7.2
+build-php8-sf4: ## Build the php8-sf4 test image
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=8.0 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php8-sf4
+.PHONY: build-php8-sf4
 
-build-php73: ## Build the PHP 7.3 container
-	docker build . -f docker/7.3/Dockerfile -t noiselabs/smarty-bundle:latest-php7.3
+build: ## Build Docker images
+	$(MAKE) build-php7-sf3 build-php7-sf4 build-php8-sf4
+.PHONY: build
 
-build: ## Build Docker containers
-	$(MAKE) build-php70 build-php71 build-php72 build-php73
+build-parallel: ## Build Docker images in parallel
+	$(MAKE) -j4 build-php7-sf3 build-php7-sf4 build-php8-sf4
+.PHONY: build-parallel
 
-build-parallel: ## Build Docker containers in parallel
-	$(MAKE) -j4 build-php70 build-php71 build-php72 build-php73
+test-php7-sf3: ## Run unit and functional tests in the php7-sf3 image
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf3 composer test
+.PHONY: test-php7-sf3
 
-test-php70: ## Run unit and functional tests in the PHP 7.0 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 composer test
+test-php7-sf4: ## Run unit and functional tests in the php7-sf4 image
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf4 composer test
+.PHONY: test-php7-sf4
 
-test-php71: ## Run unit and functional tests in the PHP 7.1 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.1 composer test
-
-test-php72: ## Run unit and functional tests in the PHP 7.2 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.2 composer test
-
-test-php73: ## Run unit and functional tests in the PHP 7.3 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 composer test
+test-php8-sf4: ## Run unit and functional tests in the php8-sf4 image
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php8-sf4 composer test
+.PHONY: test-php8-sf4
 
 test: ## Run unit and functional tests
 	$(MAKE) test-php70 test-php71 test-php72 test-php73
 
 test-parallel: ## Run unit and functional tests in parallel
-	$(MAKE) -j4 test-php70 test-php71 test-php72 test-php73
+	$(MAKE) -j4 test-php71 test-php72 test-php73 test-php80
 
-sh-php70: ## Get a shell in the PHP 7.0 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
+sh-php7-sf3: ## Get a shell in the php7-sf3 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf3 sh
+.PHONY: sh-php7-sf3
 
-sh-php71: ## Get a shell in the PHP 7.1 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.1 sh
+sh-php7-sf4: ## Get a shell in the php7-sf4 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf4 sh
+.PHONY: sh-php7-sf4
 
-sh-php72: ## Get a shell in the PHP 7.2 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.2 sh
+sh-php8-sf4: ## Get a shell in the php8-sf4 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php8-sf4 sh
+.PHONY: sh-php8-sf4
 
-sh-php73: ## Get a shell in the PHP 7.3 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 sh
+web-php7-sf3: ## Launches the built-in PHP web server in the php7-sf3  container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8073:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle-testing:php7-sf3 php -S 0.0.0.0:8080 -t web
+.PHONY: web-php7-sf3
 
-web-php70: ## Launches the built-in PHP web server in the PHP 7.0 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9080:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.0 php -S 0.0.0.0:8080 -t web
+web-php7-sf4: ## Launches the built-in PHP web server in the php7-sf4  container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8074:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle-testing:php7-sf4 php -S 0.0.0.0:8080 -t web
+.PHONY: web-php7-sf4
 
-web-php71: ## Launches the built-in PHP web server in the PHP 7.1 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9081:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.1 php -S 0.0.0.0:8080 -t web
+web-php8-sf4: ## Launches the built-in PHP web server in the php8-sf4  container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8084:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle-testing:php8-sf4 php -S 0.0.0.0:8080 -t web
+.PHONY: web-php8-sf4
 
-web-php72: ## Launches the built-in PHP web server in the PHP 7.2 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9082:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.2 php -S 0.0.0.0:8080 -t web
-
-web-php73: ## Launches the built-in PHP web server in the PHP 7.3 container
-	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9083:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.3 php -S 0.0.0.0:8080 -t web
-
+### Coding Standards ###
 php-cs-fixer-dry-run: ## Check for PHP Coding Standards fixes but don't apply changes
 	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff -v
 .PHONY: php-cs-fixer-dry-run

@@ -1,0 +1,7 @@
+framework:
+    templating:
+        engines: ['smarty']
+
+smarty:
+    globals:
+        version: "3.0.0-dev"

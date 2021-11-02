@@ -1,33 +1,25 @@
 <?php
-/**
+/*
  * This file is part of NoiseLabs-SmartyBundle
  *
- * NoiseLabs-SmartyBundle is free software; you can redistribute it
- * and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * Copyright 2011-2017 Vítor Brandão <vitor@noiselabs.io>
  *
- * NoiseLabs-SmartyBundle is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * NoiseLabs-SmartyBundle is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with NoiseLabs-SmartyBundle; if not, see
- * <http://www.gnu.org/licenses/>.
+ * NoiseLabs-SmartyBundle is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ * for more details.
  *
- * Copyright (C) 2011-2016 Vítor Brandão
- *
- * @category    NoiseLabs
- * @package     SmartyBundle
- * @copyright   (C) 2011-2016 Vítor Brandão <vitor@noiselabs.org>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL-3
- * @link        http://www.noiselabs.org
+ * You should have received a copy of the GNU Lesser General Public License along with NoiseLabs-SmartyBundle; if not,
+ * see <http://www.gnu.org/licenses/>.
  */
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
 use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -41,6 +33,10 @@ use Symfony\Component\Templating\TemplateNameParser;
 use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TestCase extends PHPUnitTestCase
 {
     /**
@@ -93,14 +89,14 @@ class TestCase extends PHPUnitTestCase
 
     public function getSmarty()
     {
-        return new \Smarty();
+        return new Smarty();
     }
 
     public function getSmartyOptions()
     {
         return [
-            'caching'       => false,
-            'compile_dir'   => $this->tmpDir.'/templates_c'
+            'caching' => false,
+            'compile_dir' => $this->tmpDir.'/templates_c',
         ];
     }
 
@@ -124,15 +120,21 @@ class TestCase extends PHPUnitTestCase
             $options
         );
 
-        return new ProjectTemplateEngine(
+        $templateParser = new TemplateNameParser();
+        $templateLoader = new TemplateLoader($templateParser, $this->loader);
+
+        $engine = new ProjectTemplateEngine(
             $this->smarty,
+            $templateLoader,
             $container,
-            new TemplateNameParser(),
-            $this->loader,
             $options,
             $global,
             $logger
         );
+
+        $engine->setLoader($this->loader);
+
+        return $engine;
     }
 
     public function getKernel()
@@ -143,24 +145,22 @@ class TestCase extends PHPUnitTestCase
     protected function createContainer(array $data = [])
     {
         return new ContainerBuilder(new ParameterBag(array_merge([
-            'kernel.bundles'          => ['SmartyBundle' => 'NoiseLabs\\Bundle\\SmartyBundle\\SmartyBundle'],
-            'kernel.cache_dir'        => __DIR__,
+            'kernel.bundles' => ['SmartyBundle' => 'NoiseLabs\\Bundle\\SmartyBundle\\SmartyBundle'],
+            'kernel.cache_dir' => __DIR__,
             'kernel.compiled_classes' => [],
-            'kernel.debug'            => false,
-            'kernel.environment'      => 'test',
-            'kernel.name'             => 'kernel',
-            'kernel.root_dir'         => __DIR__,
+            'kernel.debug' => false,
+            'kernel.environment' => 'test',
+            'kernel.name' => 'kernel',
+            'kernel.root_dir' => __DIR__,
         ], $data)));
-    }
-
-    protected function getMock($originalClassName)
-    {
-        return $this->createMock($originalClassName);
     }
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
+ *
+ * @internal
+ * @coversNothing
  */
 class KernelForTest extends Kernel
 {
@@ -188,10 +188,20 @@ class KernelForTest extends Kernel
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class ProjectTemplateEngine extends SmartyEngine
 {
+    /**
+     * @var ProjectTemplateLoader
+     */
+    private $loader;
+
+    public function setLoader(ProjectTemplateLoader $loader)
+    {
+        $this->loader = $loader;
+    }
+
     public function setTemplate($name, $content)
     {
         $this->loader->setTemplate($name, $content);
@@ -204,7 +214,7 @@ class ProjectTemplateEngine extends SmartyEngine
 }
 
 /**
- * @author Vítor Brandão <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@noiselabs.io>
  */
 class ProjectTemplateLoader extends Loader
 {
