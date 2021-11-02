@@ -38,7 +38,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SmartyBundle extends Bundle
 {
-    const VERSION = '2.2.0';
+    public const VERSION = '2.2.0';
 
     public function build(ContainerBuilder $container)
     {

@@ -64,10 +64,10 @@ class SecurityExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new ModifierPlugin('is_granted', $this, 'isGranted'),
             new ModifierPlugin('csrf_token', $this, 'getCsrfToken'),
-        );
+        ];
     }
 
     public function isGranted($role, $object = null, $field = null)

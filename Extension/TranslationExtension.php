@@ -61,12 +61,12 @@ class TranslationExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new BlockPlugin('trans', $this, 'transBlock'),
             new ModifierPlugin('trans', $this, 'transModifier'),
             new BlockPlugin('transchoice', $this, 'transchoiceBlock'),
             new ModifierPlugin('transchoice', $this, 'transchoiceModifier')
-        );
+        ];
     }
 
     /**
@@ -77,15 +77,15 @@ class TranslationExtension extends AbstractExtension
      * @param array  $params  Parameters to pass to the translator
      * @param string $message Message to translate
      */
-    public function transBlock(array $params = array(), $message = null, \Smarty_Internal_Template $template = null, &$repeat = null)
+    public function transBlock(array $params = [], $message = null, \Smarty_Internal_Template $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat && isset($message)) {
-            $params = array_merge(array(
-                'vars'      => array(),
+            $params = array_merge([
+                'vars'      => [],
                 'domain'    => 'messages',
                 'locale'    => null,
-            ), $params);
+            ], $params);
 
             return $this->translator->trans($message, $params['vars'], $params['domain'], $params['locale']);
         }
@@ -101,7 +101,7 @@ class TranslationExtension extends AbstractExtension
      * {"text to be translated"|trans}
      * </code>
      */
-    public function transModifier($message, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function transModifier($message, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->translator->trans($message, $parameters, $domain, $locale);
     }
@@ -111,32 +111,32 @@ class TranslationExtension extends AbstractExtension
      *
      * @param string $message Message to translate
      */
-    public function transchoiceBlock(array $params = array(), $message = null, \Smarty_Internal_Template $template = null, &$repeat = null)
+    public function transchoiceBlock(array $params = [], $message = null, \Smarty_Internal_Template $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat && isset($message)) {
-            $params = array_merge(array(
+            $params = array_merge([
                 'count'     => null,
-                'vars'      => array(),
+                'vars'      => [],
                 'domain'    => 'messages',
                 'locale'    => null,
-            ), $params);
+            ], $params);
 
             // Replace [123] with {123}
             if ($template->smarty->left_delimiter == '{' || $template->smarty->right_delimiter == '}') {
                 $message = preg_replace("/\[([0-9]*)\] (.*?)/i", '{$1} $2', $message);
             }
 
-            return $this->translator->transchoice($message, $params['count'], array_merge(array('%count%' => $params['count']), $params['vars']), $params['domain'], $params['locale']);
+            return $this->translator->transchoice($message, $params['count'], array_merge(['%count%' => $params['count']], $params['vars']), $params['domain'], $params['locale']);
         }
     }
 
     /**
      * Modifier plugin for 'transchoice'.
      */
-    public function transchoiceModifier($message, $count, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function transchoiceModifier($message, $count, array $parameters = [], $domain = 'messages', $locale = null)
     {
-        return $this->translator->transChoice($message, $count, array_merge(array('%count%' => $count), $parameters), $domain, $locale);
+        return $this->translator->transChoice($message, $count, array_merge(['%count%' => $count], $parameters), $domain, $locale);
     }
 
     /**

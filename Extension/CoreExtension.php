@@ -50,9 +50,9 @@ class CoreExtension extends AbstractExtension
 
     public function getPlugins()
     {
-        return array(
+        return [
             new ModifierPlugin('length', $this, 'length_modifier')
-        );
+        ];
     }
 
     /**

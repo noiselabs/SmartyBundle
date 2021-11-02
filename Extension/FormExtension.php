@@ -76,7 +76,7 @@ class FormExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new FunctionPlugin('form_enctype', $this, 'renderEnctype'),
             new FunctionPlugin('form_widget', $this, 'renderWidget'),
             new FunctionPlugin('form_errors', $this, 'renderErrors'),
@@ -85,7 +85,7 @@ class FormExtension extends AbstractExtension
             new FunctionPlugin('form_rest', $this, 'renderRest'),
             new ModifierPlugin('_form_is_choice_group', $this, 'isChoiceGroup'),
             new ModifierPlugin('_form_is_choice_selected', $this, 'isChoiceSelected'),
-        );
+        ];
     }
 
     /**
@@ -234,9 +234,9 @@ class FormExtension extends AbstractExtension
      *
      * @throws ExceptionInterface if no template block exists to render the given section of the view
      */
-    protected function render(FormView $view, \Smarty_Internal_Template $template, $section, array $variables = array())
+    protected function render(FormView $view, \Smarty_Internal_Template $template, $section, array $variables = [])
     {
-        $mainTemplate = in_array($section, array('widget', 'row'));
+        $mainTemplate = in_array($section, ['widget', 'row']);
         if ($mainTemplate && $view->isRendered()) {
             return '';
         }
@@ -257,10 +257,10 @@ class FormExtension extends AbstractExtension
             $types = $view->get('types');
             $types[] = $custom;
             $typeIndex = count($types) - 1;
-            $this->varStack[$rendering] = array (
+            $this->varStack[$rendering] = [
                 'variables' => array_replace_recursive($view->all(), $variables),
                 'types'     => $types,
-            );
+            ];
         }
 
         do {
@@ -314,7 +314,7 @@ class FormExtension extends AbstractExtension
         $view = $parameters['form'];
         unset($parameters['form']);
 
-        return array($view, $parameters);
+        return [$view, $parameters];
     }
 
     /**

@@ -51,7 +51,8 @@ class CompileCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'A bundle name'
             )
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The following command finds all known Smarty templates and compiles them:
 
 <info>php %command.full_name%</info>
@@ -81,7 +82,7 @@ EOF
         }
 
         $totalCtime = 0;
-        $count = array('ok' => 0, 'failed' => 0);
+        $count = ['ok' => 0, 'failed' => 0];
         foreach ($templates as $template) {
             try {
                 $startTime = microtime(true);

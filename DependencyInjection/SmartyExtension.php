@@ -62,9 +62,9 @@ class SmartyExtension extends Extension
         if (!empty($config['globals'])) {
             foreach ($config['globals'] as $key => $global) {
                 if (isset($global['type']) && 'service' === $global['type']) {
-                    $engineDefinition->addMethodCall('addGlobal', array($key, new Reference($global['id'])));
+                    $engineDefinition->addMethodCall('addGlobal', [$key, new Reference($global['id'])]);
                 } else {
-                    $engineDefinition->addMethodCall('addGlobal', array($key, $global['value']));
+                    $engineDefinition->addMethodCall('addGlobal', [$key, $global['value']]);
                 }
             }
         }

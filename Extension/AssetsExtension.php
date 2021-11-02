@@ -58,11 +58,11 @@ class AssetsExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new BlockPlugin('asset', $this, 'getAssetUrl_block'),
             new ModifierPlugin('asset', $this, 'getAssetUrl_modifier'),
             new FunctionPlugin('assets_version', $this, 'getAssetsVersion')
-        );
+        ];
     }
 
     /**
@@ -89,13 +89,13 @@ class AssetsExtension extends AbstractExtension
      *
      * @return string A public path which takes into account the base path and URL path
      */
-    public function getAssetUrl_block(array $parameters = array(), $path = null, $template = null, &$repeat = null)
+    public function getAssetUrl_block(array $parameters = [], $path = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {
-            $parameters = array_merge(array(
+            $parameters = array_merge([
                 'package'   => null,
-            ), $parameters);
+            ], $parameters);
 
             return $this->packages->getUrl($path, $parameters['package']);
         }
@@ -121,11 +121,11 @@ class AssetsExtension extends AbstractExtension
      *
      * @return string
      */
-    public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
+    public function getAssetsVersion(array $parameters = [], \Smarty_Internal_Template $template)
     {
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'package'   => null,
-        ), $parameters);
+        ], $parameters);
 
         return $this->packages->getVersion(null, $parameters['package']);
     }

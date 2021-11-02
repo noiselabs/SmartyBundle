@@ -59,7 +59,7 @@ class AssetsExtensionTest extends TestCase
 
     public function testGetVersion()
     {
-        $extension = $this->createAssetsExtension(null, array(), 'foo');
+        $extension = $this->createAssetsExtension(null, [], 'foo');
         $this->engine->addExtension($extension);
         $xml = $this->renderXml('version.smarty');
         $this->assertEquals('foo', (string) $xml->asset);
@@ -74,7 +74,7 @@ class AssetsExtensionTest extends TestCase
         $this->assertEquals('http://assets.example.com/foo.js', (string) $xml->asset[1]);
     }
 
-    protected function createAssetsExtension($basePath = null, $baseUrls = array(), $version = null, $format = null, $namedPackages = array())
+    protected function createAssetsExtension($basePath = null, $baseUrls = [], $version = null, $format = null, $namedPackages = [])
     {
         $context = $this->getMock(ContextInterface::class);
 

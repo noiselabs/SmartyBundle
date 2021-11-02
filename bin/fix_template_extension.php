@@ -67,14 +67,14 @@ $bullet = '*';
 
 // script options
 $shortopts = 'h';
-$longopts = array(
+$longopts = [
     'fix',
     'from::',
     'help',
     'git',
     'to::',
     'src:'
-);
+];
 
 $options = getopt($shortopts, $longopts);
 

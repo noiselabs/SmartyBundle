@@ -45,9 +45,9 @@ class ExpressionExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new ModifierPlugin('expression', $this, 'createExpression'),
-        );
+        ];
     }
 
     /**

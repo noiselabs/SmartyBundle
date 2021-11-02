@@ -98,10 +98,10 @@ class TestCase extends PHPUnitTestCase
 
     public function getSmartyOptions()
     {
-        return array(
+        return [
             'caching'       => false,
             'compile_dir'   => $this->tmpDir.'/templates_c'
-        );
+        ];
     }
 
     public function createTemplate($filepath)
@@ -109,14 +109,14 @@ class TestCase extends PHPUnitTestCase
         return $this->engine->getSmarty()->createTemplate($filepath);
     }
 
-    protected function renderXml($name, $context = array())
+    protected function renderXml($name, $context = [])
     {
         $template = $this->createTemplate($name);
 
         return new \SimpleXMLElement($this->engine->render($template));
     }
 
-    public function getSmartyEngine(array $options = array(), $global = null, $logger = null)
+    public function getSmartyEngine(array $options = [], $global = null, $logger = null)
     {
         $container = $this->createContainer();
         $options = array_merge(
@@ -140,17 +140,17 @@ class TestCase extends PHPUnitTestCase
         return new KernelForTest('test', true);
     }
 
-    protected function createContainer(array $data = array())
+    protected function createContainer(array $data = [])
     {
-        return new ContainerBuilder(new ParameterBag(array_merge(array(
-            'kernel.bundles'          => array('SmartyBundle' => 'NoiseLabs\\Bundle\\SmartyBundle\\SmartyBundle'),
+        return new ContainerBuilder(new ParameterBag(array_merge([
+            'kernel.bundles'          => ['SmartyBundle' => 'NoiseLabs\\Bundle\\SmartyBundle\\SmartyBundle'],
             'kernel.cache_dir'        => __DIR__,
-            'kernel.compiled_classes' => array(),
+            'kernel.compiled_classes' => [],
             'kernel.debug'            => false,
             'kernel.environment'      => 'test',
             'kernel.name'             => 'kernel',
             'kernel.root_dir'         => __DIR__,
-        ), $data)));
+        ], $data)));
     }
 
     protected function getMock($originalClassName)
@@ -179,7 +179,7 @@ class KernelForTest extends Kernel
 
     public function getBundles()
     {
-        return array();
+        return [];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
@@ -208,7 +208,7 @@ class ProjectTemplateEngine extends SmartyEngine
  */
 class ProjectTemplateLoader extends Loader
 {
-    public $templates = array();
+    public $templates = [];
 
     public function setTemplate($name, $content)
     {
