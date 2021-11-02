@@ -18,8 +18,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
-ENV SYMFONY_REQUIRE=${SYMFONY_REQUIRE}
 
-RUN SYMFONY_REQUIRE=${SYMFONY_REQUIRE} composer update --no-interaction --no-progress --prefer-dist --verbose
+RUN SYMFONY_REQUIRE=${SYMFONY_VERSION} composer update --no-interaction --no-progress --prefer-dist --verbose
 
 RUN composer install --prefer-dist --no-progress --no-interaction --verbose;

@@ -112,15 +112,15 @@ dc-run-php7-sf3: ## Get a shell in a php7-sf3 container
 
 ### Sandbox/Simple Docker targets ###
 build-php7-sf3: ## Build the php7-sf3 test image
-	docker build . -f Tests/Sandbox/Simple/Dockerfile --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=3.4 -t noiselabs/smarty-bundle-testing:php7-sf3
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=3.4 -t noiselabs/smarty-bundle-testing:php7-sf3
 .PHONY: build-php7-sf3
 
 build-php7-sf4: ## Build the php7-sf4 test image
-	docker build . -f Tests/Sandbox/Simple/Dockerfile --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php7-sf4
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=7.4 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php7-sf4
 .PHONY: build-php7-sf4
 
 build-php8-sf4: ## Build the php8-sf4 test image
-	docker build . -f Tests/Sandbox/Simple/Dockerfile --build-arg PHP_VERSION=8.0 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php8-sf4
+	docker build . -f Tests/Sandbox/Simple/Dockerfile --no-cache --build-arg PHP_VERSION=8.0 --build-arg SYMFONY_VERSION=4.4 -t noiselabs/smarty-bundle-testing:php8-sf4
 .PHONY: build-php8-sf4
 
 build: ## Build Docker images
