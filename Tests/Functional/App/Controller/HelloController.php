@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\App\Controller;
 
+use NoiseLabs\Bundle\SmartyBundle\SmartyBundle;
+use NoiseLabs\Bundle\SmartyBundle\Tests\Functional\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HelloController extends AbstractController
@@ -29,7 +31,7 @@ class HelloController extends AbstractController
     public function index()
     {
         return $this->render('hello/index.html.smarty', [
-            'title' => 'Test Homepage',
+            'title' => sprintf('This is SmartyBundle %s @ PHP %s & Symfony %s', SmartyBundle::VERSION, PHP_VERSION, AppKernel::VERSION)
         ]);
     }
 }

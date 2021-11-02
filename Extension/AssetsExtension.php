@@ -25,6 +25,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\FunctionPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use Smarty_Internal_Template;
 use Symfony\Component\Asset\Packages;
 
 /**
@@ -119,7 +120,7 @@ class AssetsExtension extends AbstractExtension
      *
      * @return string
      */
-    public function getAssetsVersion(array $parameters = [], \Smarty_Internal_Template $template)
+    public function getAssetsVersion(array $parameters = [], Smarty_Internal_Template $template = null)
     {
         $parameters = array_merge([
             'package' => null,

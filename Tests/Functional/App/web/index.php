@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../../../../vendor/autoload.php';
 
-$environment = sprintf('php%d%d', PHP_MAJOR_VERSION, PHP_MINOR_VERSION);
+$environment = sprintf('php%d_sf%d', PHP_MAJOR_VERSION, AppKernel::MAJOR_VERSION);
 $kernel = new AppKernel($environment, true);
 $request = Request::createFromGlobals();
 

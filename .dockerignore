@@ -1,3 +1,4 @@
 /composer.lock
-/docker
+/Tests/Functional/App/cache
+/Tests/Functional/App/logs
 /vendor
