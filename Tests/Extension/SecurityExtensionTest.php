@@ -81,11 +81,11 @@ class SecurityExtensionTest extends TestCase
      */
     public function getIsGrantedTests()
     {
-        return array(
+        return [
             // is_granted modifier
-            array('{if "IS_AUTHENTICATED_FULLY"|is_granted}access granted{else}access denied{/if}', 'access granted', true),
-            array('{if "IS_AUTHENTICATED_FULLY"|is_granted}access granted{else}access denied{/if}', 'access denied', false)
-        );
+            ['{if "IS_AUTHENTICATED_FULLY"|is_granted}access granted{else}access denied{/if}', 'access granted', true],
+            ['{if "IS_AUTHENTICATED_FULLY"|is_granted}access granted{else}access denied{/if}', 'access denied', false]
+        ];
     }
 
     public function testCsrfTokenWithCsrfTokenManager()
@@ -135,9 +135,9 @@ class SecurityExtensionTest extends TestCase
 
     protected function createCsrfTokenManager($value)
     {
-        $csrfToken = $this->getMock('stdClass', array('getValue'));
+        $csrfToken = $this->getMock('stdClass', ['getValue']);
         $csrfToken->expects($this->any())->method('getValue')->will($this->returnValue($value));
-        $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, array('getToken', 'refreshToken', 'removeToken', 'isTokenValid'));
+        $csrfTokenManager = $this->getMockForAbstractClass(CsrfTokenManagerInterface::class, ['getToken', 'refreshToken', 'removeToken', 'isTokenValid']);
         $csrfTokenManager->expects($this->any())->method('getToken')->will($this->returnValue($csrfToken));
 
         return $csrfTokenManager;

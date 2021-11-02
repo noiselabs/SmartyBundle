@@ -47,7 +47,7 @@ class SmartyEngineTest extends TestCase
     {
         $container = $this->createContainer();
         $app = new GlobalVariables($container);
-        $engine = $this->getSmartyEngine(array(), $app);
+        $engine = $this->getSmartyEngine([], $app);
 
         $request = $container->get('request');
         $globals = $engine->getGlobals();
@@ -62,7 +62,7 @@ class SmartyEngineTest extends TestCase
     {
         $container = $this->createContainer();
         $app = new GlobalVariables($container);
-        $engine = $this->getSmartyEngine(array(), $app);
+        $engine = $this->getSmartyEngine([], $app);
 
         $container->set('request', null);
 
@@ -79,9 +79,9 @@ class SmartyEngineTest extends TestCase
         $engine = $this->getSmartyEngine();
         $engine->addGlobal('global_variable', 'lorem ipsum');
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'global_variable' => 'lorem ipsum',
-        ), $engine->getGlobals());
+        ], $engine->getGlobals());
     }
 
     /**
@@ -96,7 +96,7 @@ class SmartyEngineTest extends TestCase
 
         $this->assertEquals($engine->render('global.tpl'), 'global variable');
 
-        $this->assertEquals($engine->render('global.tpl', array('global' => 'overwritten')), 'overwritten');
+        $this->assertEquals($engine->render('global.tpl', ['global' => 'overwritten']), 'overwritten');
     }
 
     /**
@@ -140,9 +140,9 @@ class SmartyEngineTest extends TestCase
      */
     public function testGetSetExtensionsArray()
     {
-        $extensions = array();
+        $extensions = [];
 
-        foreach (array('mock0', 'mock1', 'mock2', 'mock3') as $name) {
+        foreach (['mock0', 'mock1', 'mock2', 'mock3'] as $name) {
             $extensions[$name] = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface');
             $extensions[$name]->expects($this->any())
                 ->method('getName')
@@ -173,7 +173,7 @@ class SmartyEngineTest extends TestCase
             $container,
             new TemplateNameParser(),
             $this->loader,
-            array()
+            []
         );
 
         $this->assertSame($this->loader, $engine->getLoader());
@@ -183,7 +183,7 @@ class SmartyEngineTest extends TestCase
      * @since  0.2.0
      * @author Vítor Brandão <vitor@noiselabs.org>
      */
-    protected function createContainer(array $data = array())
+    protected function createContainer(array $data = [])
     {
         $container = parent::createContainer($data);
 
@@ -202,7 +202,7 @@ class SmartyEngineTest extends TestCase
 
         $engine = $this->getSmartyEngine();
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
+        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', ['getName', 'getType', 'doModify', 'getCallback']);
         $plugin->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('mockPluginA'));
@@ -214,7 +214,7 @@ class SmartyEngineTest extends TestCase
             ->will($this->returnArgument(0));
         $plugin->expects($this->any())
             ->method('getCallback')
-            ->will($this->returnValue(array($plugin,'doModify')));
+            ->will($this->returnValue([$plugin,'doModify']));
 
         // register first plugin
         $engine->addPlugin($plugin);
@@ -225,7 +225,7 @@ class SmartyEngineTest extends TestCase
         $this->assertEquals('foo', $engine->render('plugin_test_1.tpl'));
 
 
-        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', array('getName', 'getType', 'doModify', 'getCallback'));
+        $plugin = $this->getMock('NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface', ['getName', 'getType', 'doModify', 'getCallback']);
         $plugin->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('mockPluginB'));
@@ -237,7 +237,7 @@ class SmartyEngineTest extends TestCase
             ->will($this->returnArgument(0));
         $plugin->expects($this->any())
             ->method('getCallback')
-            ->will($this->returnValue(array($plugin,'doModify')));
+            ->will($this->returnValue([$plugin,'doModify']));
 
         // register second plugin
         $engine->addPlugin($plugin);

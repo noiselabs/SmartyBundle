@@ -43,7 +43,7 @@ abstract class AbstractFilter implements FilterInterface
      * Available filter types.
      * @var array
      */
-    protected static $types = array('pre', 'post', 'output', 'variable');
+    protected static $types = ['pre', 'post', 'output', 'variable'];
     protected $name;
     protected $extension;
     protected $method;
@@ -67,7 +67,7 @@ abstract class AbstractFilter implements FilterInterface
      */
     public function getCallback()
     {
-        return array($this->extension, $this->method);
+        return [$this->extension, $this->method];
     }
 
     public function validateType()

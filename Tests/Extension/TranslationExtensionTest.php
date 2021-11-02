@@ -45,13 +45,13 @@ class TranslationExtensionTest extends TestCase
         $this->engine->setTemplate($template, '{trans vars=["%value%" => $value]}Percent: %value%% ({$msg}){/trans}');
         $this->engine->addExtension(new TranslationExtension(new Translator('en', new MessageFormatter())));
 
-        $this->assertEquals('Percent: 12% (approx.)', $this->engine->render($template, array('value' => 12, 'msg' => 'approx.')));
+        $this->assertEquals('Percent: 12% (approx.)', $this->engine->render($template, ['value' => 12, 'msg' => 'approx.']));
     }
 
     /**
      * @dataProvider getTransTests
      */
-    public function testTrans($content, $expected, array $variables = array())
+    public function testTrans($content, $expected, array $variables = [])
     {
         static $test = 0;
         $template = 'translation_test_'.$test++.'.html.tpl';
@@ -67,41 +67,41 @@ class TranslationExtensionTest extends TestCase
      */
     public function getTransTests()
     {
-        return array(
+        return [
             // trans block
-            array('{trans}Hello{/trans}', 'Hello'),
-            array('{trans}{$name}{/trans}', 'Symfony2', array('name' => 'Symfony2')),
+            ['{trans}Hello{/trans}', 'Hello'],
+            ['{trans}{$name}{/trans}', 'Symfony2', ['name' => 'Symfony2']],
 
-            array('{trans domain="elsewhere"}Hello{/trans}', 'Hello'),
+            ['{trans domain="elsewhere"}Hello{/trans}', 'Hello'],
 
-            array('{trans}Hello {$name}{/trans}', 'Hello Symfony2', array('name' => 'Symfony2')),
-            array('{trans vars=["%name%" => "Symfony2"]}Hello %name%{/trans}', 'Hello Symfony2'),
-            array('{$vars=["%name%" => "Symfony2"]}{trans vars=$vars}Hello %name%{/trans}', 'Hello Symfony2'),
+            ['{trans}Hello {$name}{/trans}', 'Hello Symfony2', ['name' => 'Symfony2']],
+            ['{trans vars=["%name%" => "Symfony2"]}Hello %name%{/trans}', 'Hello Symfony2'],
+            ['{$vars=["%name%" => "Symfony2"]}{trans vars=$vars}Hello %name%{/trans}', 'Hello Symfony2'],
 
-            array('{trans locale="pt"}Hello{/trans}', 'Hello'),
+            ['{trans locale="pt"}Hello{/trans}', 'Hello'],
 
             // transchoice block
-            array('{transchoice count=$count domain="messages"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
-                'There is no apples', array('count' => 0)),
-            array('{transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
-                'There is 5 apples', array('count' => 5)),
-            array('{transchoice count=$count vars=["%name%" => $name]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
-                'There is 5 apples (Symfony2)', array('count' => 5, 'name' => 'Symfony2')),
-            array('{transchoice count=$count vars=["%name%" => "Symfony2"]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
-                'There is 5 apples (Symfony2)', array('count' => 5)),
-            array('{transchoice count=$count locale="fr"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
-                'There is no apples', array('count' => 0)),
+            ['{transchoice count=$count domain="messages"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is no apples', ['count' => 0]],
+            ['{transchoice count=$count}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is 5 apples', ['count' => 5]],
+            ['{transchoice count=$count vars=["%name%" => $name]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
+                'There is 5 apples (Symfony2)', ['count' => 5, 'name' => 'Symfony2']],
+            ['{transchoice count=$count vars=["%name%" => "Symfony2"]}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%){/transchoice}',
+                'There is 5 apples (Symfony2)', ['count' => 5]],
+            ['{transchoice count=$count locale="fr"}[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples{/transchoice}',
+                'There is no apples', ['count' => 0]],
 
             // trans modifier
-            array('{"Hello"|trans}', 'Hello'),
-            array('{$name|trans}', 'Symfony2', array('name' => 'Symfony2')),
-            array('{$hello|trans:$vars}', 'Hello Symfony2', array('hello' => 'Hello %name%', 'vars' => array('%name%' => 'Symfony2'))),
-            array('{"Hello"|trans:array():"messages":"pt"}', 'Hello'),
+            ['{"Hello"|trans}', 'Hello'],
+            ['{$name|trans}', 'Symfony2', ['name' => 'Symfony2']],
+            ['{$hello|trans:$vars}', 'Hello Symfony2', ['hello' => 'Hello %name%', 'vars' => ['%name%' => 'Symfony2']]],
+            ['{"Hello"|trans:array():"messages":"pt"}', 'Hello'],
 
             // transchoice modifier
-            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count}', 'There is 5 apples', array('count' => 5)),
-            array('{$text|transchoice:5:["%name%" => "Symfony2"]}', 'There is 5 apples (Symfony2)', array('text' => '[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%)')),
-            array('{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count:[]:"messages":"pt"}', 'There is 5 apples', array('count' => 5)),
-        );
+            ['{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count}', 'There is 5 apples', ['count' => 5]],
+            ['{$text|transchoice:5:["%name%" => "Symfony2"]}', 'There is 5 apples (Symfony2)', ['text' => '[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples (%name%)']],
+            ['{"[0] There is no apples|[1] There is one apple|]1,Inf] There is %count% apples"|transchoice:$count:[]:"messages":"pt"}', 'There is 5 apples', ['count' => 5]],
+        ];
     }
 }

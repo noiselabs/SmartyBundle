@@ -62,10 +62,10 @@ class ActionsExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new BlockPlugin('render', $this, 'renderBlockAction'),
             new ModifierPlugin('render', $this, 'renderModifierAction')
-        );
+        ];
     }
 
     /**
@@ -76,14 +76,14 @@ class ActionsExtension extends AbstractExtension
      * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
-    public function renderBlockAction(array $parameters = array(), $controller = null, $template = null, &$repeat = null)
+    public function renderBlockAction(array $parameters = [], $controller = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {
-            $parameters = array_merge(array(
-                'attributes'    => array(),
-                'options'       => array()
-            ), $parameters);
+            $parameters = array_merge([
+                'attributes'    => [],
+                'options'       => []
+            ], $parameters);
 
             return $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
@@ -97,7 +97,7 @@ class ActionsExtension extends AbstractExtension
      * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
      * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
-    public function renderModifierAction($controller, array $attributes = array(), array $options = array())
+    public function renderModifierAction($controller, array $attributes = [], array $options = [])
     {
         return $this->render($controller, $attributes, $options);
     }
@@ -110,9 +110,9 @@ class ActionsExtension extends AbstractExtension
      *
      * @since Symfony-2.2
      */
-    protected function render($controller, array $attributes = array(), array $options = array())
+    protected function render($controller, array $attributes = [], array $options = [])
     {
-        $renderOptions = array();
+        $renderOptions = [];
         if (isset($options['standalone']) && true === $options['standalone']) {
             if (isset($options['strategy'])) {
                 $renderOptions['strategy'] = $options['strategy'];

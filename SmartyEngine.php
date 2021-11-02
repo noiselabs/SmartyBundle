@@ -118,12 +118,12 @@ class SmartyEngine implements EngineInterface
         $this->parser = $parser;
         $this->loader = $loader;
         $this->logger = $logger;
-        $this->globals = array();
+        $this->globals = [];
 
         // There are no default extensions.
-        $this->extensions = array();
+        $this->extensions = [];
 
-        foreach (array('autoload_filters') as $property) {
+        foreach (['autoload_filters'] as $property) {
             if (isset($options[$property])) {
                 $this->smarty->$property = $options[$property];
                 unset($options[$property]);
@@ -131,7 +131,7 @@ class SmartyEngine implements EngineInterface
         }
 
         // addSomeProperty()
-        foreach (array('plugins_dir', 'template_dir') as $property) {
+        foreach (['plugins_dir', 'template_dir'] as $property) {
             if (!isset($options[$property])) {
                 continue;
             }
@@ -150,7 +150,7 @@ class SmartyEngine implements EngineInterface
          * Register an handler for 'logical' filenames of the type:
          * <code>file:AcmeHelloBundle:Default:layout.html.tpl</code>
          */
-        $this->smarty->default_template_handler_func = array($this,  'smartyDefaultTemplateHandler');
+        $this->smarty->default_template_handler_func = [$this,  'smartyDefaultTemplateHandler'];
 
         /**
          * Define a set of template dirs to look for. This will allow the
@@ -159,7 +159,7 @@ class SmartyEngine implements EngineInterface
          *
          * See {@link http://www.smarty.net/docs/en/resources.tpl} for details
          */
-        $bundlesTemplateDir = array();
+        $bundlesTemplateDir = [];
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $name = explode('\\', $bundle);
@@ -181,7 +181,7 @@ class SmartyEngine implements EngineInterface
      */
     public function __call($name, $args)
     {
-        return call_user_func_array(array($this->smarty, $name), $args);
+        return call_user_func_array([$this->smarty, $name], $args);
     }
 
     /**
@@ -209,7 +209,7 @@ class SmartyEngine implements EngineInterface
      * @throws \InvalidArgumentException if the template does not exist
      * @throws \RuntimeException         if the template cannot be rendered
      */
-    public function render($name, array $parameters = array())
+    public function render($name, array $parameters = [])
     {
         $template = $this->load($name);
 
@@ -234,7 +234,7 @@ class SmartyEngine implements EngineInterface
          *
          * Too learn more see {@link http://www.smarty.net/docs/en/api.assign.tpl}
          */
-         $this->smarty->assign($parameters);
+        $this->smarty->assign($parameters);
 
         /**
          * This returns the template output instead of displaying it. Supply a
@@ -320,7 +320,7 @@ class SmartyEngine implements EngineInterface
      * @param string                          $name       Function name
      * @param array                           $attributes Attributes to pass to the template function
      */
-    public function renderTemplateFunction($template, $name, array $attributes = array())
+    public function renderTemplateFunction($template, $name, array $attributes = [])
     {
         if (!$template instanceof \Smarty_Internal_Template) {
             $template = $this->createTemplate($template);
@@ -344,7 +344,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return string The output returned by the template function.
      */
-    public function fetchTemplateFunction($template, $name, array $attributes = array())
+    public function fetchTemplateFunction($template, $name, array $attributes = [])
     {
         ob_start();
         $this->renderTemplateFunction($template, $name, $attributes);
@@ -387,7 +387,7 @@ class SmartyEngine implements EngineInterface
         $template = $this->parser->parse($name);
 
         // Keep 'tpl' for backwards compatibility.
-        return in_array($template->get('engine'), array('smarty', 'tpl'), true);
+        return in_array($template->get('engine'), ['smarty', 'tpl'], true);
     }
 
     /**
@@ -399,7 +399,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return Response A Response instance
      */
-    public function renderResponse($view, array $parameters = array(), Response $response = null)
+    public function renderResponse($view, array $parameters = [], Response $response = null)
     {
         if (null === $response) {
             $response = new Response();
@@ -493,7 +493,7 @@ class SmartyEngine implements EngineInterface
      */
     public function setExtensions(array $extensions)
     {
-        $this->extensions = array();
+        $this->extensions = [];
 
         foreach ($extensions as $extension) {
             $this->addExtension($extension);
@@ -532,7 +532,7 @@ class SmartyEngine implements EngineInterface
     public function getFilters()
     {
         if (null === $this->filters) {
-            $this->filters = array();
+            $this->filters = [];
             foreach ($this->getExtensions() as $extension) {
                 $this->filters = array_merge($this->filters, $extension->getFilters());
             }
@@ -581,7 +581,7 @@ class SmartyEngine implements EngineInterface
     public function getPlugins($extensionName = '')
     {
         if (null === $this->plugins) {
-            $this->plugins = array();
+            $this->plugins = [];
             foreach ($this->getExtensions() as $extension) {
                 $this->plugins = array_merge($this->plugins, $extension->getPlugins());
             }
@@ -589,7 +589,7 @@ class SmartyEngine implements EngineInterface
 
         // filter plugins that belong to $extension
         if ($extensionName) {
-            $plugins = array();
+            $plugins = [];
             foreach (array_keys($this->plugins) as $k) {
                 if ($extensionName == $this->plugins[$k]->getExtension()->getName()) {
                     $plugins[] = $this->plugins[$k];

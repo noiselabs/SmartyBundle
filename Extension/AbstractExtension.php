@@ -47,7 +47,7 @@ abstract class AbstractExtension implements ExtensionInterface
      */
     public function getPlugins()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractExtension implements ExtensionInterface
      */
     public function getFilters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -73,6 +73,6 @@ abstract class AbstractExtension implements ExtensionInterface
      */
     public function getGlobals()
     {
-        return array();
+        return [];
     }
 }

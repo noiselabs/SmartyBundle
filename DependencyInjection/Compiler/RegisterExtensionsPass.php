@@ -47,9 +47,9 @@ class RegisterExtensionsPass implements CompilerPassInterface
         $definition = $container->getDefinition('templating.engine.smarty');
 
         $calls = $definition->getMethodCalls();
-        $definition->setMethodCalls(array());
+        $definition->setMethodCalls([]);
         foreach ($container->findTaggedServiceIds('smarty.extension') as $id => $attributes) {
-            $definition->addMethodCall('addExtension', array(new Reference($id)));
+            $definition->addMethodCall('addExtension', [new Reference($id)]);
         }
         $definition->setMethodCalls(array_merge($definition->getMethodCalls(), $calls));
     }

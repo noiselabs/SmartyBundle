@@ -65,7 +65,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('smarty');
 
         $rootNode
-            ->treatNullLike(array('enabled' => true))
+            ->treatNullLike(['enabled' => true])
         ->end();
 
         $this->addGlobalsSection($rootNode);
@@ -86,8 +86,12 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('key')
                     ->prototype('array')
                         ->beforeNormalization()
-                            ->ifTrue(function ($v) { return is_string($v) && '@' === substr($v, 0, 1); })
-                            ->then(function ($v) { return array('id' => substr($v, 1), 'type' => 'service'); })
+                            ->ifTrue(function ($v) {
+                                return is_string($v) && '@' === substr($v, 0, 1);
+                            })
+                            ->then(function ($v) {
+                                return ['id' => substr($v, 1), 'type' => 'service'];
+                            })
                         ->end()
                         ->beforeNormalization()
                             ->ifTrue(function ($v) {
@@ -95,18 +99,20 @@ class Configuration implements ConfigurationInterface
                                     $keys = array_keys($v);
                                     sort($keys);
 
-                                    return $keys !== array('id', 'type') && $keys !== array('value');
+                                    return $keys !== ['id', 'type'] && $keys !== ['value'];
                                 }
 
                                 return true;
                             })
-                            ->then(function ($v) { return array('value' => $v); })
+                            ->then(function ($v) {
+                                return ['value' => $v];
+                            })
                         ->end()
                         ->children()
                             ->scalarNode('id')->end()
                             ->scalarNode('type')
                                 ->validate()
-                                    ->ifNotInArray(array('service'))
+                                    ->ifNotInArray(['service'])
                                     ->thenInvalid('The %s type is not supported')
                                 ->end()
                             ->end()
@@ -138,29 +144,41 @@ class Configuration implements ConfigurationInterface
                             ->canBeUnset()
                             ->children()
                                 ->arrayNode('pre')
-                                    ->example(array('trim', 'stamp'))
+                                    ->example(['trim', 'stamp'])
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function ($v) { return !is_array($v); })
-                                        ->then(function ($v) { return array($v); })
+                                        ->ifTrue(function ($v) {
+                                            return !is_array($v);
+                                        })
+                                        ->then(function ($v) {
+                                            return [$v];
+                                        })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()
                                 ->arrayNode('post')
-                                    ->example(array('add_header_comment'))
+                                    ->example(['add_header_comment'])
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function ($v) { return !is_array($v); })
-                                        ->then(function ($v) { return array($v); })
+                                        ->ifTrue(function ($v) {
+                                            return !is_array($v);
+                                        })
+                                        ->then(function ($v) {
+                                            return [$v];
+                                        })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()
                                 ->arrayNode('output')
-                                    ->example(array('convert'))
+                                    ->example(['convert'])
                                     ->canBeUnset()
                                     ->beforeNormalization()
-                                        ->ifTrue(function ($v) { return !is_array($v); })
-                                        ->then(function ($v) { return array($v); })
+                                        ->ifTrue(function ($v) {
+                                            return !is_array($v);
+                                        })
+                                        ->then(function ($v) {
+                                            return [$v];
+                                        })
                                     ->end()
                                     ->prototype('scalar')->end()
                                 ->end()

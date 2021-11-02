@@ -1,5 +1,7 @@
 <?php
+
 // src/Controller/SmartyController.php
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;

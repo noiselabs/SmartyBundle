@@ -71,7 +71,7 @@ class SmartyTemplateFinder implements TemplateFinderInterface
             return $this->templates;
         }
 
-        $templates = array();
+        $templates = [];
 
         foreach ($this->kernel->getBundles() as $name => $bundle) {
             $templates = array_merge($templates, $this->findTemplatesInBundle($bundle));
@@ -91,13 +91,13 @@ class SmartyTemplateFinder implements TemplateFinderInterface
      */
     public function findTemplatesInFolder($dir)
     {
-        $templates = array();
+        $templates = [];
 
         if (is_dir($dir)) {
             $finder = new Finder();
             foreach ($finder->files()->followLinks()->in($dir) as $file) {
                 $template = $this->parser->parse($file->getRelativePathname());
-                if (false !== $template && in_array($template->get('engine'), array('smarty', 'tpl'))) {
+                if (false !== $template && in_array($template->get('engine'), ['smarty', 'tpl'])) {
                     $templates[] = $template;
                 }
             }

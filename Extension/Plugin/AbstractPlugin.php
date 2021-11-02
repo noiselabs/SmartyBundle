@@ -43,9 +43,9 @@ abstract class AbstractPlugin implements PluginInterface
      * Available plugin types.
      * @var array
      */
-    protected static $types = array('function', 'modifier', 'block',
+    protected static $types = ['function', 'modifier', 'block',
     'compiler', 'prefilter', 'postfilter', 'outputfilter', 'resource',
-    'insert');
+    'insert'];
     protected $name;
     protected $extension;
     protected $method;
@@ -85,7 +85,7 @@ abstract class AbstractPlugin implements PluginInterface
      */
     public function getCallback()
     {
-        return array($this->extension, $this->method);
+        return [$this->extension, $this->method];
     }
 
     /**

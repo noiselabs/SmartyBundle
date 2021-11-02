@@ -49,7 +49,7 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->createContainer();
         $container->registerExtension(new SmartyExtension());
-        $container->loadFromExtension('smarty', array());
+        $container->loadFromExtension('smarty', []);
         $this->compileContainer($container);
 
         // Smarty options
@@ -88,10 +88,10 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($appDir.'/cache/smarty/templates_c', $options['compile_dir'], '->load() sets the compile_dir option');
         $this->assertEquals($appDir.'/config/smarty', $options['config_dir'], '->load() sets the config_dir option');
         $this->assertEquals('string', $options['default_resource_type'], '->load() sets the default_resource_type option');
-        $this->assertEquals(array(
+        $this->assertEquals([
             '/tmp/noiselabs-smarty-bundle-test/app/Resources/plugins',
             '/tmp/noiselabs-smarty-bundle-test/app/Resources/smarty/plugins'
-        ), $options['plugins_dir'], '->load() adds directories to the default list of directories where plugins are stored');
+        ], $options['plugins_dir'], '->load() adds directories to the default list of directories where plugins are stored');
         $this->assertEquals($appDir.'/Resources/views', $options['template_dir'], '->load() sets the template_dir option');
         $this->assertTrue($options['use_include_path'], '->load() sets the use_include_path option');
         $this->assertFalse($options['use_sub_dirs'], '->load() sets the use_sub_dirs option');
@@ -101,8 +101,8 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete();
 
-        $globals = array(
-            'array'   => array(),
+        $globals = [
+            'array'   => [],
             'false'   => false,
             'float'   => 2.0,
             'integer' => 3,
@@ -110,11 +110,11 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
             'object'  => new \stdClass(),
             'string'  => 'foo',
             'true'    => true,
-        );
+        ];
 
         $container = $this->createContainer();
         $container->registerExtension(new SmartyExtension());
-        $container->loadFromExtension('smarty', array('globals' => $globals));
+        $container->loadFromExtension('smarty', ['globals' => $globals]);
         $this->compileContainer($container);
 
         $calls = $container->getDefinition('smarty')->getMethodCalls();
@@ -128,30 +128,30 @@ class SmartyExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function getFormats()
     {
-        return array(
+        return [
             //array('php'),
-            array('yml'),
+            ['yml'],
             //array('xml'),
-        );
+        ];
     }
 
     private function createContainer()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        $container = new ContainerBuilder(new ParameterBag([
             'kernel.cache_dir'  => __DIR__,
             'kernel.charset'    => 'UTF-8',
             'kernel.debug'      => false,
             'kernel.root_dir'   => __DIR__,
-            'kernel.bundles'    => array()
-        )));
+            'kernel.bundles'    => []
+        ]));
 
         return $container;
     }
 
     private function compileContainer(ContainerBuilder $container)
     {
-        $container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
+        $container->getCompilerPassConfig()->setOptimizationPasses([]);
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
         $container->compile();
     }
 

@@ -99,4 +99,73 @@ dc-sh-php: ## Connect to the PHP FPM container
 
 dc-run-php: ## Launch a new PHP FPM container
 	@$(DOCKER_COMPOSE_PROD) run --rm php sh
-.PHONY: dc-sh-php
+.PHONY: dc-run-php
+
+### Docker targets ###
+build-php70: ## Build the PHP 7.0 container
+	docker build . -f docker/7.0/Dockerfile -t noiselabs/smarty-bundle:latest-php7.0
+
+build-php71: ## Build the PHP 7.1 container
+	docker build . -f docker/7.1/Dockerfile -t noiselabs/smarty-bundle:latest-php7.1
+
+build-php72: ## Build the PHP 7.2 container
+	docker build . -f docker/7.2/Dockerfile -t noiselabs/smarty-bundle:latest-php7.2
+
+build-php73: ## Build the PHP 7.3 container
+	docker build . -f docker/7.3/Dockerfile -t noiselabs/smarty-bundle:latest-php7.3
+
+build: ## Build Docker containers
+	$(MAKE) build-php70 build-php71 build-php72 build-php73
+
+build-parallel: ## Build Docker containers in parallel
+	$(MAKE) -j4 build-php70 build-php71 build-php72 build-php73
+
+test-php70: ## Run unit and functional tests in the PHP 7.0 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 composer test
+
+test-php71: ## Run unit and functional tests in the PHP 7.1 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.1 composer test
+
+test-php72: ## Run unit and functional tests in the PHP 7.2 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.2 composer test
+
+test-php73: ## Run unit and functional tests in the PHP 7.3 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 composer test
+
+test: ## Run unit and functional tests
+	$(MAKE) test-php70 test-php71 test-php72 test-php73
+
+test-parallel: ## Run unit and functional tests in parallel
+	$(MAKE) -j4 test-php70 test-php71 test-php72 test-php73
+
+sh-php70: ## Get a shell in the PHP 7.0 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.0 sh
+
+sh-php71: ## Get a shell in the PHP 7.1 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.1 sh
+
+sh-php72: ## Get a shell in the PHP 7.2 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.2 sh
+
+sh-php73: ## Get a shell in the PHP 7.3 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle:latest-php7.3 sh
+
+web-php70: ## Launches the built-in PHP web server in the PHP 7.0 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9080:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.0 php -S 0.0.0.0:8080 -t web
+
+web-php71: ## Launches the built-in PHP web server in the PHP 7.1 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9081:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.1 php -S 0.0.0.0:8080 -t web
+
+web-php72: ## Launches the built-in PHP web server in the PHP 7.2 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9082:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.2 php -S 0.0.0.0:8080 -t web
+
+web-php73: ## Launches the built-in PHP web server in the PHP 7.3 container
+	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:9083:8080/tcp -w /app/Tests/Functional/App noiselabs/smarty-bundle:latest-php7.3 php -S 0.0.0.0:8080 -t web
+
+php-cs-fixer-dry-run: ## Check for PHP Coding Standards fixes but don't apply changes
+	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff -v
+.PHONY: php-cs-fixer-dry-run
+
+php-cs-fixer-apply: ##  Run the PHP Coding Standards Fixer (PHP CS Fixer)
+	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff -v
+.PHONY: php-cs-fixer-apply

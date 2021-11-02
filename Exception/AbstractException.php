@@ -74,8 +74,8 @@ class AbstractException extends \Exception
         }
 
         $this->rawMessage = str_replace(
-            array('&quot;', '&gt;', '&lt;'),
-            array('"', '>', '<'),
+            ['&quot;', '&gt;', '&lt;'],
+            ['"', '>', '<'],
             html_entity_decode($message)
         );
 
@@ -242,8 +242,8 @@ class AbstractException extends \Exception
          */
         function objectToArray($var)
         {
-            $result = array();
-            $references = array();
+            $result = [];
+            $references = [];
 
             // loop over elements/properties
             foreach ($var as $key => $value) {

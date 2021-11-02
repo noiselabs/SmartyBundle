@@ -53,12 +53,12 @@ class RoutingExtension extends AbstractExtension
      */
     public function getPlugins()
     {
-        return array(
+        return [
             new BlockPlugin('path', $this, 'getPath_block'),
             new ModifierPlugin('path', $this, 'getPath_modifier'),
             new BlockPlugin('url', $this, 'getUrl_block'),
             new ModifierPlugin('url', $this, 'getUrl_modifier')
-        );
+        ];
     }
 
     /**
@@ -69,7 +69,7 @@ class RoutingExtension extends AbstractExtension
      *
      * @return string The generated URL
      */
-    public function getPath($name, $parameters = array())
+    public function getPath($name, $parameters = [])
     {
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
@@ -82,12 +82,12 @@ class RoutingExtension extends AbstractExtension
      *
      * @return string The generated URL
      */
-    public function getUrl($name, $parameters = array())
+    public function getUrl($name, $parameters = [])
     {
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    public function getPath_block(array $parameters = array(), $name = null, $template = null, &$repeat = null)
+    public function getPath_block(array $parameters = [], $name = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {
@@ -95,12 +95,12 @@ class RoutingExtension extends AbstractExtension
         }
     }
 
-    public function getPath_modifier($name, array $parameters = array())
+    public function getPath_modifier($name, array $parameters = [])
     {
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
-    public function getUrl_block(array $parameters = array(), $name = null, $template = null, &$repeat = null)
+    public function getUrl_block(array $parameters = [], $name = null, $template = null, &$repeat = null)
     {
         // only output on the closing tag
         if (!$repeat) {
@@ -108,7 +108,7 @@ class RoutingExtension extends AbstractExtension
         }
     }
 
-    public function getUrl_modifier($name, array $parameters = array())
+    public function getUrl_modifier($name, array $parameters = [])
     {
         return $this->generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
