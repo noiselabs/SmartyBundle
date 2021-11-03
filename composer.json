@@ -36,6 +36,7 @@
     "require-dev": {
         "phpunit/phpunit": "^8|^9",
         "symfony/asset": "^3|^4",
+        "symfony/console": "^3|^4",
         "symfony/expression-language": "^3|^4",
         "symfony/phpunit-bridge": "^3|^4",
         "symfony/security": "^3.4.48|^4",
@@ -44,12 +45,14 @@
         "symfony/yaml": "^3|^4"
     },
     "autoload": {
-        "psr-4": { "NoiseLabs\\Bundle\\SmartyBundle\\": "" }
+        "psr-4": {
+            "NoiseLabs\\Bundle\\SmartyBundle\\": "src/"
+        }
     },
     "autoload-dev": {
-        "files": [
-            "autoload/phpunit-class-aliases.php"
-        ]
+        "psr-4": {
+            "NoiseLabs\\Bundle\\SmartyBundle\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {
@@ -57,7 +60,7 @@
         }
     },
     "scripts": {
-        "test": "php -v && php vendor/bin/phpunit --version && php vendor/bin/phpunit",
+        "test": "php -dxdebug.mode=coverage vendor/bin/phpunit",
         "test-with-coverage": "@test --coverage-text",
         "test-unit": "@test --testsuite=unit",
         "test-functional": "@test --testsuite=functional",

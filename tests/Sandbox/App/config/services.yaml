@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  NoiseLabs\Bundle\SmartyBundle\Tests\Sandbox\App\Controller\:
+    resource: '../Controller'
+    public: true
+    tags: ['controller.service_arguments']

@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php: [ '7.2', '8.0' ]
+        php: [ '7.4', '8.0' ]
         symfony: [ '3.4', '4.4' ]
       fail-fast: false
 
@@ -29,7 +29,7 @@ jobs:
           extensions: "${{ env.extensions }}"
           ini-values: date.timezone=Europe/London,memory_limit=-1,error_reporting=-1,log_errors_max_len=0,zend.assertions=1,assert.exception=1,xdebug.show_exception_trace=0
           php-version: "${{ matrix.php }}"
-          tools: composer, phpunit:8
+          tools: composer, phpunit:9
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -48,8 +48,8 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction --no-progress --prefer-dist --verbose
 
-      - name: PHPUnit Unit tests
-        run: phpunit --testsuit=unit --coverage-text
+      - name: PHP environment details
+        run: php -v
 
-      - name: PHPUnit Functional tests
-        run: phpunit --testsuit=unit --coverage-text
+      - name: PHPUnit Unit and Functional tests
+        run: XDEBUG_MODE=coverage phpunit --coverage-text
