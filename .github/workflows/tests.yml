@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Tests
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   unit-tests:
-    name: Unit Tests
+    name: Unit and Functional Tests
     runs-on: ubuntu-latest
 
     env:
@@ -48,5 +48,8 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction --no-progress --prefer-dist --verbose
 
-      - name: PHPUnit tests
-        run: phpunit --coverage-text
+      - name: PHPUnit Unit tests
+        run: phpunit --testsuit=unit --coverage-text
+
+      - name: PHPUnit Functional tests
+        run: phpunit --testsuit=unit --coverage-text

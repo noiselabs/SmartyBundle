@@ -8,9 +8,10 @@ SmartyBundle
 
 This [Symfony](http://symfony.com/) bundle provides integration for the [Smarty3](http://www.smarty.net/) template engine.
 
-[![Total Downloads](https://poser.pugx.org/noiselabs/smarty-bundle/downloads.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Stable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/stable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/noiselabs/smarty-bundle/v/unstable.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
+![Tests](https://github.com/noiselabs/SmartyBundle/actions/workflows/tests.yml/badge.svg)
+[![Total Downloads](https://poser.pugx.org/noiselabs/smarty-bundle/downloads.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 [![License](https://poser.pugx.org/noiselabs/smarty-bundle/license.png)](https://packagist.org/packages/noiselabs/smarty-bundle)
 
 See this compatibility chart to find out which version of the SmartyBundle you need depending on your version of Symfony.
