@@ -101,10 +101,6 @@ ARG SYMFONY_VERSION
 ENV SYMFONY_REQUIRE=${SYMFONY_VERSION}
 ENV SYMFONY_VERSION=${SYMFONY_VERSION}
 
-RUN wget https://get.symfony.com/cli/installer -O - | bash && \
-    mv /root/.symfony/bin/symfony /usr/local/bin/symfony && \
-    symfony check:requirements
-
 # Download the Symfony skeleton and leverage Docker cache layers
 RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}.99" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction --verbose && \
 	composer clear-cache

@@ -6,7 +6,7 @@ on:
 
 jobs:
   unit-tests:
-    name: Unit and Functional Tests
+    name: PHPUnit
     runs-on: ubuntu-latest
 
     env:
@@ -14,8 +14,16 @@ jobs:
 
     strategy:
       matrix:
-        php: [ '7.4', '8.0' ]
-        symfony: [ '3.4', '4.4' ]
+        include:
+          - php: '7.3'
+            symfony: '4.4'
+            composer_flags: --prefer-lowest
+          - php: '7.4'
+            symfony: '4.4'
+            composer_flags: --prefer-stable
+          - php: '8.0'
+            symfony: '4.4'
+            composer_flags: --prefer-stable
       fail-fast: false
 
     steps:

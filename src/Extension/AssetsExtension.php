@@ -126,7 +126,7 @@ class AssetsExtension extends AbstractExtension
             'package' => null,
         ], $parameters);
 
-        return $this->packages->getVersion(null, $parameters['package']);
+        return $this->packages->getVersion('', $parameters['package']);
     }
 
     /**

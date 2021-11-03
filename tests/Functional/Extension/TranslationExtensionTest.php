@@ -44,7 +44,7 @@ class TranslationExtensionTest extends TestCase
     }
 
     /**
-     * @dataProvider getTransTests
+     * @dataProvider getTranslationTests
      *
      * @param mixed $content
      * @param mixed $expected
@@ -63,7 +63,7 @@ class TranslationExtensionTest extends TestCase
     /**
      * Returns translation tests (data provider).
      */
-    public function getTransTests()
+    public function getTranslationTests()
     {
         return [
             // trans block

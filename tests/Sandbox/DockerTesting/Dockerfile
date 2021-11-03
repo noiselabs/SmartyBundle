@@ -4,12 +4,8 @@ FROM php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="Vitor Brandao <vitor@noiselabs.io>"
 
-RUN apk add --no-cache --virtual smartybundle-deps \
-    $PHPIZE_DEPS \
-    icu-dev
-RUN pecl channel-update pecl.php.net && pecl install xdebug
-RUN docker-php-ext-install intl && \
-    docker-php-ext-enable intl xdebug
+RUN apk add --no-cache --virtual smartybundle-deps icu-dev
+RUN docker-php-ext-install intl && docker-php-ext-enable intl
 
 WORKDIR /app
 
@@ -24,9 +20,10 @@ ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 ARG SYMFONY_VERSION
 ENV SYMFONY_REQUIRE=${SYMFONY_VERSION}
+ARG COMPOSER_FLAGS=""
 
-RUN composer global require --no-progress --no-scripts --no-plugins symfony/flex
+RUN composer global require --no-progress --no-scripts --no-plugins --ignore-platform-req=php symfony/flex
 
-RUN composer update --no-interaction --no-progress --prefer-dist --verbose
+RUN composer update --no-interaction --no-progress --prefer-dist --verbose --ignore-platform-req=php ${COMPOSER_FLAGS}
 
 RUN php -v

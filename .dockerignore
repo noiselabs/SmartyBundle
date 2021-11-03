@@ -1,4 +1,6 @@
 /composer.lock
-/Tests/Functional/App/cache
-/Tests/Functional/App/logs
+/tests/Sandbox/App/cache
+/tests/Sandbox/App/logs
+/tmp
+/tools
 /vendor

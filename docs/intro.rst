@@ -38,8 +38,8 @@ Requirements
 ============
 
 * `PHP <http://php.net>`_ 7.1 and up
-* `Symfony <http://www.symfony.com>`_ 2.8 and up
-* `Smarty 3 <http://www.smarty.net>`_
+* `Symfony <http://www.symfony.com>`_ 4
+* `Smarty <http://www.smarty.net>`_ 3
 
 License
 =======

@@ -81,25 +81,6 @@ class SmartyExtension extends Extension
         if (class_exists('\\Symfony\\Component\\Console\\Application')) {
             $loader->load('console.xml');
         }
-
-        /*
-         * @note Caching of Smarty classes was causing issues because of the
-         * include_once directives used in Smarty.class.php so this
-         * feature is disabled.
-         *
-         * <code>
-         * $this->addClassesToCompile(array(
-         * 'Smarty',
-         * 'Smarty_Internal_Data',
-         * 'Smarty_Internal_Templatebase',
-         * 'Smarty_Internal_Template',
-         * 'Smarty_Resource',
-         * 'Smarty_Internal_Resource_File',
-         * 'Smarty_Cacheresource',
-         * 'Smarty_Internal_Cacheresource_File',
-         * ));
-         * </code>
-         */
     }
 
     public function getAlias()

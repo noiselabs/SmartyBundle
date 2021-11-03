@@ -11,7 +11,7 @@ Tell composer to add the bundle to your :file:`composer.json` by running the com
 
 .. code-block:: bash
 
-    $ php composer.phar require noiselabs/smarty-bundle ~2.0
+    $ php composer.phar require noiselabs/smarty-bundle:4.0.x-dev
 
 Composer will install the bundle to your project's :file:`vendor/noiselabs` directory.
 
