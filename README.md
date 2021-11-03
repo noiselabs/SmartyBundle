@@ -25,7 +25,7 @@ See this compatibility chart to find out which version of the SmartyBundle you n
 
 ### Update: Symfony 4 support (October 2021)
 
-Symfony 4 support is being developed in the [3.0 branch](https://github.com/noiselabs/SmartyBundle/tree/3.0). Please checkout that branch if you wish to test it and/or contribute.
+Symfony 4 support is now being developed in the [master branch](https://github.com/noiselabs/SmartyBundle/tree/master) instead of the [3.0 branch](https://github.com/noiselabs/SmartyBundle/tree/3.0).
 
 Requirements
 ------------
