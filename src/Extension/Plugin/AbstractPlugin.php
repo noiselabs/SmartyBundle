@@ -73,7 +73,7 @@ abstract class AbstractPlugin implements PluginInterface
      * @param ExtensionInterface $extension A ExtensionInterface instance
      * @param string             $method    Method name
      */
-    public function __construct($name, ExtensionInterface $extension, $method)
+    public function __construct(string $name, ExtensionInterface $extension, string $method)
     {
         $this->name = $name;
         $this->extension = $extension;
