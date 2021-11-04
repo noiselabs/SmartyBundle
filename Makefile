@@ -180,13 +180,18 @@ php-cs-fixer-apply: ##  Run the PHP Coding Standards Fixer (PHP CS Fixer)
 
 ### Composer ###
 composer-sf4-lowest: ## Install composer dependencies using sf4 --prefer-lowest
-	SYMFONY_REQUIRE=4.4 composer update --prefer-dist --verbose --prefer-lowest
+	SYMFONY_REQUIRE=4.4 composer update --prefer-dist --prefer-lowest
 .PHONY: composer-sf3
 
 composer-sf4: ## Install composer dependencies using sf4
-	SYMFONY_REQUIRE=4.4 composer update --prefer-dist --verbose
+	SYMFONY_REQUIRE=4.4 composer update --prefer-dist
 .PHONY: composer-sf4
 
 composer-sf5: ## Install composer dependencies using sf5
-	SYMFONY_REQUIRE=5.3 composer update --prefer-dist --verbose
+	SYMFONY_REQUIRE=5.3 composer update --prefer-dist
 .PHONY: composer-sf5
+
+### PHPUnit tests ###
+phpunit: ## Run PHPUnit tests
+	XDEBUG_MODE=coverage phpunit --coverage-text
+.PHONY: phpunit

@@ -1,0 +1,29 @@
+{extends 'file:base.html.smarty'}
+
+{block name=source}{literal}
+    1. {trans}Hello, World!{/trans}
+
+    2. {trans vars=['%name%' => 'World']}Hello %name%{/trans}
+
+    3. {trans domain="messages" locale="pt_PT"}Hello, World!{/trans}
+
+    4. {"Hello, World!!"|trans}
+
+    5. {"Hello %name%"|trans:['%name%' => 'World']}
+
+    6. {"Hello, World!!"|trans:[]:"messages":"pt_PT"}
+{/literal}{/block}
+
+{block name=result}
+    <p>1. {trans}Hello, World!{/trans}</p>
+    <br>
+    <p>2. {trans vars=['%name%' => 'World']}Hello, %name%!{/trans}</p>
+    <br>
+    <p>3. {trans domain="messages" locale="pt_PT"}Hello, World!{/trans}</p>
+    <br>
+    <p>4. {"Hello, World!"|trans}</p>
+    <br>
+    <p>5. {"Hello, %name%!"|trans:['%name%' => 'World']}</p>
+    <br>
+    <p>6. {"Hello, World!"|trans:[]:"messages":"pt_PT"}</p>
+{/block}

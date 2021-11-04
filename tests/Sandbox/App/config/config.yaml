@@ -1,4 +1,4 @@
 framework:
-  secret: S0ME_SECRET
+  secret: '%env(APP_SECRET)%'
   templating:
     engines: ['smarty']

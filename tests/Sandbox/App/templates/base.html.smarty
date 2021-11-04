@@ -50,7 +50,10 @@
                 Routing
             </p>
             <ul class="menu-list">
-                <li><a href="{'routing'|path}">Route</a></li>
+                <li><a href="{'routing'|path}">Routing</a></li>
+            </ul>
+            <ul class="menu-list">
+                <li><a href="{'translation'|path}">Translation</a></li>
             </ul>
         </aside>
     </div>
