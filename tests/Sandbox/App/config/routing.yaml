@@ -1,0 +1,6 @@
+hello:
+    path: /
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Sandbox\App\Controller\HelloController::index
+routing:
+    path: /routing
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Sandbox\App\Controller\RoutingController::index

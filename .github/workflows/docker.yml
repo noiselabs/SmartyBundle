@@ -1,0 +1,21 @@
+name: Testing Sandbox
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        build_target: [ 'php8-sf4', 'php7-sf4' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build ${{ matrix.build_target }}
+        run: make build-${{ matrix.build_target }}

@@ -1,10 +1,10 @@
 *.pyc
 .idea
-.phpunit.result.cache
+.phpunit.cache
 .php-cs-fixer.cache
 composer.lock
-/Resources/doc/_build/
-/Tests/Functional/App/cache
-/Tests/Functional/App/logs
+/docs/_build/
+/tests/Sandbox/App/cache
+/tests/Sandbox/App/logs
 /tmp
 vendor
