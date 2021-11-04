@@ -102,11 +102,10 @@ ENV SYMFONY_REQUIRE=${SYMFONY_VERSION}
 ENV SYMFONY_VERSION=${SYMFONY_VERSION}
 
 # Download the Symfony skeleton and leverage Docker cache layers
-RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}.99" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction --verbose && \
-	composer clear-cache
+RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}.99" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction --no-scripts --verbose
 
 ###> extra packages ###
-RUN composer require --no-interaction --with-all-dependencies --verbose \
+RUN composer require --no-interaction --no-scripts --with-all-dependencies --verbose \
     annotations \
     sensio/framework-extra-bundle:*
 ###< extra packages ###

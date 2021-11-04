@@ -6,10 +6,11 @@
 
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
-from string import upper
+
 
 class configurationblock(nodes.General, nodes.Element):
     pass
+
 
 class ConfigurationBlock(Directive):
     has_content = True
@@ -18,17 +19,34 @@ class ConfigurationBlock(Directive):
     final_argument_whitespace = True
     option_spec = {}
     formats = {
-        'html':            'HTML',
-        'xml':             'XML',
-        'php':             'PHP',
-        'yaml':            'YAML',
-        'jinja':           'Twig',
-        'html+jinja':      'Twig',
-        'jinja+html':      'Twig',
-        'php+html':        'PHP',
-        'html+php':        'PHP',
-        'ini':             'INI',
+        'html': 'HTML',
+        'xml': 'XML',
+        'php': 'PHP',
+        'yaml': 'YAML',
+        'jinja': 'Twig',
+        'html+jinja': 'Twig',
+        'jinja+html': 'Twig',
+        'twig': 'Twig',
+        'html+twig': 'Twig',
+        'twig+html': 'Twig',
+        'php+html': 'PHP',
+        'html+php': 'PHP',
+        'ini': 'INI',
+        'markdown': 'Markdown',
         'php-annotations': 'Annotations',
+        'php-attributes': 'Attributes',
+        'php-standalone': 'Standalone Use',
+        'php-symfony': 'Framework Use',
+        'rst': 'reStructuredText',
+        'varnish2': 'Varnish 2',
+        'varnish3': 'Varnish 3',
+        'varnish4': 'Varnish 4',
+        'blackfire': 'Blackfire',
+        'bash': 'Bash',
+        'apache': 'Apache',
+        'nginx': 'Nginx',
+        'terminal': 'Terminal',
+        'env': '.env',
     }
 
     def run(self):
@@ -46,7 +64,8 @@ class ConfigurationBlock(Directive):
                 #targetnode = nodes.target('', '', ids=[targetid])
                 #targetnode.append(child)
 
-                innernode = nodes.emphasis(self.formats[child['language']], self.formats[child['language']])
+                innernode = nodes.emphasis(self.formats[child['language']],
+                                           self.formats[child['language']])
 
                 para = nodes.paragraph()
                 para += [innernode, child]
@@ -60,20 +79,29 @@ class ConfigurationBlock(Directive):
 
         return [resultnode]
 
+
 def visit_configurationblock_html(self, node):
     self.body.append(self.starttag(node, 'div', CLASS='configuration-block'))
+
 
 def depart_configurationblock_html(self, node):
     self.body.append('</div>\n')
 
+
 def visit_configurationblock_latex(self, node):
     pass
+
 
 def depart_configurationblock_latex(self, node):
     pass
 
+
 def setup(app):
     app.add_node(configurationblock,
-                 html=(visit_configurationblock_html, depart_configurationblock_html),
-                 latex=(visit_configurationblock_latex, depart_configurationblock_latex))
+                 html=(visit_configurationblock_html,
+                       depart_configurationblock_html),
+                 latex=(visit_configurationblock_latex,
+                        depart_configurationblock_latex))
     app.add_directive('configuration-block', ConfigurationBlock)
+
+    return {'parallel_read_safe': True}
