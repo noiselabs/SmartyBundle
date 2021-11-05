@@ -41,4 +41,9 @@ class SmartyBundle extends Bundle
 
         $container->addCompilerPass(new RegisterExtensionsPass());
     }
+
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
 }

@@ -24,6 +24,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use SmartyException;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
 
 /**
@@ -82,6 +83,10 @@ class ActionsExtension extends AbstractExtension
                 'options' => [],
             ], $parameters);
 
+            if (!$controller) {
+                throw new SmartyException('The controller parameter must be specified');
+            }
+
             return $this->render($controller, $parameters['attributes'], $parameters['options']);
         }
     }
@@ -91,8 +96,8 @@ class ActionsExtension extends AbstractExtension
      *
      * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
      *
-     * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
-     * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     * @see \Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
+     * @see \Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
     public function renderModifierAction($controller, array $attributes = [], array $options = [])
     {

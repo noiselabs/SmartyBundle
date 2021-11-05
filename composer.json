@@ -38,7 +38,7 @@
         "symfony/asset": "^4|^5",
         "symfony/console": "^4|^5",
         "symfony/expression-language": "^4|^5",
-        "symfony/phpunit-bridge": "^4|^5",
+        "symfony/phpunit-bridge": "^5",
         "symfony/security": "^3.4.48|^4|^5",
         "symfony/security-acl": "^3|^4|^5",
         "symfony/translation": "^4|^5",

@@ -23,11 +23,11 @@ declare(strict_types=1);
 namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateFilenameParser;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
@@ -44,7 +44,7 @@ class TemplateFinder implements TemplateFinderInterface
     private $kernel;
 
     /**
-     * @var TemplateNameParserInterface
+     * @var TemplateFilenameParser
      */
     private $parser;
 
@@ -54,11 +54,6 @@ class TemplateFinder implements TemplateFinderInterface
     private $rootDir;
 
     /**
-     * @var TemplateLoader
-     */
-    private $templateLoader;
-
-    /**
      * @var array
      */
     private $templateDirs;
@@ -66,29 +61,31 @@ class TemplateFinder implements TemplateFinderInterface
     /**
      * Constructor.
      *
-     * @param KernelInterface             $kernel  A KernelInterface instance
-     * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
-     * @param string                      $rootDir The directory where global templates can be stored
+     * @param KernelInterface        $kernel  A KernelInterface instance
+     * @param TemplateFilenameParser $parser  A TemplateNameParserInterface instance
+     * @param string                 $rootDir The directory where global templates can be stored
      */
     public function __construct(
         KernelInterface $kernel,
-        TemplateLoader $templateLoader,
-        TemplateNameParserInterface $parser,
-        $rootDir,
+        TemplateFilenameParser $parser,
+        string $rootDir,
         array $smartyOptions
     ) {
         $this->kernel = $kernel;
-        $this->templateLoader = $templateLoader;
         $this->parser = $parser;
-        $this->rootDir = $rootDir;
 
-        $this->templateDirs = [];
+        $this->templateDirs = [
+            $rootDir.'/Resources/views',
+            $rootDir.'/templates',
+        ];
+
         if (isset($smartyOptions['template_dir'])) {
             $this->templateDirs[] = $smartyOptions['template_dir'];
         }
         if (isset($smartyOptions['templates_dir']) && is_array($smartyOptions['templates_dir'])) {
             $this->templateDirs = array_merge($this->templateDirs, $smartyOptions['templates_dir']);
         }
+        $this->templateDirs = array_unique($this->templateDirs);
     }
 
     /**
@@ -111,12 +108,7 @@ class TemplateFinder implements TemplateFinderInterface
         return $templates;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return BundleInterface
-     */
-    public function getBundle($name)
+    public function getBundle(string $name): BundleInterface
     {
         return $this->kernel->getBundle($name);
     }
@@ -128,9 +120,11 @@ class TemplateFinder implements TemplateFinderInterface
      *
      * @return array An array of templates of type TemplateReferenceInterface
      */
-    public function findTemplatesInBundle(BundleInterface $bundle)
+    public function findTemplatesInBundle(BundleInterface $bundle): array
     {
-        $templates = $this->findTemplatesInFolder($bundle->getPath().'/Resources/views');
+        $bundleTemplatesDir = is_dir($bundle->getPath().'/Resources/views') ?
+            $bundle->getPath().'/Resources/views' : $bundle->getPath().'/templates';
+        $templates = $this->findTemplatesInFolder($bundleTemplatesDir);
         $name = $bundle->getName();
 
         foreach (array_keys($templates) as $k) {
@@ -147,7 +141,7 @@ class TemplateFinder implements TemplateFinderInterface
      *
      * @return array|TemplateReferenceInterface[] An array of templates of type TemplateReferenceInterface
      */
-    private function findTemplatesInFolder($dir)
+    private function findTemplatesInFolder(string $dir): array
     {
         if (!$dir || !is_dir($dir)) {
             return [];

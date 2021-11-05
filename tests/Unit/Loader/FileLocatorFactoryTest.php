@@ -20,14 +20,19 @@
  */
 declare(strict_types=1);
 
-namespace NoiseLabs\Bundle\SmartyBundle\Loader;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Loader;
 
-use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
+use NoiseLabs\Bundle\SmartyBundle\Loader\FileLocatorFactory;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\Kernel;
 
-class TemplateNotFoundException extends RuntimeException
+class FileLocatorFactoryTest extends TestCase
 {
-    public static function couldNotLocate(string $templateName): TemplateNotFoundException
+    public function testItCreatesAFileLocatorInstance()
     {
-        return new static(sprintf('Could not locate template "%s"', $templateName));
+        $kernel = $this->createMock(Kernel::class);
+        $fileLocator = FileLocatorFactory::createFileLocator($kernel, 'path', [], []);
+        $this->assertInstanceOf(FileLocator::class, $fileLocator);
     }
 }

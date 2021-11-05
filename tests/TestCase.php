@@ -58,6 +58,11 @@ class TestCase extends PHPUnitTestCase
      */
     protected $tmpDir;
 
+    /**
+     * @var array
+     */
+    protected $smartyOptions = [];
+
     protected function setUp(): void
     {
         if (!class_exists('Smarty')) {
@@ -65,6 +70,10 @@ class TestCase extends PHPUnitTestCase
         }
 
         $this->tmpDir = sys_get_temp_dir().'/noiselabs-smarty-bundle-test';
+        $this->smartyOptions = array_merge([
+            'caching' => false,
+            'compile_dir' => $this->tmpDir.'/templates_c',
+        ], $this->smartyOptions);
 
         $this->smarty = $this->getSmarty();
         $this->loader = new ProjectTemplateLoader();
@@ -74,6 +83,12 @@ class TestCase extends PHPUnitTestCase
     public function tearDown(): void
     {
         $this->deleteTmpDir();
+    }
+
+    protected function addTemplateDirs(array $templateDirs)
+    {
+        $this->smartyOptions['templates_dir'] = isset($this->smartyOptions['templates_dir']) ?
+            array_merge($this->smartyOptions['templates_dir'], $templateDirs) : $templateDirs;
     }
 
     protected function deleteTmpDir()
@@ -89,14 +104,6 @@ class TestCase extends PHPUnitTestCase
     public function getSmarty()
     {
         return new Smarty();
-    }
-
-    public function getSmartyOptions()
-    {
-        return [
-            'caching' => false,
-            'compile_dir' => $this->tmpDir.'/templates_c',
-        ];
     }
 
     public function createTemplate($filepath)
@@ -115,7 +122,7 @@ class TestCase extends PHPUnitTestCase
     {
         $container = $this->createContainer();
         $options = array_merge(
-            $this->getSmartyOptions(),
+            $this->smartyOptions,
             $options
         );
 

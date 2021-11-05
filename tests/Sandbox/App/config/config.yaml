@@ -1,4 +1,9 @@
 framework:
+  default_locale: en
   secret: '%env(APP_SECRET)%'
   templating:
     engines: ['smarty']
+  translator:
+    default_path: '%kernel.project_dir%/translations'
+    fallbacks:
+      - en

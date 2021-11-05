@@ -20,14 +20,32 @@
  */
 declare(strict_types=1);
 
-namespace NoiseLabs\Bundle\SmartyBundle\Loader;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional;
 
-use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
+use NoiseLabs\Bundle\SmartyBundle\SmartyBundle;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class TemplateNotFoundException extends RuntimeException
+class SmartyBundleTest extends TestCase
 {
-    public static function couldNotLocate(string $templateName): TemplateNotFoundException
+    public function testThatItAnnouncesItsVersion()
     {
-        return new static(sprintf('Could not locate template "%s"', $templateName));
+        self::assertIsString(SmartyBundle::VERSION);
+    }
+
+    public function testItCanBeCompiled()
+    {
+        $container = new ContainerBuilder();
+        $smartyBundle = new SmartyBundle();
+
+        $smartyBundle->build($container);
+
+        self::assertNotEmpty($container->getCompiler()->getPassConfig()->getPasses());
+    }
+
+    public function testGetPath()
+    {
+        $smartyBundle = new SmartyBundle();
+        self::assertSame(realpath(__DIR__.'/../../'), $smartyBundle->getPath());
     }
 }

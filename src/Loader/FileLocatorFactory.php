@@ -31,10 +31,8 @@ class FileLocatorFactory
      * @param KernelInterface $kernel A KernelInterface instance
      * @param null|string     $path   The path the global resource directory
      * @param array           $paths  An array of paths where to look for resources
-     *
-     * @return FileLocator
      */
-    public static function createFileLocator(KernelInterface $kernel, $path, array $paths, array $extraTemplatePaths)
+    public static function createFileLocator(KernelInterface $kernel, ?string $path, array $paths, array $extraTemplatePaths): FileLocator
     {
         return new FileLocator($kernel, $path, array_merge($paths, $extraTemplatePaths));
     }
