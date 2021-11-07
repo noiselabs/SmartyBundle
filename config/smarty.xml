@@ -85,17 +85,9 @@
 
         <service id="smarty.templating.finder" class="NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder" public="true">
             <argument type="service" id="kernel" />
-            <argument type="service" id="smarty.templating.loader"/>
             <argument type="service" id="templating.filename_parser" />
             <argument>%kernel.root_dir%/Resources</argument>
             <argument>%smarty.options%</argument>
         </service>
-
-        <!--service id="smarty.cache_warmer" class="NoiseLabs\Bundle\SmartyBundle\CacheWarmer\SmartyCacheWarmer" public="false">
-            <tag name="kernel.cache_warmer" priority="255" />
-            <argument type="service" id="service_container" />
-            <argument type="service" id="smarty.templating.finder" />
-        </service-->
-
     </services>
 </container>

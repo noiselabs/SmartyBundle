@@ -20,14 +20,17 @@
  */
 declare(strict_types=1);
 
-namespace NoiseLabs\Bundle\SmartyBundle\Loader;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Loader;
 
-use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
+use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateNotFoundException;
+use PHPUnit\Framework\TestCase;
 
-class TemplateNotFoundException extends RuntimeException
+class TemplateNotFoundExceptionTest extends TestCase
 {
-    public static function couldNotLocate(string $templateName): TemplateNotFoundException
+    public function testCouldNotLocateExceptionIncludesTemplateName()
     {
-        return new static(sprintf('Could not locate template "%s"', $templateName));
+        $templateName = 'hello.index.smarty';
+        $exception = TemplateNotFoundException::couldNotLocate($templateName);
+        $this->assertStringContainsString($templateName, $exception->getMessage());
     }
 }

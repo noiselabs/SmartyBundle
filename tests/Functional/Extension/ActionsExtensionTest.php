@@ -24,6 +24,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Tests\Functional\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension;
 use NoiseLabs\Bundle\SmartyBundle\Tests\TestCase;
+use SmartyException;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
 
 /**
@@ -35,10 +36,9 @@ class ActionsExtensionTest extends TestCase
 {
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->addTemplateDirs([__DIR__.'/templates/actions']);
 
-        $templatesDir = __DIR__.'/templates/actions';
-        $this->engine->setTemplateDir($templatesDir);
+        parent::setUp();
     }
 
     public function testExtensionName()
@@ -46,6 +46,26 @@ class ActionsExtensionTest extends TestCase
         $extension = $this->createActionsExtension();
 
         $this->assertEquals('actions', $extension->getName());
+    }
+
+    public function testGetPlugins()
+    {
+        self::assertNotEmpty($extension = $this->createActionsExtension()->getPlugins());
+    }
+
+    public function testRendersBlockActionWithoutControllerRaisesAnException()
+    {
+        $this->expectException(SmartyException::class);
+
+        $extension = $this->createActionsExtension();
+        $render = $extension->renderBlockAction();
+    }
+
+    public function testRendersBlockAction()
+    {
+        $extension = $this->createActionsExtension();
+        $render = $extension->renderBlockAction([], 'ThisIsNotABundle:NotAController:NeitherAnAction');
+        $this->assertNull($render);
     }
 
     protected function createActionsExtension()

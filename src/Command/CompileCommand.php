@@ -48,6 +48,8 @@ class CompileCommand extends Command
      */
     private $finder;
 
+    protected static $defaultName = 'smarty:compile';
+
     public function __construct(SmartyEngine $engine, TemplateFinder $finder)
     {
         parent::__construct();
@@ -59,13 +61,10 @@ class CompileCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('smarty:compile')
+            ->setDefinition([
+                new InputArgument('bundle', InputArgument::OPTIONAL, 'The bundle name or directory where to load the templates'),
+            ])
             ->setDescription('Compiles all known Smarty templates')
-            ->addArgument(
-                'bundle',
-                InputArgument::OPTIONAL,
-                'A bundle name'
-            )
             ->setHelp(
                 <<<'EOF'
                     The following command finds all known Smarty templates and compiles them:
@@ -114,10 +113,6 @@ class CompileCommand extends Command
                 }
             } catch (\Exception $e) {
                 $e = SmartyBundleRuntimeException::createFromPrevious($e, $template);
-                // problem during compilation, log it and give up
-                if ($verbose) {
-                    $output->writeln('');
-                }
                 $output->writeln(sprintf("<error>ERROR: Failed to compile Smarty template \"%s\"</error>\n-> %s\n", (string) $template, $e->getMessage()));
                 ++$count['failed'];
             }

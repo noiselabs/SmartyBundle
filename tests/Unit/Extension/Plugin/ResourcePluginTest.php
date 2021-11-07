@@ -20,14 +20,19 @@
  */
 declare(strict_types=1);
 
-namespace NoiseLabs\Bundle\SmartyBundle\Loader;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Extension\Plugin;
 
-use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\AbstractPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ResourcePlugin;
+use NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Extension\NullExtension;
+use PHPUnit\Framework\TestCase;
 
-class TemplateNotFoundException extends RuntimeException
+class ResourcePluginTest extends TestCase
 {
-    public static function couldNotLocate(string $templateName): TemplateNotFoundException
+    public function testGetType()
     {
-        return new static(sprintf('Could not locate template "%s"', $templateName));
+        $nullExtension = new NullExtension();
+        $resourcePlugin = new ResourcePlugin('test', $nullExtension, 'none');
+        $this->assertSame(AbstractPlugin::TYPE_RESOURCE, $resourcePlugin->getType());
     }
 }

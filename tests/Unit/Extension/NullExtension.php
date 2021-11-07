@@ -20,14 +20,34 @@
  */
 declare(strict_types=1);
 
-namespace NoiseLabs\Bundle\SmartyBundle\Loader;
+namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Extension;
 
-use NoiseLabs\Bundle\SmartyBundle\Exception\RuntimeException;
+use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 
-class TemplateNotFoundException extends RuntimeException
+class NullExtension implements ExtensionInterface
 {
-    public static function couldNotLocate(string $templateName): TemplateNotFoundException
+    public function sayHello()
     {
-        return new static(sprintf('Could not locate template "%s"', $templateName));
+        return 'hello';
+    }
+
+    public function getPlugins()
+    {
+        return [];
+    }
+
+    public function getFilters()
+    {
+        return [];
+    }
+
+    public function getGlobals()
+    {
+        return [];
+    }
+
+    public function getName()
+    {
+        return 'null';
     }
 }
