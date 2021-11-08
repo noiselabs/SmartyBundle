@@ -28,13 +28,13 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Filter\FilterInterface;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\PluginInterface;
 use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader;
+use NoiseLabs\Bundle\SmartyBundle\Templating\GlobalVariables;
 use Psr\Log\LoggerInterface;
 use Smarty;
 use Smarty_Internal_Runtime_TplFunction;
 use Smarty_Internal_Template;
 use SmartyException;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -84,11 +84,6 @@ class SmartyEngine implements EngineInterface
      * @var TemplateLoader
      */
     private $templateLoader;
-
-    /**
-     * @var array
-     */
-    private $registeredPlugins;
 
     /**
      * Constructor.
@@ -192,7 +187,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return Smarty The Smarty instance
      */
-    public function getSmarty()
+    public function getSmarty(): Smarty
     {
         $this->registerFilters();
         $this->registerPlugins();
@@ -211,7 +206,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return string The evaluated template as a string
      */
-    public function render($name, array $parameters = [])
+    public function render($name, array $parameters = []): string
     {
         $template = $this->load($name);
 
@@ -268,12 +263,10 @@ class SmartyEngine implements EngineInterface
      * @param mixed $name A template name
      * @param bool  $load If we should load template content right away. Default: true
      *
+     *@throws SmartyException
      * @throws RuntimeException
-     * @throws SmartyException
-     *
-     * @return \Smarty_Internal_Template
      */
-    public function createTemplate($name, $load = true)
+    public function createTemplate($name, bool $load = true): Smarty_Internal_Template
     {
         $template = $this->load($name);
         $template = $this->smarty->createTemplate($template, $this->smarty);
@@ -292,15 +285,12 @@ class SmartyEngine implements EngineInterface
     /**
      * Compiles a template object.
      *
-     * @param mixed $name         A template name
-     * @param bool  $forceCompile
+     * @param mixed $name A template name
      *
+     *@throws SmartyException
      * @throws RuntimeException
-     * @throws SmartyException
-     *
-     * @return \Smarty_Internal_Template
      */
-    public function compileTemplate($name, $forceCompile = false)
+    public function compileTemplate($name, bool $forceCompile = false): Smarty_Internal_Template
     {
         $template = $this->load($name);
         $template = $this->smarty->createTemplate($template, $this->smarty);
@@ -332,7 +322,7 @@ class SmartyEngine implements EngineInterface
      * @throws RuntimeException
      * @throws SmartyException
      */
-    public function renderTemplateFunction($template, $name, array $attributes = [])
+    public function renderTemplateFunction($template, string $name, array $attributes = [])
     {
         if (!$template instanceof Smarty_Internal_Template) {
             $template = $this->createTemplate($template);
@@ -345,12 +335,18 @@ class SmartyEngine implements EngineInterface
                 throw new RuntimeException($e->getMessage());
             }
         } else {
-            $function = 'smarty_template_function_'.$name;
-            if (!is_callable($function)) {
-                throw new RuntimeException(sprintf('Template function "%s" is not defined in "%s".', $name, $template->source->filepath), -1, null, $template);
+            if (!isset($this->smarty->registered_plugins[PluginInterface::TYPE_FUNCTION][$name])
+            || empty($this->smarty->registered_plugins[PluginInterface::TYPE_FUNCTION][$name])) {
+                throw new RuntimeException(sprintf("Unable to find template function '%s'", $name));
             }
 
-            $function($template, $attributes);
+            $function = $this->smarty->registered_plugins[PluginInterface::TYPE_FUNCTION][$name][0];
+
+            if (!is_callable($function)) {
+                throw new RuntimeException(sprintf("Template function '%s' is not callable", $name));
+            }
+
+            echo $function($attributes, $template);
         }
     }
 
@@ -359,12 +355,12 @@ class SmartyEngine implements EngineInterface
      * @param string                           $name       Function name
      * @param array                            $attributes Attributes to pass to the template function
      *
+     *@throws SmartyException
      * @throws RuntimeException
-     * @throws SmartyException
      *
      * @return string the output returned by the template function
      */
-    public function fetchTemplateFunction($template, $name, array $attributes = [])
+    public function fetchTemplateFunction($template, string $name, array $attributes = []): string
     {
         ob_start();
         $this->renderTemplateFunction($template, $name, $attributes);
@@ -381,7 +377,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return bool true if the template exists, false otherwise
      */
-    public function exists($name)
+    public function exists($name): bool
     {
         try {
             $this->load($name);
@@ -399,7 +395,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return bool True if this class supports the given resource, false otherwise
      */
-    public function supports($name)
+    public function supports($name): bool
     {
         if ($name instanceof Smarty_Internal_Template) {
             return true;
@@ -419,7 +415,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return Response A Response instance
      */
-    public function renderResponse($view, array $parameters = [], Response $response = null)
+    public function renderResponse($view, array $parameters = [], Response $response = null): ?Response
     {
         if (null === $response) {
             $response = new Response();
@@ -433,7 +429,7 @@ class SmartyEngine implements EngineInterface
     /**
      * Loads the given template.
      *
-     * @param string $name A template name
+     * @param Smarty_Internal_Template|string $name A template name
      *
      * @throws RuntimeException
      *
@@ -458,7 +454,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return bool Whether the extension is registered or not
      */
-    public function hasExtension($name)
+    public function hasExtension(string $name): bool
     {
         return array_key_exists($name, $this->extensions);
     }
@@ -470,7 +466,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return ExtensionInterface An ExtensionInterface instance
      */
-    public function getExtension($name)
+    public function getExtension(string $name): ExtensionInterface
     {
         if (false === $this->hasExtension($name)) {
             throw new InvalidArgumentException(sprintf('The "%s" extension is not enabled.', $name));
@@ -494,7 +490,7 @@ class SmartyEngine implements EngineInterface
      *
      * @param string $name The extension name
      */
-    public function removeExtension($name)
+    public function removeExtension(string $name)
     {
         unset($this->extensions[$name]);
     }
@@ -518,7 +514,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return ExtensionInterface[] An array of extensions
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
@@ -542,7 +538,7 @@ class SmartyEngine implements EngineInterface
      *
      * @return FilterInterface[] An array of Filters
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         if (null === $this->filters) {
             $this->filters = [];
@@ -588,11 +584,9 @@ class SmartyEngine implements EngineInterface
      * Gets the collection of plugins, optionally filtered by an extension
      * name.
      *
-     * @param string $extensionName
-     *
      * @return Extension\Plugin\PluginInterface[] An array of plugins
      */
-    public function getPlugins($extensionName = '')
+    public function getPlugins(string $extensionName = ''): array
     {
         if (null === $this->plugins) {
             $this->plugins = [];
@@ -636,7 +630,6 @@ class SmartyEngine implements EngineInterface
         // verify that plugin isn't registered yet. That would cause a SmartyException.
         if (!isset($this->smarty->registered_plugins[$plugin->getType()][$plugin->getName()])) {
             $this->smarty->registerPlugin($plugin->getType(), $plugin->getName(), $plugin->getCallback());
-            $this->registeredPlugins[] = $plugin->getType().'_'.$plugin->getName();
         }
     }
 
@@ -646,7 +639,7 @@ class SmartyEngine implements EngineInterface
      * @param string $name  The global name
      * @param mixed  $value The global value
      */
-    public function addGlobal($name, $value)
+    public function addGlobal(string $name, $value)
     {
         $this->globals[$name] = $value;
     }

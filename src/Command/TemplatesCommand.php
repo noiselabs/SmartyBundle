@@ -95,5 +95,7 @@ class TemplatesCommand extends Command
         foreach ($templates as $path => $template) {
             $io->writeln(sprintf('* <comment>%s</comment>', $path));
         }
+
+        return 0;
     }
 }

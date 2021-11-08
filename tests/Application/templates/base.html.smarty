@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartyBundle Test App</title>
+    <link rel="stylesheet" href="{'css/bulma.min.css'|asset}">
+</head>
+<body>
+<header class="header">
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    {$title}
+                </h1>
+            </div>
+        </div>
+    </section>
+</header>
+
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+                <h2 class="subtitle is-4">Template source</h2>
+                <div class="box">
+                    <pre>{block name=source}{/block}</pre>
+                </div>
+            </div>
+            <div class="column">
+                <h2 class="subtitle is-4">Result</h2>
+                <div class="box">
+                    {block name=result}{/block}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="footer">
+    <div class="container">
+        <aside class="menu">
+            <p class="menu-label">
+                General
+            </p>
+            <ul class="menu-list">
+                <li><a href="{'hello'|path}">Homepage</a></li>
+            </ul>
+            <p class="menu-label">
+                Routing
+            </p>
+            <ul class="menu-list">
+                <li><a href="{'routing'|path}">Routing</a></li>
+            </ul>
+            <ul class="menu-list">
+                <li><a href="{'translation'|path}">Translation</a></li>
+            </ul>
+        </aside>
+    </div>
+</footer>
+</body>
+</html>

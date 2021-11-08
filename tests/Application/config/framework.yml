@@ -1,0 +1,13 @@
+framework:
+  secret: test
+  router: { resource: "%kernel.project_dir%/TestCase/%kernel.test_case%/routing.yml" }
+  test: true
+  default_locale: en
+  session:
+    storage_id: session.storage.mock_file
+  templating:
+    engines: [ 'smarty' ]
+  translator:
+    default_path: '%kernel.project_dir%/translations'
+    fallbacks:
+      - en

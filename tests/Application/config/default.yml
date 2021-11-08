@@ -1,0 +1,19 @@
+imports:
+  - { resource: framework.yml }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  logger: { class: Psr\Log\NullLogger }
+
+  NoiseLabs\Bundle\SmartyBundle\Tests\Application\Controller\:
+    resource: '../Controller'
+    public: true
+    tags: ['controller.service_arguments']
+
+smarty:
+  globals:
+    test_global_variable: "this is a global variable"

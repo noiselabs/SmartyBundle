@@ -1,0 +1,12 @@
+assets:
+    path: /assets
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Application\Controller\AssetsController::index
+global_variables:
+    path: /global-variables
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Application\Controller\GlobalVariablesController::index
+routing:
+    path: /routing
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Application\Controller\RoutingController::index
+translation:
+    path: /translation
+    controller: NoiseLabs\Bundle\SmartyBundle\Tests\Application\Controller\TranslationController::index

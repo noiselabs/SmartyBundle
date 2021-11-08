@@ -126,5 +126,7 @@ class CompileCommand extends Command
             $output->write(sprintf("- Failed to compile <error>%d</error> files.\n", $count['failed']));
         }
         $output->write(sprintf("- Total compilation time: <comment>%f secs</comment>.\n", $totalCtime));
+
+        return $count['failed'] > 0 ? -1 : 0;
     }
 }

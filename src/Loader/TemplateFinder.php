@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Loader;
 
+use NoiseLabs\Bundle\SmartyBundle\Templating\TemplateFilenameParser;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateFilenameParser;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;

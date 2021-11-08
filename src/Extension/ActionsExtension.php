@@ -24,8 +24,8 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\BlockPlugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\Plugin\ModifierPlugin;
+use NoiseLabs\Bundle\SmartyBundle\Templating\Helper\ActionsHelper;
 use SmartyException;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper;
 
 /**
  * SmartyBundle extension for Symfony actions helper.
@@ -65,16 +65,18 @@ class ActionsExtension extends AbstractExtension
     /**
      * Returns the Response content for a given controller or URI.
      *
-     * @param string     $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
-     * @param null|mixed $template
-     * @param null|mixed $repeat
+     * @param null|string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
+     * @param null|mixed  $template
+     * @param null|mixed  $repeat
      *
-     * @see Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
-     * @see Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     * @throws SmartyException
      *
      * @return mixed
+     *
+     * @see \Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
+     * @see \NoiseLabs\Bundle\SmartyBundle\Templating\Helper\ActionsHelper::render()
      */
-    public function renderBlockAction(array $parameters = [], $controller = null, $template = null, &$repeat = null)
+    public function renderBlockAction(array $parameters = [], $controller = null, $template = null, &$repeat = null): string
     {
         // only output on the closing tag
         if (!$repeat) {
@@ -96,7 +98,7 @@ class ActionsExtension extends AbstractExtension
      *
      * @param string $controller A controller name to execute (a string like BlogBundle:Post:index), or a relative URI
      *
-     * @see \Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper::render()
+     * @see \NoiseLabs\Bundle\SmartyBundle\Templating\Helper\ActionsHelper::render()
      * @see \Symfony\Bundle\TwigBundle\Extension\ActionsExtension::renderAction()
      */
     public function renderModifierAction($controller, array $attributes = [], array $options = [])
@@ -106,12 +108,8 @@ class ActionsExtension extends AbstractExtension
 
     /**
      * @param $controller
-     *
-     * @return mixed
-     *
-     * @since Symfony-2.2
      */
-    protected function render($controller, array $attributes = [], array $options = [])
+    protected function render($controller, array $attributes = [], array $options = []): string
     {
         $renderOptions = [];
         if (isset($options['standalone']) && true === $options['standalone']) {
@@ -125,19 +123,10 @@ class ActionsExtension extends AbstractExtension
         }
 
         $isControllerReference = false !== strpos($controller, ':');
+        $uri = $isControllerReference ? $this->actionsHelper->controller($controller, $attributes, $options) : $controller;
+        $options = $isControllerReference ? $renderOptions : array_merge($renderOptions, $attributes);
 
-        return $this->getActionsHelper()->render(
-            $isControllerReference ? $this->getActionsHelper()->controller($controller, $attributes, $options) : $controller,
-            $isControllerReference ? $renderOptions : array_merge($renderOptions, $attributes)
-        );
-    }
-
-    /**
-     * @return ActionsHelper
-     */
-    protected function getActionsHelper()
-    {
-        return $this->actionsHelper;
+        return $this->actionsHelper->render($uri, $options);
     }
 
     /**

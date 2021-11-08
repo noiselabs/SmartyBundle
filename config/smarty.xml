@@ -12,15 +12,10 @@
             <argument type="service" id="smarty.templating.loader"/>
             <argument type="service" id="service_container" />
             <argument>%smarty.options%</argument>
-            <argument type="service" id="templating.globals" on-invalid="null" />
+            <argument type="service" id="smarty.templating.globals" on-invalid="null" />
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="templating.engine" />
             <tag name="monolog.logger" channel="SmartyBundle" />
-        </service>
-
-        <service id="smarty.templating.loader" class="NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader">
-            <argument type="service" id="templating.name_parser"/>
-            <argument type="service" id="smarty.templating.loader.filesystem" />
         </service>
 
         <service id="smarty.file_locator" class="Symfony\Component\HttpKernel\Config\FileLocator">
@@ -33,27 +28,13 @@
             <argument>%smarty.options.templates_dir%</argument>
         </service>
 
-        <service id="smarty.templating.locator" class="Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator">
-            <argument type="service" id="smarty.file_locator" />
-            <argument>%kernel.cache_dir%</argument>
-        </service>
-
-        <service id="smarty.templating.loader.filesystem" class="Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader">
-            <argument type="service" id="smarty.templating.locator" />
-        </service>
-
         <service id="smarty.extension.core" class="NoiseLabs\Bundle\SmartyBundle\Extension\CoreExtension" public="false">
             <tag name="smarty.extension" />
         </service>
 
         <service id="smarty.extension.actions" class="NoiseLabs\Bundle\SmartyBundle\Extension\ActionsExtension" public="false">
             <tag name="smarty.extension" />
-            <argument type="service" id="templating.helper.actions" />
-        </service>
-
-        <service id="templating.helper.actions" class="Symfony\Bundle\FrameworkBundle\Templating\Helper\ActionsHelper">
-            <tag name="templating.helper" alias="actions" />
-            <argument type="service" id="fragment.handler" />
+            <argument type="service" id="smarty.templating.helper.actions" />
         </service>
 
         <service id="smarty.extension.assets" class="NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension" public="false">
@@ -82,12 +63,5 @@
         </service>
 
         <service id="smarty_engine" alias="templating.engine.smarty" />
-
-        <service id="smarty.templating.finder" class="NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder" public="true">
-            <argument type="service" id="kernel" />
-            <argument type="service" id="templating.filename_parser" />
-            <argument>%kernel.root_dir%/Resources</argument>
-            <argument>%smarty.options%</argument>
-        </service>
     </services>
 </container>

@@ -49,7 +49,7 @@ class CompileCommandTest extends TestCase
     {
         $tester = $this->createCommandTester();
         $tester->execute([]);
-        $this->assertStringContainsString('compile 2 files', $tester->getDisplay());
+        $this->assertStringContainsString(' Successfully compiled 2 files', $tester->getDisplay());
     }
 
     public function testItDisplaysNoTemplatesFound()
@@ -63,7 +63,7 @@ class CompileCommandTest extends TestCase
     {
         $tester = $this->createCommandTester();
         $tester->execute(['bundle' => '@TestBundle']);
-        $this->assertStringContainsString('compile 1 files', $tester->getDisplay());
+        $this->assertStringContainsString(' Successfully compiled 1 files', $tester->getDisplay());
     }
 
     private function createCommandTester(bool $shouldReturnTemplates = true): CommandTester

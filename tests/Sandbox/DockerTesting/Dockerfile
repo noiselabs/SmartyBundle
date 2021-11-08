@@ -4,7 +4,7 @@ FROM php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="Vitor Brandao <vitor@noiselabs.io>"
 
-RUN apk add --no-cache --virtual smartybundle-deps icu-dev
+RUN apk add --no-cache --virtual smartybundle-deps icu-dev wget
 RUN docker-php-ext-install intl && docker-php-ext-enable intl
 
 WORKDIR /app
@@ -22,8 +22,10 @@ ARG SYMFONY_VERSION
 ENV SYMFONY_REQUIRE=${SYMFONY_VERSION}
 ARG COMPOSER_FLAGS=""
 
-RUN composer global require --no-progress --no-scripts --no-plugins --ignore-platform-req=php symfony/flex
+RUN wget -O /usr/bin/phpunit https://phar.phpunit.de/phpunit-9.phar && chmod +x /usr/bin/phpunit
 
-RUN composer update --no-interaction --no-progress --prefer-dist --verbose --ignore-platform-req=php ${COMPOSER_FLAGS}
+RUN composer global require --ignore-platform-req=php --no-plugins --no-progress --no-scripts symfony/flex
+
+RUN composer update --ignore-platform-req=php --no-interaction --no-progress --prefer-dist --verbose ${COMPOSER_FLAGS}
 
 RUN php -v

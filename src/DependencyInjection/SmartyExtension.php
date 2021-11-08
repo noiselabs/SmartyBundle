@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace NoiseLabs\Bundle\SmartyBundle\DependencyInjection;
 
 use Exception;
+use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -46,10 +47,33 @@ class SmartyExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
-        $loader->load('smarty.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $this->registerSmartyConfiguration($config, $container, $loader);
+        $this->registerTemplatingConfiguration($config, $container, $loader);
+
+        if ($this->hasConsole()) {
+            // Console commands
+            $loader->load('console.xml');
+        }
+    }
+
+    public function getAlias()
+    {
+        return 'smarty';
+    }
+
+    protected function hasConsole(): bool
+    {
+        return class_exists(Application::class);
+    }
+
+    private function registerSmartyConfiguration(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $loader->load('smarty.xml');
+
         $engineDefinition = $container->getDefinition('templating.engine.smarty');
 
         if (!empty($config['globals'])) {
@@ -76,15 +100,10 @@ class SmartyExtension extends Extension
         foreach ($config['options'] as $k => $v) {
             $container->setParameter('smarty.options.'.$k, $v);
         }
-
-        // Console commands
-        if (class_exists('\\Symfony\\Component\\Console\\Application')) {
-            $loader->load('console.xml');
-        }
     }
 
-    public function getAlias()
+    private function registerTemplatingConfiguration(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
-        return 'smarty';
+        $loader->load('templating.xml');
     }
 }
