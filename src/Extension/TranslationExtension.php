@@ -126,7 +126,7 @@ class TranslationExtension extends AbstractExtension
                 $message = preg_replace('/\\[([0-9]*)\\] (.*?)/i', '{$1} $2', $message);
             }
 
-            return $this->translator->transchoice($message, $params['count'], array_merge(['%count%' => $params['count']], $params['vars']), $params['domain'], $params['locale']);
+            return $this->translator->trans($message, array_merge(['%count%' => $params['count']], $params['vars']), $params['domain'], $params['locale']);
         }
     }
 
@@ -140,7 +140,7 @@ class TranslationExtension extends AbstractExtension
      */
     public function transchoiceModifier($message, $count, array $parameters = [], $domain = 'messages', $locale = null)
     {
-        return $this->translator->transChoice($message, $count, array_merge(['%count%' => $count], $parameters), $domain, $locale);
+        return $this->translator->trans($message, array_merge(['%count%' => $count], $parameters), $domain, $locale);
     }
 
     /**

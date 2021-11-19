@@ -3,6 +3,7 @@
 .phpunit.cache
 .php-cs-fixer.cache
 composer.lock
+/cache
 /docs/_build/
 /tests/Sandbox/App/cache
 /tests/Sandbox/App/logs

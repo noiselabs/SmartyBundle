@@ -113,27 +113,27 @@ build: ## Build Docker images (in parallel)
 	$(MAKE) -j4 build-php7-sf4 build-php7-sf5 build-php8-sf4 build-php8-sf5
 .PHONY: build
 
-test-php7-sf4: ## Run unit and functional tests in the php7-sf4 image
+test-php7-sf4: ## Run phpunit tests in the php7-sf4 image
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf4 composer test
 .PHONY: test-php7-sf4
 
-test-php7-sf5: ## Run unit and functional tests in the php7-sf5 image
+test-php7-sf5: ## Run phpunit tests in the php7-sf5 image
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php7-sf5 composer test
 .PHONY: test-php7-sf5
 
-test-php8-sf4: ## Run unit and functional tests in the php8-sf4 image
+test-php8-sf4: ## Run phpunit tests in the php8-sf4 image
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php8-sf4 composer test
 .PHONY: test-php8-sf4
 
-test-php8-sf5: ## Run unit and functional tests in the php8-sf5 image
+test-php8-sf5: ## Run phpunit tests in the php8-sf5 image
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor noiselabs/smarty-bundle-testing:php8-sf5 composer test
 .PHONY: test-php8-sf5
 
-test: ## Run unit and functional tests
+test: ## Run phpunit tests
 	$(MAKE) test-php7-sf4 test-php7-sf5 test-php8-sf4 test-php8-sf5
 .PHONY: test
 
-test-parallel: ## Run unit and functional tests in parallel
+test-parallel: ## Run phpunit tests in parallel
 	$(MAKE) -j4 test-php7-sf4 test-php7-sf5 test-php8-sf4 test-php8-sf5
 .PHONY: test-parallel
 
@@ -153,19 +153,23 @@ sh-php8-sf5: ## Get a shell in the php8-sf5 container
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -w /app/tests/Sandbox/App noiselabs/smarty-bundle-testing:php8-sf5 sh
 .PHONY: sh-php8-sf5
 
-web-php7-sf4: ## Launches the built-in PHP web server in the php7-sf4  container
+web-php7-sf4: ## Launches the built-in PHP web server in the php7-sf4 container
+	@echo http://localhost:8074/
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8074:8080/tcp -w /app/tests/Sandbox/App noiselabs/smarty-bundle-testing:php7-sf4 php -S 0.0.0.0:8080 -t web
 .PHONY: web-php7-sf4
 
-web-php7-sf5: ## Launches the built-in PHP web server in the php7-sf5  container
+web-php7-sf5: ## Launches the built-in PHP web server in the php7-sf5 container
+	@echo http://localhost:8075/
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8075:8080/tcp -w /app/tests/Sandbox/App noiselabs/smarty-bundle-testing:php7-sf5 php -S 0.0.0.0:8080 -t web
 .PHONY: web-php7-sf5
 
-web-php8-sf4: ## Launches the built-in PHP web server in the php8-sf4  container
+web-php8-sf4: ## Launches the built-in PHP web server in the php8-sf4 container
+	@echo http://localhost:8084/
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8084:8080/tcp -w /app/tests/Sandbox/App noiselabs/smarty-bundle-testing:php8-sf4 php -S 0.0.0.0:8080 -t web
 .PHONY: web-php8-sf4
 
-web-php8-sf5: ## Launches the built-in PHP web server in the php8-sf5  container
+web-php8-sf5: ## Launches the built-in PHP web server in the php8-sf5 container
+	@echo http://localhost:8085/
 	docker run --rm -it --mount type=bind,src=$(PWD),dst=/app --mount type=volume,dst=/app/vendor -p 127.0.0.1:8085:8080/tcp -w /app/tests/Sandbox/App noiselabs/smarty-bundle-testing:php8-sf5 php -S 0.0.0.0:8080 -t web
 .PHONY: web-php8-sf5
 
@@ -193,5 +197,5 @@ composer-sf5: ## Install composer dependencies using sf5
 
 ### PHPUnit tests ###
 phpunit: ## Run PHPUnit tests
-	XDEBUG_MODE=coverage phpunit --coverage-text --coverage-html=.phpunit.cache/html
+	XDEBUG_MODE=coverage phpunit --debug --coverage-text --coverage-html=.phpunit.cache/html
 .PHONY: phpunit

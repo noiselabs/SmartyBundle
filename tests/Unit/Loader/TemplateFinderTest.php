@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace NoiseLabs\Bundle\SmartyBundle\Tests\Unit\Loader;
 
 use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder;
+use NoiseLabs\Bundle\SmartyBundle\Templating\TemplateFilenameParser;
 use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateFilenameParser;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 

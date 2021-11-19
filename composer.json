@@ -31,12 +31,15 @@
         "ext-simplexml": "*",
         "smarty/smarty": "^3.1.40",
         "symfony/framework-bundle": "^4|^5",
+        "symfony/polyfill-php80": "^1.23",
         "symfony/templating": "^4|^5"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
         "symfony/asset": "^4|^5",
+        "symfony/browser-kit": "^4|^5",
         "symfony/console": "^4|^5",
+        "symfony/css-selector": "^4|^5",
         "symfony/expression-language": "^4|^5",
         "symfony/phpunit-bridge": "^5",
         "symfony/security": "^3.4.48|^4|^5",

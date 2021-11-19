@@ -11,7 +11,7 @@
 
     5. {"Hello %name%"|trans:['%name%' => 'World']}
 
-    6. {"Hello, World!!"|trans:[]:"messages":"pt_PT"}
+    6. {"Hello, World!"|trans:[]:"messages":"pt_PT"}
 {/literal}{/block}
 
 {block name=result}

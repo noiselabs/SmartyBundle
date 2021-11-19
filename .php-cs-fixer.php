@@ -1,7 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude(['tests/Sandbox', 'tools', 'tmp'])
+    ->exclude(['cache', 'tests/Sandbox', 'tools', 'tmp'])
     ->in(__DIR__)
 ;
 

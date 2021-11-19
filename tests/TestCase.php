@@ -18,12 +18,14 @@
  * License along with NoiseLabs-SmartyBundle; if not, see
  * <http://www.gnu.org/licenses/>.
  */
+declare(strict_types=1);
 
 namespace NoiseLabs\Bundle\SmartyBundle\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine;
+use SimpleXMLElement;
 use Smarty;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -80,7 +82,7 @@ class TestCase extends PHPUnitTestCase
         $this->engine = $this->getSmartyEngine();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->deleteTmpDir();
     }
@@ -93,7 +95,8 @@ class TestCase extends PHPUnitTestCase
 
     protected function deleteTmpDir()
     {
-        if (!file_exists($dir = $this->tmpDir)) {
+        $dir = $this->tmpDir;
+        if (!$dir || !file_exists($dir)) {
             return;
         }
 
@@ -101,7 +104,7 @@ class TestCase extends PHPUnitTestCase
         $fs->remove($dir);
     }
 
-    public function getSmarty()
+    public function getSmarty(): Smarty
     {
         return new Smarty();
     }
@@ -111,11 +114,11 @@ class TestCase extends PHPUnitTestCase
         return $this->engine->getSmarty()->createTemplate($filepath);
     }
 
-    protected function renderXml($name, $context = [])
+    protected function renderXml($name, $context = []): SimpleXMLElement
     {
         $template = $this->createTemplate($name);
 
-        return new \SimpleXMLElement($this->engine->render($template));
+        return new SimpleXMLElement($this->engine->render($template));
     }
 
     public function getSmartyEngine(array $options = [], $global = null, $logger = null)
@@ -143,7 +146,7 @@ class TestCase extends PHPUnitTestCase
         return $engine;
     }
 
-    public function getKernel()
+    public function getKernel(): KernelForTest
     {
         return new KernelForTest('test', true);
     }
@@ -207,7 +210,7 @@ class ProjectTemplateEngine extends SmartyEngine
         $this->loader->setTemplate($name, $content);
     }
 
-    public function getLoader()
+    public function getLoader(): ProjectTemplateLoader
     {
         return $this->loader;
     }

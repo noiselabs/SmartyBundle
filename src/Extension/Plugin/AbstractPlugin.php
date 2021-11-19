@@ -25,7 +25,7 @@ namespace NoiseLabs\Bundle\SmartyBundle\Extension\Plugin;
 use NoiseLabs\Bundle\SmartyBundle\Extension\ExtensionInterface;
 
 /**
- * The Plugin base class represents a OO approach to the Smarty plugin
+ * The Plugin base class represents an OO approach to the Smarty plugin
  * architecture.
  *
  * See {@link http://www.smarty.net/docs/en/plugins.tpl}.

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+        <service id="smarty.templating.name_parser" class="NoiseLabs\Bundle\SmartyBundle\Templating\TemplateNameParser">
+            <argument type="service" id="kernel" />
+        </service>
+
+        <service id="smarty.templating.filename_parser" class="NoiseLabs\Bundle\SmartyBundle\Templating\TemplateFilenameParser" />
+
+        <service id="smarty.templating.locator" class="NoiseLabs\Bundle\SmartyBundle\Templating\Loader\TemplateLocator">
+            <argument type="service" id="smarty.file_locator" />
+            <argument>%kernel.cache_dir%</argument>
+        </service>
+
+        <service id="smarty.templating.finder" class="NoiseLabs\Bundle\SmartyBundle\Loader\TemplateFinder" public="true">
+            <argument type="service" id="kernel" />
+            <argument type="service" id="smarty.templating.filename_parser" />
+            <argument>%kernel.root_dir%/Resources</argument>
+            <argument>%smarty.options%</argument>
+        </service>
+
+        <service id="smarty.templating.loader.filesystem" class="NoiseLabs\Bundle\SmartyBundle\Templating\Loader\FilesystemLoader">
+            <argument type="service" id="smarty.templating.locator" />
+        </service>
+
+        <service id="smarty.templating.loader" class="NoiseLabs\Bundle\SmartyBundle\Loader\TemplateLoader">
+            <argument type="service" id="smarty.templating.name_parser"/>
+            <argument type="service" id="smarty.templating.loader.filesystem" />
+        </service>
+
+        <service id="smarty.templating.globals" class="NoiseLabs\Bundle\SmartyBundle\Templating\GlobalVariables">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="smarty.templating.helper.actions" class="NoiseLabs\Bundle\SmartyBundle\Templating\Helper\ActionsHelper">
+            <tag name="templating.helper" alias="actions" />
+            <argument type="service" id="fragment.handler" />
+        </service>
+    </services>
+</container>
