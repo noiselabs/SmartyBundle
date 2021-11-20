@@ -56,7 +56,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0.x-dev"
+            "3.x": "3.0.x-dev"
         }
     },
     "scripts": {

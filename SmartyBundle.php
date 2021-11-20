@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SmartyBundle extends Bundle
 {
-    const VERSION = '3.0.0-dev';
+    const VERSION = '3.0.0';
 
     public function build(ContainerBuilder $container)
     {
