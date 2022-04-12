@@ -71,8 +71,8 @@ class TemplateLoader
     {
         $templateId = $name instanceof TemplateReferenceInterface ? $name->getLogicalName() : $name;
 
-        if (isset($this->cache[$name])) {
-            return $this->cache[$name];
+        if (isset($this->cache[$templateId])) {
+            return $this->cache[$templateId];
         }
 
         $template = $name instanceof TemplateReferenceInterface ? $name : $this->defaultTemplateParser->parse($name);
